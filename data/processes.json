@@ -1,0 +1,991 @@
+{
+  "generatedAt": "2026-09-03T13:07:08.623Z",
+  "sourceFiles": [
+    {
+      "path": "docs/ba-processes/00-index.md",
+      "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/docs/ba-processes/00-index.md"
+    },
+    {
+      "path": "docs/taxonomy.md",
+      "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/docs/taxonomy.md"
+    }
+  ],
+  "processes": [
+    {
+      "id": 1,
+      "label": "Формирование ФТ/ТЗ",
+      "emoji": "📋",
+      "description": "От сырого запроса (встреча, письмо, идея) до черновика ФТ/ТЗ.",
+      "operations": [
+        "ingestion",
+        "understanding",
+        "documentation",
+        "solution_design"
+      ],
+      "pattern": "asr-ingestion, glossary-context-generation, user-story-generation, usecase-generation, fr-generation, fr-validation",
+      "patterns": [
+        {
+          "slug": "asr-ingestion",
+          "path": "patterns/asr-ingestion/",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/patterns/asr-ingestion/"
+        },
+        {
+          "slug": "glossary-context-generation",
+          "path": "patterns/glossary-context-generation/",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/patterns/glossary-context-generation/"
+        },
+        {
+          "slug": "user-story-generation",
+          "path": "patterns/user-story-generation/",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/patterns/user-story-generation/"
+        },
+        {
+          "slug": "usecase-generation",
+          "path": "patterns/usecase-generation/",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/patterns/usecase-generation/"
+        },
+        {
+          "slug": "fr-generation",
+          "path": "patterns/fr-generation/",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/patterns/fr-generation/"
+        },
+        {
+          "slug": "fr-validation",
+          "path": "patterns/fr-validation/",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/patterns/fr-validation/"
+        }
+      ],
+      "prompts": [
+        {
+          "id": "mango-asr-ingestion-oneshot",
+          "file": "asr-ingestion-oneshot.md",
+          "title": "ASR: Нормализация транскрипции",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/asr-ingestion-oneshot.md",
+          "mode": "oneshot",
+          "modeIcon": "●",
+          "status": "draft",
+          "archived": false
+        },
+        {
+          "id": "mango-asr-ingestion-legacy",
+          "file": "asr-ingestion-legacy.md",
+          "title": "ASR: Обработка транскрипции (устаревший)",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/asr-ingestion-legacy.md",
+          "mode": "legacy",
+          "modeIcon": "⌁",
+          "status": "draft",
+          "archived": false
+        },
+        {
+          "id": "mango-glossary-context-understanding-stepwise",
+          "file": "glossary-context-understanding-stepwise.md",
+          "title": "Контекст: Терминология и цели",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/glossary-context-understanding-stepwise.md",
+          "mode": "stepwise",
+          "modeIcon": "↔",
+          "status": "draft",
+          "archived": false
+        },
+        {
+          "id": "mango-glossary-context-understanding-oneshot",
+          "file": "glossary-context-understanding-oneshot.md",
+          "title": "Контекст: Терминология за один ответ",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/glossary-context-understanding-oneshot.md",
+          "mode": "oneshot",
+          "modeIcon": "●",
+          "status": "draft",
+          "archived": false
+        },
+        {
+          "id": "mango-questions-customer-understanding-stepwise",
+          "file": "questions-customer-understanding-stepwise.md",
+          "title": "Вопросы: Выявление потребностей",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/questions-customer-understanding-stepwise.md",
+          "mode": "stepwise",
+          "modeIcon": "↔",
+          "status": "draft",
+          "archived": false
+        },
+        {
+          "id": "mango-questions-customer-understanding-legacy",
+          "file": "questions-customer-understanding-legacy.md",
+          "title": "Вопросы: Подготовка заказчику (устаревший)",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/questions-customer-understanding-legacy.md",
+          "mode": "legacy",
+          "modeIcon": "⌁",
+          "status": "draft",
+          "archived": false
+        },
+        {
+          "id": "mango-us-modeling-stepwise",
+          "file": "us-modeling-stepwise.md",
+          "title": "User Story: Формирование",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/us-modeling-stepwise.md",
+          "mode": "stepwise",
+          "modeIcon": "↔",
+          "status": "draft",
+          "archived": false
+        },
+        {
+          "id": "mango-us-modeling-oneshot",
+          "file": "us-modeling-oneshot.md",
+          "title": "User Story: Формирование за один ответ",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/us-modeling-oneshot.md",
+          "mode": "oneshot",
+          "modeIcon": "●",
+          "status": "draft",
+          "archived": false
+        },
+        {
+          "id": "mango-uc-modeling-stepwise",
+          "file": "uc-modeling-stepwise.md",
+          "title": "Use Case: Моделирование",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/uc-modeling-stepwise.md",
+          "mode": "stepwise",
+          "modeIcon": "↔",
+          "status": "draft",
+          "archived": false
+        },
+        {
+          "id": "mango-uc-modeling-oneshot",
+          "file": "uc-modeling-oneshot.md",
+          "title": "Use Case: Моделирование за один ответ",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/uc-modeling-oneshot.md",
+          "mode": "oneshot",
+          "modeIcon": "●",
+          "status": "draft",
+          "archived": false
+        },
+        {
+          "id": "mango-fr-documentation-stepwise",
+          "file": "fr-documentation-stepwise.md",
+          "title": "ФТ: Генерация требований",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/fr-documentation-stepwise.md",
+          "mode": "stepwise",
+          "modeIcon": "↔",
+          "status": "draft",
+          "archived": false
+        },
+        {
+          "id": "mango-fr-documentation-oneshot",
+          "file": "fr-documentation-oneshot.md",
+          "title": "ФТ: Генерация за один ответ",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/fr-documentation-oneshot.md",
+          "mode": "oneshot",
+          "modeIcon": "●",
+          "status": "draft",
+          "archived": false
+        },
+        {
+          "id": "mango-constraints-documentation-stepwise",
+          "file": "constraints-documentation-stepwise.md",
+          "title": "Ограничения: Документирование",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/constraints-documentation-stepwise.md",
+          "mode": "stepwise",
+          "modeIcon": "↔",
+          "status": "draft",
+          "archived": false
+        },
+        {
+          "id": "mango-constraints-documentation-oneshot",
+          "file": "constraints-documentation-oneshot.md",
+          "title": "Ограничения: За один ответ",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/constraints-documentation-oneshot.md",
+          "mode": "oneshot",
+          "modeIcon": "●",
+          "status": "draft",
+          "archived": false
+        },
+        {
+          "id": "mango-technical-details-solution-design-stepwise",
+          "file": "technical-details-solution-design-stepwise.md",
+          "title": "Технические детали: Проектирование",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/technical-details-solution-design-stepwise.md",
+          "mode": "stepwise",
+          "modeIcon": "↔",
+          "status": "draft",
+          "archived": false
+        },
+        {
+          "id": "mango-technical-details-solution-design-oneshot",
+          "file": "technical-details-solution-design-oneshot.md",
+          "title": "Технические детали: За один ответ",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/technical-details-solution-design-oneshot.md",
+          "mode": "oneshot",
+          "modeIcon": "●",
+          "status": "draft",
+          "archived": false
+        },
+        {
+          "id": "mango-technical-details-solution-design-legacy",
+          "file": "technical-details-solution-design-legacy.md",
+          "title": "Технические детали: Доработки (устаревший)",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/technical-details-solution-design-legacy.md",
+          "mode": "legacy",
+          "modeIcon": "⌁",
+          "status": "draft",
+          "archived": false
+        },
+        {
+          "id": "mango-fr-validation-stepwise",
+          "file": "fr-validation-stepwise.md",
+          "title": "ФТ: Валидация и аудит",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/fr-validation-stepwise.md",
+          "mode": "stepwise",
+          "modeIcon": "↔",
+          "status": "draft",
+          "archived": false
+        },
+        {
+          "id": "mango-fr-validation-oneshot",
+          "file": "fr-validation-oneshot.md",
+          "title": "ФТ: Экспресс-валидация",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/fr-validation-oneshot.md",
+          "mode": "oneshot",
+          "modeIcon": "●",
+          "status": "draft",
+          "archived": false
+        },
+        {
+          "id": "mango-fr-validation-legacy",
+          "file": "fr-validation-legacy.md",
+          "title": "ФТ: Валидация (устаревший)",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/fr-validation-legacy.md",
+          "mode": "legacy",
+          "modeIcon": "⌁",
+          "status": "draft",
+          "archived": false
+        }
+      ],
+      "gaps": [
+        {
+          "gap": "Orchestrator для полного ФТ/ТЗ chain",
+          "status": "Требуется разработка промпта",
+          "nextArtifact": "prompts/ft-tz-orchestration-stepwise.md или отдельный issue на workflow prompt."
+        }
+      ],
+      "checks": 273,
+      "coveredPrompts": 18
+    },
+    {
+      "id": 2,
+      "label": "Валидация ФТ/ТЗ",
+      "emoji": "✅",
+      "description": "Проверка готовых ФТ/ТЗ на полноту, непротиворечивость, тестируемость.",
+      "operations": [
+        "validation",
+        "quality"
+      ],
+      "pattern": "fr-validation",
+      "patterns": [
+        {
+          "slug": "fr-validation",
+          "path": "patterns/fr-validation/",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/patterns/fr-validation/"
+        }
+      ],
+      "prompts": [
+        {
+          "id": "mango-fr-validation-stepwise",
+          "file": "fr-validation-stepwise.md",
+          "title": "ФТ: Валидация и аудит",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/fr-validation-stepwise.md",
+          "mode": "stepwise",
+          "modeIcon": "↔",
+          "status": "draft",
+          "archived": false
+        },
+        {
+          "id": "mango-fr-validation-oneshot",
+          "file": "fr-validation-oneshot.md",
+          "title": "ФТ: Экспресс-валидация",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/fr-validation-oneshot.md",
+          "mode": "oneshot",
+          "modeIcon": "●",
+          "status": "draft",
+          "archived": false
+        },
+        {
+          "id": "mango-fr-validation-legacy",
+          "file": "fr-validation-legacy.md",
+          "title": "ФТ: Валидация (устаревший)",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/fr-validation-legacy.md",
+          "mode": "legacy",
+          "modeIcon": "⌁",
+          "status": "draft",
+          "archived": false
+        }
+      ],
+      "gaps": [
+        {
+          "gap": "Quality/statistics prompt для дефектов ФТ/ТЗ",
+          "status": "Требуется разработка промпта",
+          "nextArtifact": "Новый active statistics prompt вместо reliance on archive."
+        }
+      ],
+      "checks": 108,
+      "coveredPrompts": 3
+    },
+    {
+      "id": 3,
+      "label": "Анализ тендерных ТЗ",
+      "emoji": "📑",
+      "description": "Разбор внешнего тендерного ТЗ: соответствие продукту, объём доработок.",
+      "operations": [
+        "ingestion",
+        "understanding",
+        "validation",
+        "risk_analysis"
+      ],
+      "pattern": "glossary-context-generation, fr-validation",
+      "patterns": [
+        {
+          "slug": "glossary-context-generation",
+          "path": "patterns/glossary-context-generation/",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/patterns/glossary-context-generation/"
+        },
+        {
+          "slug": "fr-validation",
+          "path": "patterns/fr-validation/",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/patterns/fr-validation/"
+        }
+      ],
+      "prompts": [
+        {
+          "id": "mango-glossary-context-understanding-stepwise",
+          "file": "glossary-context-understanding-stepwise.md",
+          "title": "Контекст: Терминология и цели",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/glossary-context-understanding-stepwise.md",
+          "mode": "stepwise",
+          "modeIcon": "↔",
+          "status": "draft",
+          "archived": false
+        },
+        {
+          "id": "mango-glossary-context-understanding-oneshot",
+          "file": "glossary-context-understanding-oneshot.md",
+          "title": "Контекст: Терминология за один ответ",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/glossary-context-understanding-oneshot.md",
+          "mode": "oneshot",
+          "modeIcon": "●",
+          "status": "draft",
+          "archived": false
+        },
+        {
+          "id": "mango-questions-customer-understanding-stepwise",
+          "file": "questions-customer-understanding-stepwise.md",
+          "title": "Вопросы: Выявление потребностей",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/questions-customer-understanding-stepwise.md",
+          "mode": "stepwise",
+          "modeIcon": "↔",
+          "status": "draft",
+          "archived": false
+        },
+        {
+          "id": "mango-questions-customer-understanding-legacy",
+          "file": "questions-customer-understanding-legacy.md",
+          "title": "Вопросы: Подготовка заказчику (устаревший)",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/questions-customer-understanding-legacy.md",
+          "mode": "legacy",
+          "modeIcon": "⌁",
+          "status": "draft",
+          "archived": false
+        },
+        {
+          "id": "mango-fr-validation-stepwise",
+          "file": "fr-validation-stepwise.md",
+          "title": "ФТ: Валидация и аудит",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/fr-validation-stepwise.md",
+          "mode": "stepwise",
+          "modeIcon": "↔",
+          "status": "draft",
+          "archived": false
+        },
+        {
+          "id": "mango-fr-validation-oneshot",
+          "file": "fr-validation-oneshot.md",
+          "title": "ФТ: Экспресс-валидация",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/fr-validation-oneshot.md",
+          "mode": "oneshot",
+          "modeIcon": "●",
+          "status": "draft",
+          "archived": false
+        },
+        {
+          "id": "mango-fr-validation-legacy",
+          "file": "fr-validation-legacy.md",
+          "title": "ФТ: Валидация (устаревший)",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/fr-validation-legacy.md",
+          "mode": "legacy",
+          "modeIcon": "⌁",
+          "status": "draft",
+          "archived": false
+        }
+      ],
+      "gaps": [
+        {
+          "gap": "Document ingestion для тендерных DOCX/PDF/XLSX",
+          "status": "Требуется разработка промпта",
+          "nextArtifact": "prompts/tender-ingestion-stepwise.md после определения sanitized examples."
+        },
+        {
+          "gap": "Tender-fit / coverage matrix / no-bid scoring",
+          "status": "Требуется разработка промпта",
+          "nextArtifact": "prompts/tender-validation-stepwise.md или tender-fit chain."
+        }
+      ],
+      "checks": 214,
+      "coveredPrompts": 7
+    },
+    {
+      "id": 4,
+      "label": "Формирование UC/US",
+      "emoji": "🎯",
+      "description": "Преобразование требований в Use Case и User Story.",
+      "operations": [
+        "modeling",
+        "understanding"
+      ],
+      "pattern": "glossary-context-generation, user-story-generation, usecase-generation, fr-validation",
+      "patterns": [
+        {
+          "slug": "glossary-context-generation",
+          "path": "patterns/glossary-context-generation/",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/patterns/glossary-context-generation/"
+        },
+        {
+          "slug": "user-story-generation",
+          "path": "patterns/user-story-generation/",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/patterns/user-story-generation/"
+        },
+        {
+          "slug": "usecase-generation",
+          "path": "patterns/usecase-generation/",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/patterns/usecase-generation/"
+        },
+        {
+          "slug": "fr-validation",
+          "path": "patterns/fr-validation/",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/patterns/fr-validation/"
+        }
+      ],
+      "prompts": [
+        {
+          "id": "mango-glossary-context-understanding-stepwise",
+          "file": "glossary-context-understanding-stepwise.md",
+          "title": "Контекст: Терминология и цели",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/glossary-context-understanding-stepwise.md",
+          "mode": "stepwise",
+          "modeIcon": "↔",
+          "status": "draft",
+          "archived": false
+        },
+        {
+          "id": "mango-glossary-context-understanding-oneshot",
+          "file": "glossary-context-understanding-oneshot.md",
+          "title": "Контекст: Терминология за один ответ",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/glossary-context-understanding-oneshot.md",
+          "mode": "oneshot",
+          "modeIcon": "●",
+          "status": "draft",
+          "archived": false
+        },
+        {
+          "id": "mango-us-modeling-stepwise",
+          "file": "us-modeling-stepwise.md",
+          "title": "User Story: Формирование",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/us-modeling-stepwise.md",
+          "mode": "stepwise",
+          "modeIcon": "↔",
+          "status": "draft",
+          "archived": false
+        },
+        {
+          "id": "mango-us-modeling-oneshot",
+          "file": "us-modeling-oneshot.md",
+          "title": "User Story: Формирование за один ответ",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/us-modeling-oneshot.md",
+          "mode": "oneshot",
+          "modeIcon": "●",
+          "status": "draft",
+          "archived": false
+        },
+        {
+          "id": "mango-uc-modeling-stepwise",
+          "file": "uc-modeling-stepwise.md",
+          "title": "Use Case: Моделирование",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/uc-modeling-stepwise.md",
+          "mode": "stepwise",
+          "modeIcon": "↔",
+          "status": "draft",
+          "archived": false
+        },
+        {
+          "id": "mango-uc-modeling-oneshot",
+          "file": "uc-modeling-oneshot.md",
+          "title": "Use Case: Моделирование за один ответ",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/uc-modeling-oneshot.md",
+          "mode": "oneshot",
+          "modeIcon": "●",
+          "status": "draft",
+          "archived": false
+        },
+        {
+          "id": "mango-fr-validation-stepwise",
+          "file": "fr-validation-stepwise.md",
+          "title": "ФТ: Валидация и аудит",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/fr-validation-stepwise.md",
+          "mode": "stepwise",
+          "modeIcon": "↔",
+          "status": "draft",
+          "archived": false
+        }
+      ],
+      "gaps": [],
+      "checks": 152,
+      "coveredPrompts": 10
+    },
+    {
+      "id": 5,
+      "label": "Визуализация UML/BPMN",
+      "emoji": "📊",
+      "description": "Построение диаграмм процессов и взаимодействий.",
+      "operations": [
+        "modeling",
+        "documentation"
+      ],
+      "pattern": "Косвенно: usecase-generation как сценарный источник",
+      "patterns": [
+        {
+          "slug": "usecase-generation",
+          "path": "patterns/usecase-generation/",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/patterns/usecase-generation/"
+        }
+      ],
+      "prompts": [
+        {
+          "id": "mango-uc-modeling-stepwise",
+          "file": "uc-modeling-stepwise.md",
+          "title": "Use Case: Моделирование",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/uc-modeling-stepwise.md",
+          "mode": "stepwise",
+          "modeIcon": "↔",
+          "status": "draft",
+          "archived": false
+        },
+        {
+          "id": "mango-uc-modeling-oneshot",
+          "file": "uc-modeling-oneshot.md",
+          "title": "Use Case: Моделирование за один ответ",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/uc-modeling-oneshot.md",
+          "mode": "oneshot",
+          "modeIcon": "●",
+          "status": "draft",
+          "archived": false
+        }
+      ],
+      "gaps": [
+        {
+          "gap": "UML/BPMN/Mermaid generation и visual review",
+          "status": "Требуется разработка промпта",
+          "nextArtifact": "Prompt для выбора типа диаграммы и генерации Mermaid/BPMN source."
+        }
+      ],
+      "checks": 0,
+      "coveredPrompts": 0
+    },
+    {
+      "id": 6,
+      "label": "Помощь ПО/ПМ",
+      "emoji": "🤝",
+      "description": "Резюме встреч, письма заказчику, уточняющие вопросы, подготовка коммуникаций.",
+      "operations": [
+        "understanding",
+        "documentation"
+      ],
+      "pattern": "asr-ingestion, glossary-context-generation, meeting-summary-generation",
+      "patterns": [
+        {
+          "slug": "asr-ingestion",
+          "path": "patterns/asr-ingestion/",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/patterns/asr-ingestion/"
+        },
+        {
+          "slug": "glossary-context-generation",
+          "path": "patterns/glossary-context-generation/",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/patterns/glossary-context-generation/"
+        },
+        {
+          "slug": "meeting-summary-generation",
+          "path": "patterns/meeting-summary-generation/",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/patterns/meeting-summary-generation/"
+        }
+      ],
+      "prompts": [
+        {
+          "id": "mango-asr-ingestion-oneshot",
+          "file": "asr-ingestion-oneshot.md",
+          "title": "ASR: Нормализация транскрипции",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/asr-ingestion-oneshot.md",
+          "mode": "oneshot",
+          "modeIcon": "●",
+          "status": "draft",
+          "archived": false
+        },
+        {
+          "id": "mango-meeting-customer-documentation-stepwise",
+          "file": "meeting-customer-documentation-stepwise.md",
+          "title": "Встреча с клиентом: Резюме",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/meeting-customer-documentation-stepwise.md",
+          "mode": "stepwise",
+          "modeIcon": "↔",
+          "status": "draft",
+          "archived": false
+        },
+        {
+          "id": "mango-meeting-team-documentation-stepwise",
+          "file": "meeting-team-documentation-stepwise.md",
+          "title": "Встреча команды: Резюме",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/meeting-team-documentation-stepwise.md",
+          "mode": "stepwise",
+          "modeIcon": "↔",
+          "status": "draft",
+          "archived": false
+        },
+        {
+          "id": "mango-questions-customer-understanding-stepwise",
+          "file": "questions-customer-understanding-stepwise.md",
+          "title": "Вопросы: Выявление потребностей",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/questions-customer-understanding-stepwise.md",
+          "mode": "stepwise",
+          "modeIcon": "↔",
+          "status": "draft",
+          "archived": false
+        },
+        {
+          "id": "mango-questions-customer-understanding-legacy",
+          "file": "questions-customer-understanding-legacy.md",
+          "title": "Вопросы: Подготовка заказчику (устаревший)",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/questions-customer-understanding-legacy.md",
+          "mode": "legacy",
+          "modeIcon": "⌁",
+          "status": "draft",
+          "archived": false
+        },
+        {
+          "id": "mango-letter-customer-documentation-legacy",
+          "file": "letter-customer-documentation-legacy.md",
+          "title": "Письмо клиенту: Сопровождение (устаревший)",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/letter-customer-documentation-legacy.md",
+          "mode": "legacy",
+          "modeIcon": "⌁",
+          "status": "draft",
+          "archived": false
+        },
+        {
+          "id": "mango-session-debug-documentation-oneshot",
+          "file": "session-debug-documentation-oneshot.md",
+          "title": "Сессия LLM: Суммаризация",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/session-debug-documentation-oneshot.md",
+          "mode": "oneshot",
+          "modeIcon": "●",
+          "status": "draft",
+          "archived": false
+        }
+      ],
+      "gaps": [
+        {
+          "gap": "Product decision log и stakeholder map",
+          "status": "Требуется разработка промпта",
+          "nextArtifact": "Коммуникационный governance prompt."
+        }
+      ],
+      "checks": 42,
+      "coveredPrompts": 6
+    },
+    {
+      "id": 7,
+      "label": "Статистика",
+      "emoji": "📈",
+      "description": "Сбор и агрегация статистики по ТЗ и артефактам анализа.",
+      "operations": [
+        "quality",
+        "ingestion"
+      ],
+      "pattern": "— (workflow map)",
+      "patterns": [],
+      "prompts": [
+        {
+          "id": "mango-tz-stats-generator-legacy",
+          "file": "tz-stats-generator-legacy.md",
+          "title": "ТЗ: Статистика, расширенный (архив)",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/archive/tz-stats-generator-legacy.md",
+          "mode": "legacy",
+          "modeIcon": "⌁",
+          "status": "archived",
+          "archived": true
+        },
+        {
+          "id": "mango-tz-stats-generator-simple-legacy",
+          "file": "tz-stats-generator-simple-legacy.md",
+          "title": "ТЗ: Статистика, простой (архив)",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/archive/tz-stats-generator-simple-legacy.md",
+          "mode": "legacy",
+          "modeIcon": "⌁",
+          "status": "archived",
+          "archived": true
+        }
+      ],
+      "gaps": [
+        {
+          "gap": "Quality/statistics prompt для дефектов ФТ/ТЗ",
+          "status": "Требуется разработка промпта",
+          "nextArtifact": "Новый active statistics prompt вместо reliance on archive."
+        }
+      ],
+      "checks": 6,
+      "coveredPrompts": 2
+    },
+    {
+      "id": 8,
+      "label": "Impact Analysis",
+      "emoji": "🧭",
+      "description": "Оценка влияния изменений на продукт и связанные требования.",
+      "operations": [
+        "impact_analysis",
+        "reverse_requirements"
+      ],
+      "pattern": "— (workflow map)",
+      "patterns": [],
+      "prompts": [
+        {
+          "id": "mango-technical-details-solution-design-stepwise",
+          "file": "technical-details-solution-design-stepwise.md",
+          "title": "Технические детали: Проектирование",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/technical-details-solution-design-stepwise.md",
+          "mode": "stepwise",
+          "modeIcon": "↔",
+          "status": "draft",
+          "archived": false
+        },
+        {
+          "id": "mango-technical-details-solution-design-oneshot",
+          "file": "technical-details-solution-design-oneshot.md",
+          "title": "Технические детали: За один ответ",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/technical-details-solution-design-oneshot.md",
+          "mode": "oneshot",
+          "modeIcon": "●",
+          "status": "draft",
+          "archived": false
+        },
+        {
+          "id": "mango-fr-validation-stepwise",
+          "file": "fr-validation-stepwise.md",
+          "title": "ФТ: Валидация и аудит",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/fr-validation-stepwise.md",
+          "mode": "stepwise",
+          "modeIcon": "↔",
+          "status": "draft",
+          "archived": false
+        },
+        {
+          "id": "mango-fr-validation-oneshot",
+          "file": "fr-validation-oneshot.md",
+          "title": "ФТ: Экспресс-валидация",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/fr-validation-oneshot.md",
+          "mode": "oneshot",
+          "modeIcon": "●",
+          "status": "draft",
+          "archived": false
+        }
+      ],
+      "gaps": [
+        {
+          "gap": "Reverse requirements и impact traceability matrix",
+          "status": "Требуется разработка промпта",
+          "nextArtifact": "prompts/impact-analysis-stepwise.md."
+        }
+      ],
+      "checks": 0,
+      "coveredPrompts": 0
+    },
+    {
+      "id": 9,
+      "label": "Risk Analysis",
+      "emoji": "🛡️",
+      "description": "Систематическая оценка рисков требований и готовности к релизу.",
+      "operations": [
+        "risk_analysis",
+        "release_readiness",
+        "validation"
+      ],
+      "pattern": "— (workflow map)",
+      "patterns": [],
+      "prompts": [
+        {
+          "id": "mango-constraints-documentation-stepwise",
+          "file": "constraints-documentation-stepwise.md",
+          "title": "Ограничения: Документирование",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/constraints-documentation-stepwise.md",
+          "mode": "stepwise",
+          "modeIcon": "↔",
+          "status": "draft",
+          "archived": false
+        },
+        {
+          "id": "mango-constraints-documentation-oneshot",
+          "file": "constraints-documentation-oneshot.md",
+          "title": "Ограничения: За один ответ",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/constraints-documentation-oneshot.md",
+          "mode": "oneshot",
+          "modeIcon": "●",
+          "status": "draft",
+          "archived": false
+        },
+        {
+          "id": "mango-fr-validation-stepwise",
+          "file": "fr-validation-stepwise.md",
+          "title": "ФТ: Валидация и аудит",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/fr-validation-stepwise.md",
+          "mode": "stepwise",
+          "modeIcon": "↔",
+          "status": "draft",
+          "archived": false
+        },
+        {
+          "id": "mango-fr-validation-oneshot",
+          "file": "fr-validation-oneshot.md",
+          "title": "ФТ: Экспресс-валидация",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/fr-validation-oneshot.md",
+          "mode": "oneshot",
+          "modeIcon": "●",
+          "status": "draft",
+          "archived": false
+        }
+      ],
+      "gaps": [
+        {
+          "gap": "Tender-fit / coverage matrix / no-bid scoring",
+          "status": "Требуется разработка промпта",
+          "nextArtifact": "prompts/tender-validation-stepwise.md или tender-fit chain."
+        },
+        {
+          "gap": "Risk register и release-readiness prompts",
+          "status": "Требуется разработка промпта",
+          "nextArtifact": "prompts/risk-analysis-stepwise.md, prompts/release-readiness-validation-stepwise.md."
+        }
+      ],
+      "checks": 0,
+      "coveredPrompts": 0
+    }
+  ],
+  "gaps": [
+    {
+      "id": "process-gap-1",
+      "gap": "Orchestrator для полного ФТ/ТЗ chain",
+      "processes": [
+        "Формирование ФТ/ТЗ"
+      ],
+      "status": "Требуется разработка промпта",
+      "nextArtifact": "prompts/ft-tz-orchestration-stepwise.md или отдельный issue на workflow prompt."
+    },
+    {
+      "id": "process-gap-2",
+      "gap": "Quality/statistics prompt для дефектов ФТ/ТЗ",
+      "processes": [
+        "Валидация ФТ/ТЗ",
+        "Статистика"
+      ],
+      "status": "Требуется разработка промпта",
+      "nextArtifact": "Новый active statistics prompt вместо reliance on archive."
+    },
+    {
+      "id": "process-gap-3",
+      "gap": "Document ingestion для тендерных DOCX/PDF/XLSX",
+      "processes": [
+        "Анализ тендерных ТЗ"
+      ],
+      "status": "Требуется разработка промпта",
+      "nextArtifact": "prompts/tender-ingestion-stepwise.md после определения sanitized examples."
+    },
+    {
+      "id": "process-gap-4",
+      "gap": "Tender-fit / coverage matrix / no-bid scoring",
+      "processes": [
+        "Анализ тендерных ТЗ",
+        "Risk Analysis"
+      ],
+      "status": "Требуется разработка промпта",
+      "nextArtifact": "prompts/tender-validation-stepwise.md или tender-fit chain."
+    },
+    {
+      "id": "process-gap-5",
+      "gap": "UML/BPMN/Mermaid generation и visual review",
+      "processes": [
+        "Визуализация UML/BPMN"
+      ],
+      "status": "Требуется разработка промпта",
+      "nextArtifact": "Prompt для выбора типа диаграммы и генерации Mermaid/BPMN source."
+    },
+    {
+      "id": "process-gap-6",
+      "gap": "Product decision log и stakeholder map",
+      "processes": [
+        "Помощь ПО/ПМ"
+      ],
+      "status": "Требуется разработка промпта",
+      "nextArtifact": "Коммуникационный governance prompt."
+    },
+    {
+      "id": "process-gap-7",
+      "gap": "Reverse requirements и impact traceability matrix",
+      "processes": [
+        "Impact Analysis"
+      ],
+      "status": "Требуется разработка промпта",
+      "nextArtifact": "prompts/impact-analysis-stepwise.md."
+    },
+    {
+      "id": "process-gap-8",
+      "gap": "Risk register и release-readiness prompts",
+      "processes": [
+        "Risk Analysis"
+      ],
+      "status": "Требуется разработка промпта",
+      "nextArtifact": "prompts/risk-analysis-stepwise.md, prompts/release-readiness-validation-stepwise.md."
+    },
+    {
+      "id": "process-gap-9",
+      "gap": "Product/RAG navigator для evidence",
+      "processes": [
+        "Все процессы",
+        "где нужен source-backed routing"
+      ],
+      "status": "Выполняется вручную",
+      "nextArtifact": "Отдельный пилот после согласования owner и sanitized sources."
+    },
+    {
+      "id": "process-gap-10",
+      "gap": "Compliance triggers review (ПДн, реклама, услуга связи, КИИ)",
+      "processes": [
+        "ФТ/ТЗ",
+        "тендеры",
+        "интеграции",
+        "release readiness"
+      ],
+      "status": "Выполняется вручную",
+      "nextArtifact": "Human review gate, не prompt-only решение."
+    },
+    {
+      "id": "process-gap-11",
+      "gap": "Product Layer / Commercial Layer boundaries",
+      "processes": [
+        "Клиентские",
+        "тендерные",
+        "интеграционные и внутренние доработки"
+      ],
+      "status": "Выполняется вручную",
+      "nextArtifact": "Matrix или navigator поверх ecosystem map."
+    }
+  ]
+}

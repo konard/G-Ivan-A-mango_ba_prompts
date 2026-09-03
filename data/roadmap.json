@@ -1,0 +1,91 @@
+{
+  "generatedAt": "2026-09-03T13:07:08.465Z",
+  "sourceFiles": [
+    {
+      "path": "docs/ba-ecosystem.md",
+      "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/docs/ba-ecosystem.md"
+    }
+  ],
+  "levels": [
+    {
+      "id": "level-1",
+      "number": 1,
+      "title": "Промпты",
+      "howItWorks": "БА вручную выбирает процесс, промпт, режим stepwise/oneshot, копирует контекст и валидирует результат.",
+      "baRole": "Оператор и reviewer каждого шага.",
+      "exitCriteria": "Есть процессная карта, стабильные prompt outputs, известные gaps и примеры прогонов.",
+      "status": "current"
+    },
+    {
+      "id": "level-2",
+      "number": 2,
+      "title": "Системные промпты + БЗ",
+      "howItWorks": "Системный prompt предлагает маршрут по направлению, читает registry/KB/RAG, возвращает structured output и gates.",
+      "baRole": "Оркестратор: подтверждает route, отвечает на gates, исправляет output.",
+      "exitCriteria": "Есть product-matrix/source registry или их аналоги, evidence policy, regression examples, audit log.",
+      "status": "planned"
+    },
+    {
+      "id": "level-3",
+      "number": 3,
+      "title": "Агенты",
+      "howItWorks": "Агент ведет состояние workflow: выбирает операции, запускает промпты, сохраняет артефакты, предлагает next step.",
+      "baRole": "Коллега-валидатор: принимает gates, решает спорные статусы, утверждает публикацию.",
+      "exitCriteria": "Workflow повторяем, есть rollback prompt/version, manual override rate приемлем, sensitive-data policy готова.",
+      "status": "planned"
+    },
+    {
+      "id": "level-4",
+      "number": 4,
+      "title": "Мультиагенты",
+      "howItWorks": "Несколько ролей: BA orchestrator, evidence agent, documentation agent, risk/compliance agent, reviewer agent.",
+      "baRole": "Владелец решения и escalation point.",
+      "exitCriteria": "Понятны права ролей, есть cross-agent audit, конфликтующие выводы не публикуются без человека.",
+      "status": "planned"
+    }
+  ],
+  "gaps": [
+    {
+      "id": "gap-1",
+      "gap": "Tender-fit / coverage matrix prompt",
+      "why": "Issue 66 ставит тендеры как один из 9 процессов, а сейчас покрыты только вспомогательные операции.",
+      "nextArtifact": "prompts/tender-validation-stepwise.md или отдельный issue на tender-fit chain."
+    },
+    {
+      "id": "gap-2",
+      "gap": "Impact analysis prompt",
+      "why": "Нужен для изменений legacy, интеграций и внутренних доработок.",
+      "nextArtifact": "prompts/impact-analysis-stepwise.md + traceability matrix template."
+    },
+    {
+      "id": "gap-3",
+      "gap": "Risk register / release-readiness prompts",
+      "why": "Нужны для Risk Analysis и release gates.",
+      "nextArtifact": "prompts/risk-analysis-stepwise.md, prompts/release-readiness-validation-stepwise.md."
+    },
+    {
+      "id": "gap-4",
+      "gap": "UML/BPMN/Mermaid prompt",
+      "why": "Визуализация - отдельный процесс БА, но инструмента нет.",
+      "nextArtifact": "Prompt для выбора диаграммы и генерации Mermaid/BPMN source."
+    },
+    {
+      "id": "gap-5",
+      "gap": "Product/RAG navigator",
+      "why": "Hub roadmap предлагает kb/product-matrix.md; в споке его пока нет.",
+      "nextArtifact": "Отдельный пилот после согласования owner и sanitized sources."
+    },
+    {
+      "id": "gap-6",
+      "gap": "Orchestrator prompt",
+      "why": "Сейчас БА сам связывает промпты в цепочку.",
+      "nextArtifact": "Системный prompt уровня 2 для выбора процесса, операций и gates."
+    },
+    {
+      "id": "gap-7",
+      "gap": "Механизм проверки не объявлен у части операций",
+      "why": "По §1.1 такая операция считается незавершённой; пробел должен быть виден, а не замаскирован.",
+      "nextArtifact": "Явный раздел «Проверка» в паттернах и quality gates в промптах; сверка с чек-листом D1–D10 (#ba-process-ontology)."
+    }
+  ]
+}

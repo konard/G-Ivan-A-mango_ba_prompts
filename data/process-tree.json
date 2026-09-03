@@ -1,0 +1,825 @@
+{
+  "generatedAt": "2026-09-03T13:07:08.465Z",
+  "sourceFiles": [
+    {
+      "path": "docs/ba-processes/00-index.md",
+      "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/docs/ba-processes/00-index.md"
+    }
+  ],
+  "treeThreshold": 20,
+  "totalProcesses": 9,
+  "shownProcesses": 8,
+  "totalSubprocesses": 38,
+  "shownSubprocesses": 25,
+  "useTree": true,
+  "processes": [
+    {
+      "id": 1,
+      "label": "Формирование ФТ/ТЗ",
+      "icon": "1",
+      "operations": [
+        "ingestion",
+        "understanding",
+        "modeling",
+        "documentation",
+        "solution_design",
+        "validation"
+      ],
+      "recommendedPrompts": [
+        "asr_ingestion_oneshot.md",
+        "asr_ingestion_legacy.md",
+        "glossary_context_understanding_stepwise.md",
+        "glossary_context_understanding_oneshot.md",
+        "questions_customer_understanding_stepwise.md",
+        "questions_customer_understanding_legacy.md",
+        "us_modeling_stepwise.md",
+        "us_modeling_oneshot.md",
+        "uc_modeling_stepwise.md",
+        "uc_modeling_oneshot.md",
+        "fr_documentation_stepwise.md",
+        "fr_documentation_oneshot.md",
+        "constraints_documentation_stepwise.md",
+        "constraints_documentation_oneshot.md",
+        "technical_details_solution_design_stepwise.md",
+        "technical_details_solution_design_oneshot.md",
+        "technical_details_solution_design_legacy.md",
+        "fr_validation_stepwise.md",
+        "fr_validation_oneshot.md",
+        "fr_validation_legacy.md"
+      ],
+      "subprocessTotal": 6,
+      "subprocessShown": 6,
+      "subprocesses": [
+        {
+          "order": 1,
+          "step": "1. Нормализовать сырой вход",
+          "operation": "ingestion",
+          "operationIcon": "↓",
+          "kind": "direct",
+          "hasPrompts": true,
+          "prompts": [
+            {
+              "file": "asr-ingestion-oneshot.md",
+              "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/asr-ingestion-oneshot.md"
+            },
+            {
+              "file": "asr-ingestion-legacy.md",
+              "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/asr-ingestion-legacy.md"
+            }
+          ]
+        },
+        {
+          "order": 2,
+          "step": "2. Собрать контекст",
+          "operation": "understanding",
+          "operationIcon": "?",
+          "kind": "direct",
+          "hasPrompts": true,
+          "prompts": [
+            {
+              "file": "glossary-context-understanding-stepwise.md",
+              "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/glossary-context-understanding-stepwise.md"
+            },
+            {
+              "file": "glossary-context-understanding-oneshot.md",
+              "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/glossary-context-understanding-oneshot.md"
+            },
+            {
+              "file": "questions-customer-understanding-stepwise.md",
+              "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/questions-customer-understanding-stepwise.md"
+            },
+            {
+              "file": "questions-customer-understanding-legacy.md",
+              "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/questions-customer-understanding-legacy.md"
+            }
+          ]
+        },
+        {
+          "order": 3,
+          "step": "3. Смоделировать сценарии при необходимости",
+          "operation": "modeling",
+          "operationIcon": "□",
+          "kind": "direct",
+          "hasPrompts": true,
+          "prompts": [
+            {
+              "file": "us-modeling-stepwise.md",
+              "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/us-modeling-stepwise.md"
+            },
+            {
+              "file": "us-modeling-oneshot.md",
+              "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/us-modeling-oneshot.md"
+            },
+            {
+              "file": "uc-modeling-stepwise.md",
+              "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/uc-modeling-stepwise.md"
+            },
+            {
+              "file": "uc-modeling-oneshot.md",
+              "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/uc-modeling-oneshot.md"
+            }
+          ]
+        },
+        {
+          "order": 4,
+          "step": "4. Оформить ФТ и ограничения",
+          "operation": "documentation",
+          "operationIcon": "¶",
+          "kind": "direct",
+          "hasPrompts": true,
+          "prompts": [
+            {
+              "file": "fr-documentation-stepwise.md",
+              "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/fr-documentation-stepwise.md"
+            },
+            {
+              "file": "fr-documentation-oneshot.md",
+              "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/fr-documentation-oneshot.md"
+            },
+            {
+              "file": "constraints-documentation-stepwise.md",
+              "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/constraints-documentation-stepwise.md"
+            },
+            {
+              "file": "constraints-documentation-oneshot.md",
+              "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/constraints-documentation-oneshot.md"
+            }
+          ]
+        },
+        {
+          "order": 5,
+          "step": "5. Подготовить технические детали",
+          "operation": "solution_design",
+          "operationIcon": "⚙",
+          "kind": "direct",
+          "hasPrompts": true,
+          "prompts": [
+            {
+              "file": "technical-details-solution-design-stepwise.md",
+              "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/technical-details-solution-design-stepwise.md"
+            },
+            {
+              "file": "technical-details-solution-design-oneshot.md",
+              "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/technical-details-solution-design-oneshot.md"
+            },
+            {
+              "file": "technical-details-solution-design-legacy.md",
+              "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/technical-details-solution-design-legacy.md"
+            }
+          ]
+        },
+        {
+          "order": 6,
+          "step": "6. Проверить черновик",
+          "operation": "validation",
+          "operationIcon": "✓",
+          "kind": "direct",
+          "hasPrompts": true,
+          "prompts": [
+            {
+              "file": "fr-validation-stepwise.md",
+              "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/fr-validation-stepwise.md"
+            },
+            {
+              "file": "fr-validation-oneshot.md",
+              "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/fr-validation-oneshot.md"
+            },
+            {
+              "file": "fr-validation-legacy.md",
+              "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/fr-validation-legacy.md"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "label": "Валидация ФТ/ТЗ",
+      "icon": "2",
+      "operations": [
+        "validation",
+        "quality",
+        "risk_analysis"
+      ],
+      "recommendedPrompts": [
+        "fr_validation_stepwise.md",
+        "fr_validation_oneshot.md",
+        "fr_validation_legacy.md"
+      ],
+      "subprocessTotal": 4,
+      "subprocessShown": 3,
+      "subprocesses": [
+        {
+          "order": 1,
+          "step": "1. Провести аудит структуры и формулировок",
+          "operation": "validation",
+          "operationIcon": "✓",
+          "kind": "direct",
+          "hasPrompts": true,
+          "prompts": [
+            {
+              "file": "fr-validation-stepwise.md",
+              "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/fr-validation-stepwise.md"
+            },
+            {
+              "file": "fr-validation-oneshot.md",
+              "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/fr-validation-oneshot.md"
+            },
+            {
+              "file": "fr-validation-legacy.md",
+              "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/fr-validation-legacy.md"
+            }
+          ]
+        },
+        {
+          "order": 2,
+          "step": "2. Классифицировать качество",
+          "operation": "quality",
+          "operationIcon": "◆",
+          "kind": "manual",
+          "hasPrompts": false,
+          "prompts": []
+        },
+        {
+          "order": 3,
+          "step": "3. Отметить риски",
+          "operation": "risk_analysis",
+          "operationIcon": "!",
+          "kind": "support",
+          "hasPrompts": true,
+          "prompts": [
+            {
+              "file": "constraints-documentation-stepwise.md",
+              "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/constraints-documentation-stepwise.md"
+            }
+          ]
+        },
+        {
+          "order": 4,
+          "step": "4. Вернуть результат в документ",
+          "operation": "documentation",
+          "operationIcon": "¶",
+          "kind": "direct",
+          "hasPrompts": true,
+          "prompts": [
+            {
+              "file": "fr-documentation-stepwise.md",
+              "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/fr-documentation-stepwise.md"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "label": "Анализ тендерных ТЗ",
+      "icon": "3",
+      "operations": [
+        "ingestion",
+        "understanding",
+        "validation",
+        "risk_analysis",
+        "quality"
+      ],
+      "recommendedPrompts": [
+        "glossary_context_understanding_stepwise.md",
+        "glossary_context_understanding_oneshot.md",
+        "questions_customer_understanding_stepwise.md",
+        "questions_customer_understanding_legacy.md",
+        "fr_validation_stepwise.md",
+        "fr_validation_oneshot.md",
+        "fr_validation_legacy.md"
+      ],
+      "subprocessTotal": 5,
+      "subprocessShown": 2,
+      "subprocesses": [
+        {
+          "order": 1,
+          "step": "1. Сохранить структуру внешнего ТЗ",
+          "operation": "ingestion",
+          "operationIcon": "↓",
+          "kind": "manual",
+          "hasPrompts": false,
+          "prompts": []
+        },
+        {
+          "order": 2,
+          "step": "2. Понять термины и неоднозначности",
+          "operation": "understanding",
+          "operationIcon": "?",
+          "kind": "direct",
+          "hasPrompts": true,
+          "prompts": [
+            {
+              "file": "glossary-context-understanding-stepwise.md",
+              "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/glossary-context-understanding-stepwise.md"
+            },
+            {
+              "file": "glossary-context-understanding-oneshot.md",
+              "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/glossary-context-understanding-oneshot.md"
+            },
+            {
+              "file": "questions-customer-understanding-stepwise.md",
+              "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/questions-customer-understanding-stepwise.md"
+            },
+            {
+              "file": "questions-customer-understanding-legacy.md",
+              "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/questions-customer-understanding-legacy.md"
+            }
+          ]
+        },
+        {
+          "order": 3,
+          "step": "3. Проверить атомарность и проверяемость",
+          "operation": "validation",
+          "operationIcon": "✓",
+          "kind": "direct",
+          "hasPrompts": true,
+          "prompts": [
+            {
+              "file": "fr-validation-stepwise.md",
+              "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/fr-validation-stepwise.md"
+            },
+            {
+              "file": "fr-validation-oneshot.md",
+              "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/fr-validation-oneshot.md"
+            },
+            {
+              "file": "fr-validation-legacy.md",
+              "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/fr-validation-legacy.md"
+            }
+          ]
+        },
+        {
+          "order": 4,
+          "step": "4. Оценить риски участия",
+          "operation": "risk_analysis",
+          "operationIcon": "!",
+          "kind": "manual",
+          "hasPrompts": false,
+          "prompts": []
+        },
+        {
+          "order": 5,
+          "step": "5. Свести coverage/gaps",
+          "operation": "quality",
+          "operationIcon": "◆",
+          "kind": "manual",
+          "hasPrompts": false,
+          "prompts": []
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "label": "Формирование UC/US",
+      "icon": "4",
+      "operations": [
+        "understanding",
+        "modeling",
+        "validation",
+        "documentation"
+      ],
+      "recommendedPrompts": [
+        "glossary_context_understanding_stepwise.md",
+        "glossary_context_understanding_oneshot.md",
+        "us_modeling_stepwise.md",
+        "us_modeling_oneshot.md",
+        "uc_modeling_stepwise.md",
+        "uc_modeling_oneshot.md",
+        "fr_validation_stepwise.md"
+      ],
+      "subprocessTotal": 5,
+      "subprocessShown": 5,
+      "subprocesses": [
+        {
+          "order": 1,
+          "step": "1. Уточнить роль, ценность и границы",
+          "operation": "understanding",
+          "operationIcon": "?",
+          "kind": "direct",
+          "hasPrompts": true,
+          "prompts": [
+            {
+              "file": "glossary-context-understanding-stepwise.md",
+              "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/glossary-context-understanding-stepwise.md"
+            },
+            {
+              "file": "glossary-context-understanding-oneshot.md",
+              "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/glossary-context-understanding-oneshot.md"
+            }
+          ]
+        },
+        {
+          "order": 2,
+          "step": "2. Сформировать User Story",
+          "operation": "modeling",
+          "operationIcon": "□",
+          "kind": "direct",
+          "hasPrompts": true,
+          "prompts": [
+            {
+              "file": "us-modeling-stepwise.md",
+              "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/us-modeling-stepwise.md"
+            },
+            {
+              "file": "us-modeling-oneshot.md",
+              "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/us-modeling-oneshot.md"
+            }
+          ]
+        },
+        {
+          "order": 3,
+          "step": "3. Сформировать Use Case",
+          "operation": "modeling",
+          "operationIcon": "□",
+          "kind": "direct",
+          "hasPrompts": true,
+          "prompts": [
+            {
+              "file": "uc-modeling-stepwise.md",
+              "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/uc-modeling-stepwise.md"
+            },
+            {
+              "file": "uc-modeling-oneshot.md",
+              "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/uc-modeling-oneshot.md"
+            }
+          ]
+        },
+        {
+          "order": 4,
+          "step": "4. Проверить связку US -> UC -> ФТ",
+          "operation": "validation",
+          "operationIcon": "✓",
+          "kind": "direct",
+          "hasPrompts": true,
+          "prompts": [
+            {
+              "file": "fr-validation-stepwise.md",
+              "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/fr-validation-stepwise.md"
+            }
+          ]
+        },
+        {
+          "order": 5,
+          "step": "5. Передать в ФТ при необходимости",
+          "operation": "documentation",
+          "operationIcon": "¶",
+          "kind": "direct",
+          "hasPrompts": true,
+          "prompts": [
+            {
+              "file": "fr-documentation-stepwise.md",
+              "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/fr-documentation-stepwise.md"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "label": "Визуализация UML/BPMN",
+      "icon": "5",
+      "operations": [
+        "modeling",
+        "documentation",
+        "quality"
+      ],
+      "recommendedPrompts": [
+        "uc_modeling_stepwise.md",
+        "uc_modeling_oneshot.md"
+      ],
+      "subprocessTotal": 3,
+      "subprocessShown": 1,
+      "subprocesses": [
+        {
+          "order": 1,
+          "step": "1. Выбрать тип диаграммы",
+          "operation": "modeling",
+          "operationIcon": "□",
+          "kind": "support",
+          "hasPrompts": true,
+          "prompts": [
+            {
+              "file": "uc-modeling-stepwise.md",
+              "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/uc-modeling-stepwise.md"
+            },
+            {
+              "file": "uc-modeling-oneshot.md",
+              "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/uc-modeling-oneshot.md"
+            }
+          ]
+        },
+        {
+          "order": 2,
+          "step": "2. Оформить source диаграммы",
+          "operation": "documentation",
+          "operationIcon": "¶",
+          "kind": "manual",
+          "hasPrompts": false,
+          "prompts": []
+        },
+        {
+          "order": 3,
+          "step": "3. Сверить диаграмму с текстом",
+          "operation": "quality",
+          "operationIcon": "◆",
+          "kind": "manual",
+          "hasPrompts": false,
+          "prompts": []
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "label": "Помощь ПО/ПМ",
+      "icon": "6",
+      "operations": [
+        "ingestion",
+        "understanding",
+        "documentation",
+        "governance"
+      ],
+      "recommendedPrompts": [
+        "asr_ingestion_oneshot.md",
+        "meeting_customer_documentation_stepwise.md",
+        "meeting_team_documentation_stepwise.md",
+        "questions_customer_understanding_stepwise.md",
+        "questions_customer_understanding_legacy.md",
+        "letter_customer_documentation_legacy.md",
+        "session_debug_documentation_oneshot.md"
+      ],
+      "subprocessTotal": 4,
+      "subprocessShown": 3,
+      "subprocesses": [
+        {
+          "order": 1,
+          "step": "1. Очистить ASR или длинный вход",
+          "operation": "ingestion",
+          "operationIcon": "↓",
+          "kind": "direct",
+          "hasPrompts": true,
+          "prompts": [
+            {
+              "file": "asr-ingestion-oneshot.md",
+              "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/asr-ingestion-oneshot.md"
+            }
+          ]
+        },
+        {
+          "order": 2,
+          "step": "2. Выделить смысл и вопросы",
+          "operation": "understanding",
+          "operationIcon": "?",
+          "kind": "direct",
+          "hasPrompts": true,
+          "prompts": [
+            {
+              "file": "questions-customer-understanding-stepwise.md",
+              "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/questions-customer-understanding-stepwise.md"
+            },
+            {
+              "file": "questions-customer-understanding-legacy.md",
+              "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/questions-customer-understanding-legacy.md"
+            }
+          ]
+        },
+        {
+          "order": 3,
+          "step": "3. Оформить коммуникацию",
+          "operation": "documentation",
+          "operationIcon": "¶",
+          "kind": "direct",
+          "hasPrompts": true,
+          "prompts": [
+            {
+              "file": "meeting-customer-documentation-stepwise.md",
+              "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/meeting-customer-documentation-stepwise.md"
+            },
+            {
+              "file": "meeting-team-documentation-stepwise.md",
+              "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/meeting-team-documentation-stepwise.md"
+            },
+            {
+              "file": "letter-customer-documentation-legacy.md",
+              "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/letter-customer-documentation-legacy.md"
+            },
+            {
+              "file": "session-debug-documentation-oneshot.md",
+              "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/session-debug-documentation-oneshot.md"
+            }
+          ]
+        },
+        {
+          "order": 4,
+          "step": "4. Зафиксировать управление процессом",
+          "operation": "governance",
+          "operationIcon": "§",
+          "kind": "manual",
+          "hasPrompts": false,
+          "prompts": []
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "label": "Статистика",
+      "icon": "7",
+      "operations": [
+        "ingestion",
+        "quality",
+        "research"
+      ],
+      "recommendedPrompts": [
+        "archive/tz_stats_generator_legacy.md",
+        "archive/tz_stats_generator_simple_legacy.md"
+      ],
+      "subprocessTotal": 3,
+      "subprocessShown": 0,
+      "subprocesses": [
+        {
+          "order": 1,
+          "step": "1. Собрать корпус",
+          "operation": "ingestion",
+          "operationIcon": "↓",
+          "kind": "manual",
+          "hasPrompts": false,
+          "prompts": []
+        },
+        {
+          "order": 2,
+          "step": "2. Нормализовать категории",
+          "operation": "quality",
+          "operationIcon": "◆",
+          "kind": "archive",
+          "hasPrompts": false,
+          "prompts": []
+        },
+        {
+          "order": 3,
+          "step": "3. Сформировать выводы",
+          "operation": "research",
+          "operationIcon": "⌕",
+          "kind": "manual",
+          "hasPrompts": false,
+          "prompts": []
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "label": "Impact Analysis",
+      "icon": "8",
+      "operations": [
+        "reverse_requirements",
+        "impact_analysis",
+        "validation",
+        "governance"
+      ],
+      "recommendedPrompts": [
+        "technical_details_solution_design_stepwise.md",
+        "technical_details_solution_design_oneshot.md",
+        "fr_validation_stepwise.md",
+        "fr_validation_oneshot.md"
+      ],
+      "subprocessTotal": 4,
+      "subprocessShown": 3,
+      "subprocesses": [
+        {
+          "order": 1,
+          "step": "1. Восстановить текущее поведение",
+          "operation": "reverse_requirements",
+          "operationIcon": "↩",
+          "kind": "support",
+          "hasPrompts": true,
+          "prompts": [
+            {
+              "file": "fr-validation-stepwise.md",
+              "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/fr-validation-stepwise.md"
+            }
+          ]
+        },
+        {
+          "order": 2,
+          "step": "2. Связать изменение с артефактами",
+          "operation": "impact_analysis",
+          "operationIcon": "↗",
+          "kind": "support",
+          "hasPrompts": true,
+          "prompts": [
+            {
+              "file": "technical-details-solution-design-stepwise.md",
+              "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/technical-details-solution-design-stepwise.md"
+            },
+            {
+              "file": "technical-details-solution-design-oneshot.md",
+              "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/technical-details-solution-design-oneshot.md"
+            }
+          ]
+        },
+        {
+          "order": 3,
+          "step": "3. Проверить полноту влияния",
+          "operation": "validation",
+          "operationIcon": "✓",
+          "kind": "direct",
+          "hasPrompts": true,
+          "prompts": [
+            {
+              "file": "fr-validation-stepwise.md",
+              "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/fr-validation-stepwise.md"
+            },
+            {
+              "file": "fr-validation-oneshot.md",
+              "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/fr-validation-oneshot.md"
+            }
+          ]
+        },
+        {
+          "order": 4,
+          "step": "4. Назначить gates и owners",
+          "operation": "governance",
+          "operationIcon": "§",
+          "kind": "manual",
+          "hasPrompts": false,
+          "prompts": []
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "label": "Risk Analysis",
+      "icon": "9",
+      "operations": [
+        "risk_analysis",
+        "release_readiness",
+        "validation",
+        "quality"
+      ],
+      "recommendedPrompts": [
+        "constraints_documentation_stepwise.md",
+        "constraints_documentation_oneshot.md",
+        "fr_validation_stepwise.md",
+        "fr_validation_oneshot.md"
+      ],
+      "subprocessTotal": 4,
+      "subprocessShown": 2,
+      "subprocesses": [
+        {
+          "order": 1,
+          "step": "1. Собрать риски",
+          "operation": "risk_analysis",
+          "operationIcon": "!",
+          "kind": "support",
+          "hasPrompts": true,
+          "prompts": [
+            {
+              "file": "constraints-documentation-stepwise.md",
+              "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/constraints-documentation-stepwise.md"
+            },
+            {
+              "file": "constraints-documentation-oneshot.md",
+              "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/constraints-documentation-oneshot.md"
+            }
+          ]
+        },
+        {
+          "order": 2,
+          "step": "2. Проверить readiness",
+          "operation": "release_readiness",
+          "operationIcon": "▶",
+          "kind": "manual",
+          "hasPrompts": false,
+          "prompts": []
+        },
+        {
+          "order": 3,
+          "step": "3. Проверить митигации",
+          "operation": "validation",
+          "operationIcon": "✓",
+          "kind": "direct",
+          "hasPrompts": true,
+          "prompts": [
+            {
+              "file": "fr-validation-stepwise.md",
+              "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/fr-validation-stepwise.md"
+            },
+            {
+              "file": "fr-validation-oneshot.md",
+              "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/fr-validation-oneshot.md"
+            }
+          ]
+        },
+        {
+          "order": 4,
+          "step": "4. Собрать recurring quality signals",
+          "operation": "quality",
+          "operationIcon": "◆",
+          "kind": "archive",
+          "hasPrompts": false,
+          "prompts": []
+        }
+      ]
+    }
+  ]
+}
