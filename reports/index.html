@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Отчёты — Mango BA Prompts</title>
+<style>
+:root { --fg:#1b1b1f; --muted:#5b6472; --line:#dfe3e8; --accent:#0b5fff;
+        --ok:#12805c; --warn:#a35b00; --bad:#c2352b; --bg:#fff; --code:#f5f6f8; }
+* { box-sizing:border-box; }
+body { margin:0; background:var(--bg); color:var(--fg); font:16px/1.6 -apple-system,
+       "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
+.wrap { max-width:1080px; margin:0 auto; padding:32px 24px 96px; }
+h1 { font-size:30px; line-height:1.25; margin:0 0 8px; }
+h2 { font-size:23px; margin:40px 0 12px; padding-top:12px; border-top:1px solid var(--line); }
+h3 { font-size:19px; margin:28px 0 10px; }
+h4 { font-size:17px; margin:22px 0 8px; }
+p, li { font-size:16px; }
+a { color:var(--accent); }
+table { border-collapse:collapse; width:100%; margin:16px 0; font-size:14px; }
+th, td { border:1px solid var(--line); padding:8px 10px; text-align:left; vertical-align:top; }
+th { background:#f2f4f7; font-weight:600; }
+code { background:var(--code); padding:1px 5px; border-radius:4px;
+       font:13px/1.5 "SFMono-Regular", Consolas, monospace; }
+pre { background:var(--code); padding:14px 16px; border-radius:8px; overflow:auto; }
+pre code { background:none; padding:0; }
+blockquote { margin:16px 0; padding:8px 16px; border-left:4px solid var(--line);
+             color:var(--muted); }
+.meta { color:var(--muted); font-size:14px; margin:0 0 24px; }
+.badge { display:inline-block; padding:2px 8px; border-radius:999px; font-size:12px;
+         font-weight:600; }
+.badge-ok { background:#e3f4ee; color:var(--ok); }
+.badge-warn { background:#fdf0df; color:var(--warn); }
+.badge-bad { background:#fdeceb; color:var(--bad); }
+.toolbar { position:sticky; top:0; z-index:5; display:flex; gap:12px; align-items:center;
+           background:var(--bg); border-bottom:1px solid var(--line); padding:12px 0;
+           margin-bottom:24px; }
+button { font:inherit; padding:8px 14px; border-radius:8px; border:1px solid var(--accent);
+         background:var(--accent); color:#fff; cursor:pointer; }
+button.secondary { background:#fff; color:var(--accent); }
+.diagram { margin:16px 0; overflow:auto; }
+.diagram svg { max-width:100%; height:auto; }
+.toc { background:#f7f8fa; border:1px solid var(--line); border-radius:10px; padding:12px 20px; }
+.gate { max-width:420px; margin:15vh auto; padding:28px; border:1px solid var(--line);
+        border-radius:14px; }
+.gate input { width:100%; padding:10px 12px; font:inherit; border:1px solid var(--line);
+              border-radius:8px; margin:12px 0; }
+.gate .err { color:var(--bad); min-height:22px; font-size:14px; }
+@media print { .toolbar { display:none; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Отчёты</h1>
+  <p class="meta">Отчёты по задачам, подготовленные для передачи Заказчику.
+  Доступ к каждому отчёту закрыт паролем; пароль передаётся отдельно от ссылки.</p>
+  <table>
+    <thead><tr><th>Отчёт</th><th>Актуализирован</th><th>Прогоны</th><th>Доступ</th></tr></thead>
+    <tbody><tr><td><a href="run-0060/">Задача 765 —
+        Интеграция КЦ Mango Office ↔ HH.ru Чаты</a></td><td>2026-08-27</td>
+        <td>RUN-0056, RUN-0058, RUN-0059, RUN-0060</td><td>по паролю</td></tr></tbody>
+  </table>
+  <p><a href="../index.html">← Каталог промптов</a></p>
+</div>
+</body>
+</html>
