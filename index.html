@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Mango BA Prompts</title>
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="#catalog" aria-label="Mango BA Prompts">
+        <span class="brand-mark" aria-hidden="true">M</span>
+        <span>
+          <span class="brand-title">Mango BA Prompts</span>
+          <span class="brand-subtitle">каталог промптов</span>
+        </span>
+      </a>
+      <nav class="topnav" id="topnav" aria-label="Разделы">
+        <a href="#catalog" data-nav="catalog">Каталог</a>
+        <a href="#dashboard" data-nav="dashboard">Дашборд</a>
+        <a href="#roadmap" data-nav="roadmap">Roadmap</a>
+        <a href="#processes" data-nav="processes">Процессы</a>
+        <a href="#patterns" data-nav="patterns">Паттерны</a>
+        <a href="reports/index.html">Отчёты</a>
+        <button
+          class="icon-button theme-toggle"
+          id="theme-toggle"
+          type="button"
+          title="Переключить тему"
+          aria-label="Переключить светлую и тёмную тему"
+        >
+          ◐
+        </button>
+      </nav>
+    </header>
+
+    <main>
+      <section
+        class="page-band catalog-band"
+        id="catalog"
+        data-page="catalog"
+        aria-labelledby="catalog-title"
+      >
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Prompt library</p>
+            <h1 id="catalog-title">Каталог промптов</h1>
+          </div>
+          <output class="result-count" id="result-count" aria-live="polite"></output>
+        </div>
+
+        <div class="toolbar">
+          <div class="toolbar-top">
+            <label class="sort-box">
+              <span class="sort-label">📅 Сортировать</span>
+              <select id="sort-select">
+                <option value="updated">По дате ↓</option>
+                <option value="usage">По популярности</option>
+                <option value="alpha">По алфавиту</option>
+                <option value="status">По статусу</option>
+              </select>
+            </label>
+            <button class="export-button" id="export-button" type="button" title="Скачать каталог (Markdown) по текущим фильтрам" aria-label="Скачать каталог в Markdown">📥 Скачать</button>
+          </div>
+          <div class="toolbar-bottom">
+            <label class="search-box">
+              <span class="search-icon" aria-hidden="true">⌕</span>
+              <input
+                id="search-input"
+                type="search"
+                autocomplete="off"
+                list="search-suggestions"
+                placeholder="Поиск по названию, ID, описанию, тегам"
+              />
+              <datalist id="search-suggestions"></datalist>
+            </label>
+            <button class="secondary-button" id="clear-search-button" type="button" title="Очистить поиск" aria-label="Очистить поиск" hidden>✕ Очистить поиск</button>
+            <button class="secondary-button" id="clear-filters-button" type="button" title="Сбросить фильтры" aria-label="Сбросить все фильтры" hidden>↺ Сбросить фильтры</button>
+          </div>
+        </div>
+
+        <div class="filters" id="filters-root" aria-label="Фильтры каталога"></div>
+        <div class="prompt-grid" id="prompt-grid"></div>
+      </section>
+
+      <section
+        class="page-band dashboard-band"
+        id="dashboard"
+        data-page="dashboard"
+        aria-labelledby="dashboard-title"
+      >
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">GitHub Pages</p>
+            <h2 id="dashboard-title">Внедрение промптов, агентов и мультиагентов</h2>
+          </div>
+          <a class="source-link" href="https://github.com/G-Ivan-A/mango_ba_prompts" target="_blank" rel="noreferrer">↗</a>
+        </div>
+        <div class="metrics-grid" id="metrics-grid" aria-live="polite"></div>
+        <div class="phase-lane" id="phase-lane"></div>
+      </section>
+
+      <section
+        class="page-band checks-band"
+        id="checks"
+        data-page="dashboard"
+        aria-labelledby="checks-title"
+      >
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Prompt observability</p>
+            <h2 id="checks-title">Проверки</h2>
+          </div>
+          <a class="source-link" href="https://github.com/G-Ivan-A/mango_ba_prompts/tree/main/runs" target="_blank" rel="noreferrer">↗</a>
+        </div>
+        <div class="checks-grid" id="checks-grid" aria-live="polite"></div>
+        <div class="checks-byprocess" id="checks-byprocess"></div>
+        <div class="checks-activity" id="checks-activity"></div>
+      </section>
+
+      <section
+        class="page-band roadmap-band"
+        id="roadmap"
+        data-page="roadmap"
+        aria-labelledby="roadmap-title"
+      >
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Maturity roadmap</p>
+            <h2 id="roadmap-title">Переход от промптов к агентам</h2>
+          </div>
+          <a class="source-link" href="https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/docs/ba-ecosystem.md" target="_blank" rel="noreferrer">↗</a>
+        </div>
+        <div class="roadmap-timeline" id="roadmap-levels"></div>
+        <div class="gap-grid" id="roadmap-gaps"></div>
+      </section>
+
+      <section
+        class="page-band processes-band"
+        id="processes"
+        data-page="processes"
+        aria-labelledby="processes-title"
+      >
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">BA process map</p>
+            <h2 id="processes-title">Процессы БА</h2>
+          </div>
+          <a class="source-link" href="https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/docs/ba-processes/00-index.md" target="_blank" rel="noreferrer">↗</a>
+        </div>
+        <div class="process-grid" id="process-grid"></div>
+      </section>
+
+      <section
+        class="page-band process-band"
+        id="process-tree-panel"
+        data-page="processes"
+        aria-labelledby="process-tree-heading"
+      >
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Подпроцессы с промптами</p>
+            <h2 id="process-tree-heading">Процессы и подпроцессы с промптами</h2>
+          </div>
+          <a class="source-link" href="https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/docs/ba-processes/00-index.md" target="_blank" rel="noreferrer">↗</a>
+        </div>
+        <p class="process-note" id="process-note" aria-live="polite"></p>
+        <div class="process-actions" id="process-actions" hidden>
+          <button class="icon-button" id="process-expand" type="button">Развернуть все</button>
+          <button class="icon-button" id="process-collapse" type="button">Свернуть все</button>
+        </div>
+        <div class="process-tree" id="process-tree"></div>
+      </section>
+
+      <section
+        class="page-band patterns-band"
+        id="patterns"
+        data-page="patterns"
+        aria-labelledby="patterns-title"
+      >
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Pattern library</p>
+            <h2 id="patterns-title">Паттерны</h2>
+          </div>
+          <a class="source-link" href="https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/patterns/README.md" target="_blank" rel="noreferrer">↗</a>
+        </div>
+        <div class="pattern-grid" id="pattern-grid"></div>
+      </section>
+    </main>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <div class="modal" id="process-modal" hidden>
+      <div class="modal-backdrop" data-modal-close></div>
+      <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+        <button class="modal-close" id="modal-close" type="button" aria-label="Закрыть">×</button>
+        <div class="modal-body" id="modal-body"></div>
+      </div>
+    </div>
+    <script src="app.js" type="module"></script>
+    <!-- Mango Office Widget -->
+    <script>
+      (function(w, d, u, i, o, s, p) {
+          if (d.getElementById(i)) { return; } w['MangoObject'] = o;
+          w[o] = w[o] || function() { (w[o].q = w[o].q || []).push(arguments) }; w[o].u = u; w[o].t = 1 * new Date();
+          s = d.createElement('script'); s.async = 1; s.id = i; s.src = u; s.charset = 'utf-8';
+          p = d.getElementsByTagName('script')[0]; p.parentNode.insertBefore(s, p);
+      })(window, document, '//widgets.mango-office.ru/widgets/mango.js', 'mango-js', 'mgo');
+      mgo({multichannel: {id: 23303}});
+    </script>
+  </body>
+</html>
