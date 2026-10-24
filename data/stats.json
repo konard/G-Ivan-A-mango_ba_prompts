@@ -1,0 +1,395 @@
+{
+  "generatedAt": "2026-10-24T12:41:12.558Z",
+  "sourceFiles": [
+    {
+      "path": "prompts/README.md",
+      "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/README.md"
+    },
+    {
+      "path": "docs/taxonomy.md",
+      "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/docs/taxonomy.md"
+    },
+    {
+      "path": "docs/ba-processes/00-index.md",
+      "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/docs/ba-processes/00-index.md"
+    },
+    {
+      "path": "docs/ba-ecosystem.md",
+      "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/docs/ba-ecosystem.md"
+    },
+    {
+      "path": "patterns/README.md",
+      "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/patterns/README.md"
+    },
+    {
+      "path": "docs/ba-processes/bcreq-manual-process.md",
+      "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/docs/ba-processes/bcreq-manual-process.md"
+    }
+  ],
+  "totals": {
+    "allPrompts": 44,
+    "activePrompts": 20,
+    "archivedPrompts": 24,
+    "testsPassed": 0,
+    "inWork": 20,
+    "deferred": 24,
+    "modes": {
+      "legacy": 11,
+      "oneshot": 15,
+      "stepwise": 18
+    },
+    "statuses": {
+      "draft": 20,
+      "archived": 24
+    },
+    "operations": {
+      "ingestion": 2,
+      "governance": 1,
+      "documentation": 12,
+      "understanding": 6,
+      "risk_analysis": 1,
+      "solution_design": 5,
+      "impact_analysis": 1,
+      "validation": 4,
+      "modeling": 10,
+      "quality": 2
+    },
+    "processes": {
+      "Формирование ФТ/ТЗ": 32,
+      "Помощь ПО/ПМ": 10,
+      "Risk Analysis": 4,
+      "Анализ тендерных ТЗ": 10,
+      "Формирование UC/US": 13,
+      "Impact Analysis": 4,
+      "Валидация ФТ/ТЗ": 4,
+      "Статистика": 2
+    }
+  },
+  "taxonomy": {
+    "operations": 13,
+    "processes": 9
+  },
+  "processIndex": [
+    {
+      "id": 1,
+      "label": "Формирование ФТ/ТЗ",
+      "operations": [
+        "ingestion",
+        "understanding",
+        "modeling",
+        "documentation",
+        "solution_design",
+        "validation"
+      ],
+      "pattern": "asr-ingestion, glossary-context-generation, user-story-generation, usecase-generation, fr-generation, fr-validation",
+      "patternSlugs": [
+        "asr-ingestion",
+        "glossary-context-generation",
+        "user-story-generation",
+        "usecase-generation",
+        "fr-generation",
+        "fr-validation"
+      ],
+      "recommendedPrompts": [
+        "asr_ingestion_oneshot.md",
+        "asr_ingestion_legacy.md",
+        "bcreq_context_understanding_stepwise.md",
+        "bcreq_in_understanding_oneshot.md",
+        "bcreq_scenarios_modeling_oneshot.md",
+        "bcreq_uc_modeling_stepwise.md",
+        "bcreq_fr_documentation_stepwise.md",
+        "bcreq_core_documentation_oneshot.md",
+        "bcreq_constraints_documentation_stepwise.md",
+        "bcreq_work_solution_design_oneshot.md",
+        "bcreq_orr_solution_design_stepwise.md",
+        "bcreq_review_validation_oneshot.md"
+      ],
+      "promptFiles": [
+        "asr-ingestion-oneshot.md",
+        "asr-ingestion-legacy.md",
+        "bcreq-context-understanding-stepwise.md",
+        "bcreq-in-understanding-oneshot.md",
+        "bcreq-scenarios-modeling-oneshot.md",
+        "bcreq-uc-modeling-stepwise.md",
+        "bcreq-fr-documentation-stepwise.md",
+        "bcreq-core-documentation-oneshot.md",
+        "bcreq-constraints-documentation-stepwise.md",
+        "bcreq-work-solution-design-oneshot.md",
+        "bcreq-orr-solution-design-stepwise.md",
+        "bcreq-review-validation-oneshot.md"
+      ]
+    },
+    {
+      "id": 2,
+      "label": "Валидация ФТ/ТЗ",
+      "operations": [
+        "validation",
+        "quality",
+        "risk_analysis"
+      ],
+      "pattern": "fr-validation",
+      "patternSlugs": [
+        "fr-validation"
+      ],
+      "recommendedPrompts": [
+        "bcreq_review_validation_oneshot.md"
+      ],
+      "promptFiles": [
+        "bcreq-review-validation-oneshot.md"
+      ]
+    },
+    {
+      "id": 3,
+      "label": "Анализ тендерных ТЗ",
+      "operations": [
+        "ingestion",
+        "understanding",
+        "validation",
+        "risk_analysis",
+        "quality"
+      ],
+      "pattern": "glossary-context-generation, fr-validation",
+      "patternSlugs": [
+        "glossary-context-generation",
+        "fr-validation"
+      ],
+      "recommendedPrompts": [
+        "bcreq_context_understanding_stepwise.md",
+        "bcreq_in_understanding_oneshot.md",
+        "bcreq_review_validation_oneshot.md"
+      ],
+      "promptFiles": [
+        "bcreq-context-understanding-stepwise.md",
+        "bcreq-in-understanding-oneshot.md",
+        "bcreq-review-validation-oneshot.md"
+      ]
+    },
+    {
+      "id": 4,
+      "label": "Формирование UC/US",
+      "operations": [
+        "understanding",
+        "modeling",
+        "validation",
+        "documentation"
+      ],
+      "pattern": "glossary-context-generation, user-story-generation, usecase-generation, fr-validation",
+      "patternSlugs": [
+        "glossary-context-generation",
+        "user-story-generation",
+        "usecase-generation",
+        "fr-validation"
+      ],
+      "recommendedPrompts": [
+        "bcreq_context_understanding_stepwise.md",
+        "bcreq_in_understanding_oneshot.md",
+        "bcreq_scenarios_modeling_oneshot.md",
+        "bcreq_uc_modeling_stepwise.md",
+        "bcreq_review_validation_oneshot.md"
+      ],
+      "promptFiles": [
+        "bcreq-context-understanding-stepwise.md",
+        "bcreq-in-understanding-oneshot.md",
+        "bcreq-scenarios-modeling-oneshot.md",
+        "bcreq-uc-modeling-stepwise.md",
+        "bcreq-review-validation-oneshot.md"
+      ]
+    },
+    {
+      "id": 5,
+      "label": "Визуализация UML/BPMN",
+      "operations": [
+        "modeling",
+        "documentation",
+        "quality"
+      ],
+      "pattern": "Косвенно: usecase-generation как сценарный источник",
+      "patternSlugs": [
+        "usecase-generation"
+      ],
+      "recommendedPrompts": [
+        "bcreq_uc_modeling_stepwise.md",
+        "bcreq_scenarios_modeling_oneshot.md"
+      ],
+      "promptFiles": [
+        "bcreq-uc-modeling-stepwise.md",
+        "bcreq-scenarios-modeling-oneshot.md"
+      ]
+    },
+    {
+      "id": 6,
+      "label": "Помощь ПО/ПМ",
+      "operations": [
+        "ingestion",
+        "understanding",
+        "documentation",
+        "governance"
+      ],
+      "pattern": "asr-ingestion, glossary-context-generation, meeting-summary-generation",
+      "patternSlugs": [
+        "asr-ingestion",
+        "glossary-context-generation",
+        "meeting-summary-generation"
+      ],
+      "recommendedPrompts": [
+        "asr_ingestion_oneshot.md",
+        "meeting_customer_documentation_stepwise.md",
+        "meeting_team_documentation_stepwise.md",
+        "bcreq_context_understanding_stepwise.md",
+        "bcreq_in_understanding_oneshot.md",
+        "letter_customer_documentation_legacy.md",
+        "session_debug_documentation_oneshot.md"
+      ],
+      "promptFiles": [
+        "asr-ingestion-oneshot.md",
+        "meeting-customer-documentation-stepwise.md",
+        "meeting-team-documentation-stepwise.md",
+        "bcreq-context-understanding-stepwise.md",
+        "bcreq-in-understanding-oneshot.md",
+        "letter-customer-documentation-legacy.md",
+        "session-debug-documentation-oneshot.md"
+      ]
+    },
+    {
+      "id": 7,
+      "label": "Статистика",
+      "operations": [
+        "ingestion",
+        "quality",
+        "research"
+      ],
+      "pattern": "— (workflow map)",
+      "patternSlugs": [],
+      "recommendedPrompts": [
+        "archive/tz_stats_generator_legacy.md",
+        "archive/tz_stats_generator_simple_legacy.md"
+      ],
+      "promptFiles": [
+        "tz-stats-generator-legacy.md",
+        "tz-stats-generator-simple-legacy.md"
+      ]
+    },
+    {
+      "id": 8,
+      "label": "Impact Analysis",
+      "operations": [
+        "reverse_requirements",
+        "impact_analysis",
+        "validation",
+        "governance"
+      ],
+      "pattern": "— (workflow map)",
+      "patternSlugs": [],
+      "recommendedPrompts": [
+        "bcreq_orr_solution_design_stepwise.md",
+        "bcreq_work_solution_design_oneshot.md",
+        "bcreq_review_validation_oneshot.md"
+      ],
+      "promptFiles": [
+        "bcreq-orr-solution-design-stepwise.md",
+        "bcreq-work-solution-design-oneshot.md",
+        "bcreq-review-validation-oneshot.md"
+      ]
+    },
+    {
+      "id": 9,
+      "label": "Risk Analysis",
+      "operations": [
+        "risk_analysis",
+        "release_readiness",
+        "validation",
+        "quality"
+      ],
+      "pattern": "— (workflow map)",
+      "patternSlugs": [],
+      "recommendedPrompts": [
+        "bcreq_constraints_documentation_stepwise.md",
+        "bcreq_work_solution_design_oneshot.md",
+        "bcreq_review_validation_oneshot.md"
+      ],
+      "promptFiles": [
+        "bcreq-constraints-documentation-stepwise.md",
+        "bcreq-work-solution-design-oneshot.md",
+        "bcreq-review-validation-oneshot.md"
+      ]
+    }
+  ],
+  "phases": [
+    {
+      "id": "prompts",
+      "phase": 1,
+      "title": "Промпты",
+      "status": "current",
+      "progress": 45,
+      "levelIds": [
+        "level-1"
+      ],
+      "summary": "Ручной выбор prompt-файла, копирование в AI-чат и human review результата.",
+      "metrics": [
+        {
+          "label": "активных",
+          "value": 20
+        },
+        {
+          "label": "проверено",
+          "value": 0
+        },
+        {
+          "label": "в работе",
+          "value": 20
+        }
+      ]
+    },
+    {
+      "id": "agents",
+      "phase": 2,
+      "title": "Агенты",
+      "status": "planned",
+      "progress": 0,
+      "levelIds": [
+        "level-2",
+        "level-3"
+      ],
+      "summary": "Системный prompt, БЗ/RAG и агентный workflow поверх текущей библиотеки.",
+      "metrics": [
+        {
+          "label": "основа",
+          "value": 9
+        },
+        {
+          "label": "операций",
+          "value": 13
+        },
+        {
+          "label": "gaps",
+          "value": 7
+        }
+      ]
+    },
+    {
+      "id": "multiagents",
+      "phase": 3,
+      "title": "Мультиагенты",
+      "status": "planned",
+      "progress": 0,
+      "levelIds": [
+        "level-4"
+      ],
+      "summary": "Несколько ролей: BA orchestrator, evidence, documentation, risk и reviewer.",
+      "metrics": [
+        {
+          "label": "уровень",
+          "value": 4
+        },
+        {
+          "label": "human gates",
+          "value": "on"
+        },
+        {
+          "label": "статус",
+          "value": "план"
+        }
+      ]
+    }
+  ]
+}
