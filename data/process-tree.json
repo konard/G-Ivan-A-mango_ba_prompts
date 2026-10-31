@@ -1,0 +1,689 @@
+{
+  "generatedAt": "2026-10-31T18:07:02.298Z",
+  "sourceFiles": [
+    {
+      "path": "docs/ba-processes/00-index.md",
+      "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/docs/ba-processes/00-index.md"
+    }
+  ],
+  "treeThreshold": 20,
+  "totalProcesses": 9,
+  "shownProcesses": 8,
+  "totalSubprocesses": 38,
+  "shownSubprocesses": 22,
+  "useTree": true,
+  "processes": [
+    {
+      "id": 1,
+      "label": "Формирование ФТ/ТЗ",
+      "icon": "1",
+      "operations": [
+        "ingestion",
+        "understanding",
+        "modeling",
+        "documentation",
+        "solution_design",
+        "validation"
+      ],
+      "recommendedPrompts": [],
+      "subprocessTotal": 6,
+      "subprocessShown": 5,
+      "subprocesses": [
+        {
+          "order": 1,
+          "step": "1. Нормализовать сырой вход",
+          "operation": "ingestion",
+          "operationIcon": "↓",
+          "kind": "manual",
+          "hasPrompts": false,
+          "prompts": []
+        },
+        {
+          "order": 2,
+          "step": "2. Собрать контекст",
+          "operation": "understanding",
+          "operationIcon": "?",
+          "kind": "direct",
+          "hasPrompts": true,
+          "prompts": [
+            {
+              "file": "bcreq-context-understanding-stepwise.md",
+              "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/bcreq-context-understanding-stepwise.md"
+            },
+            {
+              "file": "bcreq-products-impact-analysis-stepwise.md",
+              "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/bcreq-products-impact-analysis-stepwise.md"
+            },
+            {
+              "file": "bcreq-in-understanding-oneshot.md",
+              "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/bcreq-in-understanding-oneshot.md"
+            }
+          ]
+        },
+        {
+          "order": 3,
+          "step": "3. Смоделировать сценарии при необходимости",
+          "operation": "modeling",
+          "operationIcon": "□",
+          "kind": "direct",
+          "hasPrompts": true,
+          "prompts": [
+            {
+              "file": "bcreq-scenarios-modeling-oneshot.md",
+              "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/bcreq-scenarios-modeling-oneshot.md"
+            },
+            {
+              "file": "bcreq-uc-modeling-stepwise.md",
+              "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/bcreq-uc-modeling-stepwise.md"
+            }
+          ]
+        },
+        {
+          "order": 4,
+          "step": "4. Оформить ФТ и ограничения",
+          "operation": "documentation",
+          "operationIcon": "¶",
+          "kind": "direct",
+          "hasPrompts": true,
+          "prompts": [
+            {
+              "file": "bcreq-fr-documentation-stepwise.md",
+              "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/bcreq-fr-documentation-stepwise.md"
+            },
+            {
+              "file": "bcreq-nfr-documentation-stepwise.md",
+              "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/bcreq-nfr-documentation-stepwise.md"
+            },
+            {
+              "file": "bcreq-core-documentation-oneshot.md",
+              "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/bcreq-core-documentation-oneshot.md"
+            },
+            {
+              "file": "bcreq-constraints-documentation-stepwise.md",
+              "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/bcreq-constraints-documentation-stepwise.md"
+            },
+            {
+              "file": "bcreq-work-solution-design-oneshot.md",
+              "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/bcreq-work-solution-design-oneshot.md"
+            }
+          ]
+        },
+        {
+          "order": 5,
+          "step": "5. Подготовить технические детали",
+          "operation": "solution_design",
+          "operationIcon": "⚙",
+          "kind": "direct",
+          "hasPrompts": true,
+          "prompts": [
+            {
+              "file": "bcreq-orr-solution-design-stepwise.md",
+              "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/bcreq-orr-solution-design-stepwise.md"
+            },
+            {
+              "file": "bcreq-uc-modeling-stepwise.md",
+              "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/bcreq-uc-modeling-stepwise.md"
+            },
+            {
+              "file": "bcreq-extra-risk-analysis-stepwise.md",
+              "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/bcreq-extra-risk-analysis-stepwise.md"
+            },
+            {
+              "file": "bcreq-work-solution-design-oneshot.md",
+              "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/bcreq-work-solution-design-oneshot.md"
+            }
+          ]
+        },
+        {
+          "order": 6,
+          "step": "6. Проверить черновик",
+          "operation": "validation",
+          "operationIcon": "✓",
+          "kind": "direct",
+          "hasPrompts": true,
+          "prompts": [
+            {
+              "file": "bcreq-review-validation-oneshot.md",
+              "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/bcreq-review-validation-oneshot.md"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "label": "Валидация ФТ/ТЗ",
+      "icon": "2",
+      "operations": [
+        "validation",
+        "quality",
+        "risk_analysis"
+      ],
+      "recommendedPrompts": [],
+      "subprocessTotal": 4,
+      "subprocessShown": 3,
+      "subprocesses": [
+        {
+          "order": 1,
+          "step": "1. Провести аудит структуры и формулировок",
+          "operation": "validation",
+          "operationIcon": "✓",
+          "kind": "direct",
+          "hasPrompts": true,
+          "prompts": [
+            {
+              "file": "bcreq-review-validation-oneshot.md",
+              "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/bcreq-review-validation-oneshot.md"
+            }
+          ]
+        },
+        {
+          "order": 2,
+          "step": "2. Классифицировать качество",
+          "operation": "quality",
+          "operationIcon": "◆",
+          "kind": "manual",
+          "hasPrompts": false,
+          "prompts": []
+        },
+        {
+          "order": 3,
+          "step": "3. Отметить риски",
+          "operation": "risk_analysis",
+          "operationIcon": "!",
+          "kind": "support",
+          "hasPrompts": true,
+          "prompts": [
+            {
+              "file": "bcreq-constraints-documentation-stepwise.md",
+              "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/bcreq-constraints-documentation-stepwise.md"
+            }
+          ]
+        },
+        {
+          "order": 4,
+          "step": "4. Вернуть результат в документ",
+          "operation": "documentation",
+          "operationIcon": "¶",
+          "kind": "direct",
+          "hasPrompts": true,
+          "prompts": [
+            {
+              "file": "bcreq-fr-documentation-stepwise.md",
+              "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/bcreq-fr-documentation-stepwise.md"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "label": "Анализ тендерных ТЗ",
+      "icon": "3",
+      "operations": [
+        "ingestion",
+        "understanding",
+        "validation",
+        "risk_analysis",
+        "quality"
+      ],
+      "recommendedPrompts": [],
+      "subprocessTotal": 5,
+      "subprocessShown": 2,
+      "subprocesses": [
+        {
+          "order": 1,
+          "step": "1. Сохранить структуру внешнего ТЗ",
+          "operation": "ingestion",
+          "operationIcon": "↓",
+          "kind": "manual",
+          "hasPrompts": false,
+          "prompts": []
+        },
+        {
+          "order": 2,
+          "step": "2. Понять термины и неоднозначности",
+          "operation": "understanding",
+          "operationIcon": "?",
+          "kind": "direct",
+          "hasPrompts": true,
+          "prompts": [
+            {
+              "file": "bcreq-context-understanding-stepwise.md",
+              "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/bcreq-context-understanding-stepwise.md"
+            },
+            {
+              "file": "bcreq-in-understanding-oneshot.md",
+              "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/bcreq-in-understanding-oneshot.md"
+            }
+          ]
+        },
+        {
+          "order": 3,
+          "step": "3. Проверить атомарность и проверяемость",
+          "operation": "validation",
+          "operationIcon": "✓",
+          "kind": "direct",
+          "hasPrompts": true,
+          "prompts": [
+            {
+              "file": "bcreq-review-validation-oneshot.md",
+              "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/bcreq-review-validation-oneshot.md"
+            }
+          ]
+        },
+        {
+          "order": 4,
+          "step": "4. Оценить риски участия",
+          "operation": "risk_analysis",
+          "operationIcon": "!",
+          "kind": "manual",
+          "hasPrompts": false,
+          "prompts": []
+        },
+        {
+          "order": 5,
+          "step": "5. Свести coverage/gaps",
+          "operation": "quality",
+          "operationIcon": "◆",
+          "kind": "manual",
+          "hasPrompts": false,
+          "prompts": []
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "label": "Формирование UC/US",
+      "icon": "4",
+      "operations": [
+        "understanding",
+        "modeling",
+        "validation",
+        "documentation"
+      ],
+      "recommendedPrompts": [],
+      "subprocessTotal": 5,
+      "subprocessShown": 5,
+      "subprocesses": [
+        {
+          "order": 1,
+          "step": "1. Уточнить роль, ценность и границы",
+          "operation": "understanding",
+          "operationIcon": "?",
+          "kind": "direct",
+          "hasPrompts": true,
+          "prompts": [
+            {
+              "file": "bcreq-context-understanding-stepwise.md",
+              "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/bcreq-context-understanding-stepwise.md"
+            },
+            {
+              "file": "bcreq-in-understanding-oneshot.md",
+              "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/bcreq-in-understanding-oneshot.md"
+            }
+          ]
+        },
+        {
+          "order": 2,
+          "step": "2. Сформировать User Story",
+          "operation": "modeling",
+          "operationIcon": "□",
+          "kind": "direct",
+          "hasPrompts": true,
+          "prompts": [
+            {
+              "file": "bcreq-scenarios-modeling-oneshot.md",
+              "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/bcreq-scenarios-modeling-oneshot.md"
+            }
+          ]
+        },
+        {
+          "order": 3,
+          "step": "3. Сформировать Use Case",
+          "operation": "modeling",
+          "operationIcon": "□",
+          "kind": "direct",
+          "hasPrompts": true,
+          "prompts": [
+            {
+              "file": "bcreq-uc-modeling-stepwise.md",
+              "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/bcreq-uc-modeling-stepwise.md"
+            },
+            {
+              "file": "bcreq-scenarios-modeling-oneshot.md",
+              "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/bcreq-scenarios-modeling-oneshot.md"
+            }
+          ]
+        },
+        {
+          "order": 4,
+          "step": "4. Проверить связку US -> UC -> ФТ",
+          "operation": "validation",
+          "operationIcon": "✓",
+          "kind": "direct",
+          "hasPrompts": true,
+          "prompts": [
+            {
+              "file": "bcreq-review-validation-oneshot.md",
+              "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/bcreq-review-validation-oneshot.md"
+            }
+          ]
+        },
+        {
+          "order": 5,
+          "step": "5. Передать в ФТ при необходимости",
+          "operation": "documentation",
+          "operationIcon": "¶",
+          "kind": "direct",
+          "hasPrompts": true,
+          "prompts": [
+            {
+              "file": "bcreq-fr-documentation-stepwise.md",
+              "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/bcreq-fr-documentation-stepwise.md"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "label": "Визуализация UML/BPMN",
+      "icon": "5",
+      "operations": [
+        "modeling",
+        "documentation",
+        "quality"
+      ],
+      "recommendedPrompts": [],
+      "subprocessTotal": 3,
+      "subprocessShown": 1,
+      "subprocesses": [
+        {
+          "order": 1,
+          "step": "1. Выбрать тип диаграммы",
+          "operation": "modeling",
+          "operationIcon": "□",
+          "kind": "support",
+          "hasPrompts": true,
+          "prompts": [
+            {
+              "file": "bcreq-uc-modeling-stepwise.md",
+              "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/bcreq-uc-modeling-stepwise.md"
+            },
+            {
+              "file": "bcreq-scenarios-modeling-oneshot.md",
+              "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/bcreq-scenarios-modeling-oneshot.md"
+            }
+          ]
+        },
+        {
+          "order": 2,
+          "step": "2. Оформить source диаграммы",
+          "operation": "documentation",
+          "operationIcon": "¶",
+          "kind": "manual",
+          "hasPrompts": false,
+          "prompts": []
+        },
+        {
+          "order": 3,
+          "step": "3. Сверить диаграмму с текстом",
+          "operation": "quality",
+          "operationIcon": "◆",
+          "kind": "manual",
+          "hasPrompts": false,
+          "prompts": []
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "label": "Помощь ПО/ПМ",
+      "icon": "6",
+      "operations": [
+        "ingestion",
+        "understanding",
+        "documentation",
+        "governance"
+      ],
+      "recommendedPrompts": [],
+      "subprocessTotal": 4,
+      "subprocessShown": 1,
+      "subprocesses": [
+        {
+          "order": 1,
+          "step": "1. Очистить ASR или длинный вход",
+          "operation": "ingestion",
+          "operationIcon": "↓",
+          "kind": "manual",
+          "hasPrompts": false,
+          "prompts": []
+        },
+        {
+          "order": 2,
+          "step": "2. Выделить смысл и вопросы",
+          "operation": "understanding",
+          "operationIcon": "?",
+          "kind": "direct",
+          "hasPrompts": true,
+          "prompts": [
+            {
+              "file": "bcreq-context-understanding-stepwise.md",
+              "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/bcreq-context-understanding-stepwise.md"
+            },
+            {
+              "file": "bcreq-in-understanding-oneshot.md",
+              "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/bcreq-in-understanding-oneshot.md"
+            }
+          ]
+        },
+        {
+          "order": 3,
+          "step": "3. Оформить коммуникацию",
+          "operation": "documentation",
+          "operationIcon": "¶",
+          "kind": "manual",
+          "hasPrompts": false,
+          "prompts": []
+        },
+        {
+          "order": 4,
+          "step": "4. Зафиксировать управление процессом",
+          "operation": "governance",
+          "operationIcon": "§",
+          "kind": "manual",
+          "hasPrompts": false,
+          "prompts": []
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "label": "Статистика",
+      "icon": "7",
+      "operations": [
+        "ingestion",
+        "quality",
+        "research"
+      ],
+      "recommendedPrompts": [],
+      "subprocessTotal": 3,
+      "subprocessShown": 0,
+      "subprocesses": [
+        {
+          "order": 1,
+          "step": "1. Собрать корпус",
+          "operation": "ingestion",
+          "operationIcon": "↓",
+          "kind": "manual",
+          "hasPrompts": false,
+          "prompts": []
+        },
+        {
+          "order": 2,
+          "step": "2. Нормализовать категории",
+          "operation": "quality",
+          "operationIcon": "◆",
+          "kind": "archive",
+          "hasPrompts": false,
+          "prompts": []
+        },
+        {
+          "order": 3,
+          "step": "3. Сформировать выводы",
+          "operation": "research",
+          "operationIcon": "⌕",
+          "kind": "manual",
+          "hasPrompts": false,
+          "prompts": []
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "label": "Impact Analysis",
+      "icon": "8",
+      "operations": [
+        "reverse_requirements",
+        "impact_analysis",
+        "validation",
+        "governance"
+      ],
+      "recommendedPrompts": [],
+      "subprocessTotal": 4,
+      "subprocessShown": 3,
+      "subprocesses": [
+        {
+          "order": 1,
+          "step": "1. Восстановить текущее поведение",
+          "operation": "reverse_requirements",
+          "operationIcon": "↩",
+          "kind": "support",
+          "hasPrompts": true,
+          "prompts": [
+            {
+              "file": "bcreq-review-validation-oneshot.md",
+              "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/bcreq-review-validation-oneshot.md"
+            }
+          ]
+        },
+        {
+          "order": 2,
+          "step": "2. Связать изменение с артефактами",
+          "operation": "impact_analysis",
+          "operationIcon": "↗",
+          "kind": "support",
+          "hasPrompts": true,
+          "prompts": [
+            {
+              "file": "bcreq-products-impact-analysis-stepwise.md",
+              "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/bcreq-products-impact-analysis-stepwise.md"
+            },
+            {
+              "file": "bcreq-orr-solution-design-stepwise.md",
+              "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/bcreq-orr-solution-design-stepwise.md"
+            },
+            {
+              "file": "bcreq-work-solution-design-oneshot.md",
+              "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/bcreq-work-solution-design-oneshot.md"
+            }
+          ]
+        },
+        {
+          "order": 3,
+          "step": "3. Проверить полноту влияния",
+          "operation": "validation",
+          "operationIcon": "✓",
+          "kind": "direct",
+          "hasPrompts": true,
+          "prompts": [
+            {
+              "file": "bcreq-review-validation-oneshot.md",
+              "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/bcreq-review-validation-oneshot.md"
+            }
+          ]
+        },
+        {
+          "order": 4,
+          "step": "4. Назначить gates и owners",
+          "operation": "governance",
+          "operationIcon": "§",
+          "kind": "manual",
+          "hasPrompts": false,
+          "prompts": []
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "label": "Risk Analysis",
+      "icon": "9",
+      "operations": [
+        "risk_analysis",
+        "release_readiness",
+        "validation",
+        "quality"
+      ],
+      "recommendedPrompts": [],
+      "subprocessTotal": 4,
+      "subprocessShown": 2,
+      "subprocesses": [
+        {
+          "order": 1,
+          "step": "1. Собрать риски",
+          "operation": "risk_analysis",
+          "operationIcon": "!",
+          "kind": "support",
+          "hasPrompts": true,
+          "prompts": [
+            {
+              "file": "bcreq-extra-risk-analysis-stepwise.md",
+              "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/bcreq-extra-risk-analysis-stepwise.md"
+            },
+            {
+              "file": "bcreq-constraints-documentation-stepwise.md",
+              "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/bcreq-constraints-documentation-stepwise.md"
+            },
+            {
+              "file": "bcreq-work-solution-design-oneshot.md",
+              "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/bcreq-work-solution-design-oneshot.md"
+            }
+          ]
+        },
+        {
+          "order": 2,
+          "step": "2. Проверить readiness",
+          "operation": "release_readiness",
+          "operationIcon": "▶",
+          "kind": "manual",
+          "hasPrompts": false,
+          "prompts": []
+        },
+        {
+          "order": 3,
+          "step": "3. Проверить митигации",
+          "operation": "validation",
+          "operationIcon": "✓",
+          "kind": "direct",
+          "hasPrompts": true,
+          "prompts": [
+            {
+              "file": "bcreq-review-validation-oneshot.md",
+              "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/bcreq-review-validation-oneshot.md"
+            }
+          ]
+        },
+        {
+          "order": 4,
+          "step": "4. Собрать recurring quality signals",
+          "operation": "quality",
+          "operationIcon": "◆",
+          "kind": "archive",
+          "hasPrompts": false,
+          "prompts": []
+        }
+      ]
+    }
+  ]
+}
