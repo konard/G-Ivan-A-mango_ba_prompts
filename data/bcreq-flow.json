@@ -1,0 +1,1811 @@
+{
+  "generatedAt": "2026-11-07T19:51:31.074Z",
+  "sourceFiles": [
+    {
+      "path": "docs/ba-processes/bcreq-manual-process.md",
+      "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/docs/ba-processes/bcreq-manual-process.md"
+    }
+  ],
+  "title": "Создание спецификации бизнес-требований и дизайна решения (BCREQ)",
+  "manual": {
+    "title": "Создание спецификации бизнес-требований и дизайна решения (BCREQ)",
+    "route": "manual",
+    "contract": {
+      "label": "Контракт состояния ручного BCREQ",
+      "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/docs/contracts/bcreq-manual-state.md"
+    },
+    "classes": {
+      "label": "Инвентарь 39 классов",
+      "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/standards/bcreq-manual-classes/README.md"
+    },
+    "rules": [
+      {
+        "id": "П-1",
+        "text": "Один промпт — один класс операции. Шаг 1.2 — первое появление класса; в следующих стадиях класс повторяется по порядку 1.3 с тем же контрактом."
+      },
+      {
+        "id": "П-2",
+        "text": "Промпт копируется целиком кнопкой ⧉ на сайте; первая строка копии — комментарий с ID промпта, его не удалять. Вместе с промптом вставить контракт состояния, применимые мета-стандарты и конституцию: К-36 проверяет их версии."
+      },
+      {
+        "id": "П-3",
+        "text": "Вход заполняется в JSON-блоке стандарта класса: task, phase, class, input_mode (START или CONTINUE), revision, rule_bundle. null — неизвестно, [] — проверено и пусто."
+      },
+      {
+        "id": "П-4",
+        "text": "Каждый ответ модели — один блок BCREQ_OUTPUT. БА проверяет receipt и recommendation и передаёт блок в следующий вызов; новый чат — через К-12 FULL и проверку переноса К-13."
+      },
+      {
+        "id": "П-5",
+        "text": "Модель только рекомендует следующий класс и гейт. Шаг, повтор, пропуск, возврат и гейт выбирает БА или согласующий; молчание не согласие."
+      },
+      {
+        "id": "П-6",
+        "text": "Вопросы К-04 БА отправляет пакетом по адресатам, модель ответы не придумывает. Пробел источника блокирует только зависящие утверждения (WAITING)."
+      },
+      {
+        "id": "П-7",
+        "text": "Цикл стадии: К-12 собирает фазу, К-20 предлагает гейт, человек решает, К-34 фиксирует решение, К-12 обновляет полный результат."
+      },
+      {
+        "id": "П-8",
+        "text": "Изменение кандидата: К-29 помечает зависимое stale, К-30 правит адресно, К-28 и К-31 проверяют, нужный объём согласуется заново."
+      }
+    ],
+    "steps": [
+      {
+        "number": 1,
+        "step": "Ш-1 Загрузка правил и параметров чата",
+        "stage": "A-IN, A-CORE, A-WORK, A-RELEASE",
+        "stages": [
+          "A-IN",
+          "A-CORE",
+          "A-WORK",
+          "A-RELEASE"
+        ],
+        "prompt": {
+          "id": "mango-bcreq-c36-rule-bundle",
+          "classId": "К-36",
+          "file": "36-rule-bundle.md",
+          "title": "К-36. Загрузка правил и параметров чата",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/standards/bcreq-manual-classes/36-rule-bundle.md"
+        },
+        "params": "class: К-36; phase: a-in / a-core / a-work / a-release; input_mode: START (новый чат — CONTINUE)",
+        "prepare": "full_constitution, applicable_standards, versions, task_parameters, access_receipts",
+        "actions": [
+          "Скопировать промпт К-36 кнопкой ⧉ вместе с контрактом состояния и правилами из К-36",
+          "Заполнить блок входа: full_constitution, applicable_standards, versions, task_parameters, access_receipts",
+          "Если нет обязательного текста правил или несовместимый bundle: запросить копию у БА, runtime недоступен — допустим локальный полный bundle",
+          "Проверить: все версии реальны, конфигурация не названа согласием, нет зависимости от памяти модели",
+          "Сохранить блок BCREQ_OUTPUT и решить, какой класс запустить следующим"
+        ],
+        "result": "rule_receipt{documents,versions,available,missing,precedence}, task_config",
+        "gate": "—"
+      },
+      {
+        "number": 2,
+        "step": "Ш-2 Приём исходного запроса",
+        "stage": "A-IN",
+        "stages": [
+          "A-IN"
+        ],
+        "prompt": {
+          "id": "mango-bcreq-c01-intake",
+          "classId": "К-01",
+          "file": "01-intake.md",
+          "title": "К-01. Приём исходного запроса",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/standards/bcreq-manual-classes/01-intake.md"
+        },
+        "params": "class: К-01; phase: a-in; input_mode: CONTINUE",
+        "prepare": "raw_request, questionnaire?, additional_comments[{text,author_role?}]",
+        "actions": [
+          "Скопировать промпт К-01 кнопкой ⧉ вместе с контрактом состояния и правилами из К-36",
+          "Заполнить блок входа: raw_request, questionnaire?, additional_comments[{text,author_role?}]",
+          "Если нет raw_request: запросить его, неполная анкета сама по себе не блокирует разбор",
+          "Проверить: дословность raw, роли комментариев, отсутствие выдуманных ответов анкеты",
+          "Сохранить блок BCREQ_OUTPUT и решить, какой класс запустить следующим"
+        ],
+        "result": "request_id, raw_verbatim, questionnaire, comments, source_register",
+        "gate": "—"
+      },
+      {
+        "number": 3,
+        "step": "Ш-3 Атомарная нормализация",
+        "stage": "A-IN",
+        "stages": [
+          "A-IN"
+        ],
+        "prompt": {
+          "id": "mango-bcreq-c02-normalize",
+          "classId": "К-02",
+          "file": "02-normalize.md",
+          "title": "К-02. Атомарная нормализация",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/standards/bcreq-manual-classes/02-normalize.md"
+        },
+        "params": "class: К-02; phase: a-in; input_mode: CONTINUE",
+        "prepare": "raw_verbatim, comments, source_register",
+        "actions": [
+          "Скопировать промпт К-02 кнопкой ⧉ вместе с контрактом состояния и правилами из К-36",
+          "Заполнить блок входа: raw_verbatim, comments, source_register",
+          "Если несколько чтений меняют смысл: сохранить варианты и вопрос, не выбрать молча",
+          "Проверить: все фрагменты входа покрыты атомом или объяснённым исключением, рекомендации отделены",
+          "Сохранить блок BCREQ_OUTPUT и решить, какой класс запустить следующим"
+        ],
+        "result": "atoms[{id,text,kind,actor,condition,source_id,locator}], ambiguities",
+        "gate": "—"
+      },
+      {
+        "number": 4,
+        "step": "Ш-4 Оценка неоднозначности",
+        "stage": "A-IN, A-CORE, A-WORK",
+        "stages": [
+          "A-IN",
+          "A-CORE",
+          "A-WORK"
+        ],
+        "prompt": {
+          "id": "mango-bcreq-c03-ambiguity",
+          "classId": "К-03",
+          "file": "03-ambiguity.md",
+          "title": "К-03. Оценка неоднозначности",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/standards/bcreq-manual-classes/03-ambiguity.md"
+        },
+        "params": "class: К-03; phase: a-in / a-core / a-work; input_mode: CONTINUE",
+        "prepare": "atoms, candidate_readings, known_decisions",
+        "actions": [
+          "Скопировать промпт К-03 кнопкой ⧉ вместе с контрактом состояния и правилами из К-36",
+          "Заполнить блок входа: atoms, candidate_readings, known_decisions",
+          "Если блокирующее чтение не разрешено: зависимые узлы WAITING, независимые продолжаются",
+          "Проверить: есть альтернативы и объяснение blocking, нет произвольного процентного порога",
+          "Сохранить блок BCREQ_OUTPUT и решить, какой класс запустить следующим"
+        ],
+        "result": "ambiguities[{id,readings,impact,blocking,owner,needed_evidence}], resolved_ids",
+        "gate": "—"
+      },
+      {
+        "number": 5,
+        "step": "Ш-5 Пакет вопросов",
+        "stage": "A-IN, A-CORE, A-WORK, A-RELEASE",
+        "stages": [
+          "A-IN",
+          "A-CORE",
+          "A-WORK",
+          "A-RELEASE"
+        ],
+        "prompt": {
+          "id": "mango-bcreq-c04-questions",
+          "classId": "К-04",
+          "file": "04-questions.md",
+          "title": "К-04. Пакет вопросов",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/standards/bcreq-manual-classes/04-questions.md"
+        },
+        "params": "class: К-04; phase: a-in / a-core / a-work / a-release; input_mode: CONTINUE",
+        "prepare": "ambiguities, missing_evidence, prior_questions, owners",
+        "actions": [
+          "Скопировать промпт К-04 кнопкой ⧉ вместе с контрактом состояния и правилами из К-36",
+          "Заполнить блок входа: ambiguities, missing_evidence, prior_questions, owners",
+          "Если нет адресата блокирующего вопроса: запросить владельца у БА, не назначать себе",
+          "Проверить: один вопрос — один выбор/факт, видно что заблокировано, ответы не подменены предположениями",
+          "Сохранить блок BCREQ_OUTPUT и решить, какой класс запустить следующим"
+        ],
+        "result": "questions[{id,text,options,recipient,blocks,deadline,source}], no_repeat_ids",
+        "gate": "—"
+      },
+      {
+        "number": 6,
+        "step": "Ш-6 Сопоставление с таксономией",
+        "stage": "A-IN",
+        "stages": [
+          "A-IN"
+        ],
+        "prompt": {
+          "id": "mango-bcreq-c05-taxonomy",
+          "classId": "К-05",
+          "file": "05-taxonomy.md",
+          "title": "К-05. Сопоставление с таксономией",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/standards/bcreq-manual-classes/05-taxonomy.md"
+        },
+        "params": "class: К-05; phase: a-in; input_mode: CONTINUE",
+        "prepare": "atoms, taxonomy_snapshot, taxonomy_version",
+        "actions": [
+          "Скопировать промпт К-05 кнопкой ⧉ вместе с контрактом состояния и правилами из К-36",
+          "Заполнить блок входа: atoms, taxonomy_snapshot, taxonomy_version",
+          "Если нет снимка или версии: запросить, не генерировать якобы существующий узел",
+          "Проверить: каждый идентификатор существует во входе, версия и основание соответствия указаны",
+          "Сохранить блок BCREQ_OUTPUT и решить, какой класс запустить следующим"
+        ],
+        "result": "matches[{atom_id,domain,capability,feature,atomic_function,status,evidence}], gaps",
+        "gate": "—"
+      },
+      {
+        "number": 7,
+        "step": "Ш-7 Границы изменения",
+        "stage": "A-IN, A-CORE, A-WORK",
+        "stages": [
+          "A-IN",
+          "A-CORE",
+          "A-WORK"
+        ],
+        "prompt": {
+          "id": "mango-bcreq-c06-scope",
+          "classId": "К-06",
+          "file": "06-scope.md",
+          "title": "К-06. Границы изменения",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/standards/bcreq-manual-classes/06-scope.md"
+        },
+        "params": "class: К-06; phase: a-in / a-core / a-work; input_mode: CONTINUE",
+        "prepare": "atoms, matches, BA_decisions, adjacent_dependencies",
+        "actions": [
+          "Скопировать промпт К-06 кнопкой ⧉ вместе с контрактом состояния и правилами из К-36",
+          "Заполнить блок входа: atoms, matches, BA_decisions, adjacent_dependencies",
+          "Если источник требует взаимоисключающих границ: запросить решение, сохранить прежнюю утверждённую границу",
+          "Проверить: все атомы распределены, смежные системы не добавлены в поставку, исключения не потеряны",
+          "Сохранить блок BCREQ_OUTPUT и решить, какой класс запустить следующим"
+        ],
+        "result": "in_scope, out_of_scope, context_only, dependencies, owners",
+        "gate": "—"
+      },
+      {
+        "number": 8,
+        "step": "Ш-8 Извлечение из web",
+        "stage": "A-IN, A-CORE, A-WORK",
+        "stages": [
+          "A-IN",
+          "A-CORE",
+          "A-WORK"
+        ],
+        "prompt": {
+          "id": "mango-bcreq-c07-web-evidence",
+          "classId": "К-07",
+          "file": "07-web-evidence.md",
+          "title": "К-07. Извлечение из web",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/standards/bcreq-manual-classes/07-web-evidence.md"
+        },
+        "params": "class: К-07; phase: a-in / a-core / a-work; input_mode: CONTINUE; по доступности источника: web",
+        "prepare": "source_plan, accessible_page_bodies, URLs, versions",
+        "actions": [
+          "Скопировать промпт К-07 кнопкой ⧉ вместе с контрактом состояния и правилами из К-36",
+          "Заполнить блок входа: source_plan, accessible_page_bodies, URLs, versions",
+          "Если нет тела/доступа: ACCESS_GAP и запрос БА, не имитировать browsing и не выводить отсутствие функции",
+          "Проверить: цитата поддерживает именно утверждение, версии известны, JS/таблицы и непрочитанные страницы отмечены",
+          "Сохранить блок BCREQ_OUTPUT и решить, какой класс запустить следующим"
+        ],
+        "result": "claims[{id,feature,verdict,quote,url,heading,version}], coverage, access_gaps",
+        "gate": "—"
+      },
+      {
+        "number": 9,
+        "step": "Ш-9 Извлечение из PDF и runtime",
+        "stage": "A-IN, A-CORE, A-WORK",
+        "stages": [
+          "A-IN",
+          "A-CORE",
+          "A-WORK"
+        ],
+        "prompt": {
+          "id": "mango-bcreq-c08-document-evidence",
+          "classId": "К-08",
+          "file": "08-document-evidence.md",
+          "title": "К-08. Извлечение из PDF и runtime",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/standards/bcreq-manual-classes/08-document-evidence.md"
+        },
+        "params": "class: К-08; phase: a-in / a-core / a-work; input_mode: CONTINUE; по доступности источника: PDF и runtime",
+        "prepare": "source_plan, attached_documents, runtime_sections?, provenance",
+        "actions": [
+          "Скопировать промпт К-08 кнопкой ⧉ вместе с контрактом состояния и правилами из К-36",
+          "Заполнить блок входа: source_plan, attached_documents, runtime_sections?, provenance",
+          "Если нет документа/frontmatter: не выдумывать страницы. Непрочитанная диаграмма: visual-review-required",
+          "Проверить: документ, заголовок, раздел и страница сверены, UNKNOWN отличим от Нет, смешение изданий исключено",
+          "Сохранить блок BCREQ_OUTPUT и решить, какой класс запустить следующим"
+        ],
+        "result": "claims[{id,feature,verdict,quote,document,section,pages?,version}], coverage, gaps",
+        "gate": "—"
+      },
+      {
+        "number": 10,
+        "step": "Ш-10 Дообогащение материалами БА",
+        "stage": "A-IN, A-CORE, A-WORK",
+        "stages": [
+          "A-IN",
+          "A-CORE",
+          "A-WORK"
+        ],
+        "prompt": {
+          "id": "mango-bcreq-c09-ba-enrichment",
+          "classId": "К-09",
+          "file": "09-ba-enrichment.md",
+          "title": "К-09. Дообогащение материалами БА",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/standards/bcreq-manual-classes/09-ba-enrichment.md"
+        },
+        "params": "class: К-09; phase: a-in / a-core / a-work; input_mode: CONTINUE; по доступности источника: материалы БА",
+        "prepare": "missing_evidence, BA_raw_materials?, author_roles, provenance",
+        "actions": [
+          "Скопировать промпт К-09 кнопкой ⧉ вместе с контрактом состояния и правилами из К-36",
+          "Заполнить блок входа: missing_evidence, BA_raw_materials?, author_roles, provenance",
+          "Если материала нет: оставить gap и запрос, сомнительная очистка меняет смысл: показать исходник и варианты",
+          "Проверить: каждый очищенный фрагмент восстанавливается по локатору, авторская рекомендация не стала фактом",
+          "Сохранить блок BCREQ_OUTPUT и решить, какой класс запустить следующим"
+        ],
+        "result": "enriched_claims, cleaned_fragments, markup, source_links, remaining_gaps",
+        "gate": "—"
+      },
+      {
+        "number": 11,
+        "step": "Ш-11 Разрешение конфликтов источников",
+        "stage": "A-IN, A-CORE, A-WORK",
+        "stages": [
+          "A-IN",
+          "A-CORE",
+          "A-WORK"
+        ],
+        "prompt": {
+          "id": "mango-bcreq-c10-source-conflicts",
+          "classId": "К-10",
+          "file": "10-source-conflicts.md",
+          "title": "К-10. Разрешение конфликтов источников",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/standards/bcreq-manual-classes/10-source-conflicts.md"
+        },
+        "params": "class: К-10; phase: a-in / a-core / a-work; input_mode: CONTINUE",
+        "prepare": "claims, versions, source_priorities, BA_decisions",
+        "actions": [
+          "Скопировать промпт К-10 кнопкой ⧉ вместе с контрактом состояния и правилами из К-36",
+          "Заполнить блок входа: claims, versions, source_priorities, BA_decisions",
+          "Если нет полномочного решения при противоречии: зависимый вывод BLOCKED, запросить выбор",
+          "Проверить: в решении есть авторитетное основание, область и срок, альтернативный источник не стёрт",
+          "Сохранить блок BCREQ_OUTPUT и решить, какой класс запустить следующим"
+        ],
+        "result": "conflicts[{id,claims,scope,versions,resolution,authority}], accepted_claims",
+        "gate": "—"
+      },
+      {
+        "number": 12,
+        "step": "Ш-12 Контроль полноты зависимостей",
+        "stage": "A-IN, A-CORE, A-WORK",
+        "stages": [
+          "A-IN",
+          "A-CORE",
+          "A-WORK"
+        ],
+        "prompt": {
+          "id": "mango-bcreq-c11-dependency-check",
+          "classId": "К-11",
+          "file": "11-dependency-check.md",
+          "title": "К-11. Контроль полноты зависимостей",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/standards/bcreq-manual-classes/11-dependency-check.md"
+        },
+        "params": "class: К-11; phase: a-in / a-core / a-work; input_mode: CONTINUE",
+        "prepare": "scope, claims, actors, settings, product_links, unresolved",
+        "actions": [
+          "Скопировать промпт К-11 кнопкой ⧉ вместе с контрактом состояния и правилами из К-36",
+          "Заполнить блок входа: scope, claims, actors, settings, product_links, unresolved",
+          "Если не хватает предпосылки ключевого поведения: WAITING этого узла, рекомендовать БА возврат, не запускать его",
+          "Проверить: каждая зависимость имеет источник либо gap, повторный обход показывает что изменилось, а не бесконечный круг",
+          "Сохранить блок BCREQ_OUTPUT и решить, какой класс запустить следующим"
+        ],
+        "result": "dependency_manifest[{id,prerequisite,evidence,status}], retrieval_requests, recommendation",
+        "gate": "—"
+      },
+      {
+        "number": 13,
+        "step": "Ш-13 User Story по запросу БА",
+        "stage": "A-IN, A-CORE, A-WORK",
+        "stages": [
+          "A-IN",
+          "A-CORE",
+          "A-WORK"
+        ],
+        "prompt": {
+          "id": "mango-bcreq-c37-user-story",
+          "classId": "К-37",
+          "file": "37-user-story.md",
+          "title": "К-37. User Story по запросу БА",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/standards/bcreq-manual-classes/37-user-story.md"
+        },
+        "params": "class: К-37; phase: a-in / a-core / a-work; input_mode: CONTINUE; только по запросу БА",
+        "prepare": "explicit_BA_request, atoms, scope, value, FR?",
+        "actions": [
+          "Скопировать промпт К-37 кнопкой ⧉ вместе с контрактом состояния и правилами из К-36",
+          "Заполнить блок входа: explicit_BA_request, atoms, scope, value, FR?",
+          "Если нет запроса БА или не известна ценность: не создавать US автоматически, запросить основание",
+          "Проверить: нет кнопок/API как намерения, история в границах, источник и связь ФТ честно заполнены",
+          "Сохранить блок BCREQ_OUTPUT и решить, какой класс запустить следующим"
+        ],
+        "result": "stories[{id,role,action,value,acceptance,fr_ids,source}], story_questions",
+        "gate": "—"
+      },
+      {
+        "number": 14,
+        "step": "Ш-14 Отдельное моделирование UC по запросу БА",
+        "stage": "A-IN, A-CORE, A-WORK",
+        "stages": [
+          "A-IN",
+          "A-CORE",
+          "A-WORK"
+        ],
+        "prompt": {
+          "id": "mango-bcreq-c38-requested-uc",
+          "classId": "К-38",
+          "file": "38-requested-uc.md",
+          "title": "К-38. Отдельное моделирование UC по запросу БА",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/standards/bcreq-manual-classes/38-requested-uc.md"
+        },
+        "params": "class: К-38; phase: a-in / a-core / a-work; input_mode: CONTINUE; только по запросу БА",
+        "prepare": "explicit_BA_request, atoms, scope, actors, FR?",
+        "actions": [
+          "Скопировать промпт К-38 кнопкой ⧉ вместе с контрактом состояния и правилами из К-36",
+          "Заполнить блок входа: explicit_BA_request, atoms, scope, actors, FR?",
+          "Если нет запроса БА или выбран сценарий вне границ: вопрос, не создавать новый объём",
+          "Проверить: есть актор и результат, нет выдуманных ФТ, не заявлено полное покрытие документа",
+          "Сохранить блок BCREQ_OUTPUT и решить, какой класс запустить следующим"
+        ],
+        "result": "requested_UC[{id,actor,precondition,flow,alternatives,result,fr_ids,source}]",
+        "gate": "—"
+      },
+      {
+        "number": 15,
+        "step": "Ш-15 Глоссарий",
+        "stage": "A-IN, A-CORE, A-WORK",
+        "stages": [
+          "A-IN",
+          "A-CORE",
+          "A-WORK"
+        ],
+        "prompt": {
+          "id": "mango-bcreq-c14-glossary",
+          "classId": "К-14",
+          "file": "14-glossary.md",
+          "title": "К-14. Глоссарий",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/standards/bcreq-manual-classes/14-glossary.md"
+        },
+        "params": "class: К-14; phase: a-in / a-core / a-work; input_mode: CONTINUE",
+        "prepare": "terms_in_sections_2_to_6, raw_wording, supplied_lexicons",
+        "actions": [
+          "Скопировать промпт К-14 кнопкой ⧉ вместе с контрактом состояния и правилами из К-36",
+          "Заполнить блок входа: terms_in_sections_2_to_6, raw_wording, supplied_lexicons",
+          "Если два значения меняют требования: показать конфликт терминов и вопрос, не унифицировать молча",
+          "Проверить: определение не рекурсивно, нет неиспользуемых терминов, сверка не придумана",
+          "Сохранить блок BCREQ_OUTPUT и решить, какой класс запустить следующим"
+        ],
+        "result": "section_1[{term,definition,source,lexicon_comparison}], term_questions",
+        "gate": "—"
+      },
+      {
+        "number": 16,
+        "step": "Ш-16 Бизнес-контекст",
+        "stage": "A-IN, A-CORE, A-WORK",
+        "stages": [
+          "A-IN",
+          "A-CORE",
+          "A-WORK"
+        ],
+        "prompt": {
+          "id": "mango-bcreq-c15-business-context",
+          "classId": "К-15",
+          "file": "15-business-context.md",
+          "title": "К-15. Бизнес-контекст",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/standards/bcreq-manual-classes/15-business-context.md"
+        },
+        "params": "class: К-15; phase: a-in / a-core / a-work; input_mode: CONTINUE",
+        "prepare": "atoms, scope, business_problem, value, decisions",
+        "actions": [
+          "Скопировать промпт К-15 кнопкой ⧉ вместе с контрактом состояния и правилами из К-36",
+          "Заполнить блок входа: atoms, scope, business_problem, value, decisions",
+          "Если неизвестна проблема/цель: пометить UNKNOWN и спросить, не изобретать выгоду. Нет ответа БА — вопрос Заказчику и согласованная гипотеза, работа идёт дальше",
+          "Проверить: не более 250 слов и 20 слов в предложении по действующему мета-стандарту, все границы сохранены",
+          "Сохранить блок BCREQ_OUTPUT и решить, какой класс запустить следующим"
+        ],
+        "result": "section_2{context,problem,goal,in_scope,out_of_scope,products_owners}",
+        "gate": "—"
+      },
+      {
+        "number": 17,
+        "step": "Ш-17 Регистрация решений и согласований",
+        "stage": "A-IN, A-CORE, A-WORK, A-RELEASE",
+        "stages": [
+          "A-IN",
+          "A-CORE",
+          "A-WORK",
+          "A-RELEASE"
+        ],
+        "prompt": {
+          "id": "mango-bcreq-c34-human-record",
+          "classId": "К-34",
+          "file": "34-human-record.md",
+          "title": "К-34. Регистрация решений и согласований",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/standards/bcreq-manual-classes/34-human-record.md"
+        },
+        "params": "class: К-34; phase: a-in / a-core / a-work / a-release; input_mode: CONTINUE; после фактической реплики человека",
+        "prepare": "human_message, actor_role, authority, candidate_revision, scope, timestamp, gate_id?, gate_type?, model_recommendation?",
+        "actions": [
+          "Скопировать промпт К-34 кнопкой ⧉ вместе с контрактом состояния и правилами из К-36",
+          "Заполнить блок входа: human_message, actor_role, authority, candidate_revision, scope, timestamp, gate_id?, gate_type?, model_recommendation?",
+          "Если нет реплики/полномочия/ревизии: proposed или pending, никогда approved, молчание не согласие",
+          "Проверить: можно восстановить кто что когда одобрил, запись не выдаёт модели право согласовать",
+          "Сохранить блок BCREQ_OUTPUT и решить, какой класс запустить следующим"
+        ],
+        "result": "section_8_5_record{id,decision,actor,authority,revision,scope,time,evidence,status,gate_id,gate_type,model_recommendation,divergence}",
+        "gate": "—"
+      },
+      {
+        "number": 18,
+        "step": "Ш-18 Сверка результата с манифестом задачи",
+        "stage": "A-IN, A-CORE, A-WORK, A-RELEASE",
+        "stages": [
+          "A-IN",
+          "A-CORE",
+          "A-WORK",
+          "A-RELEASE"
+        ],
+        "prompt": {
+          "id": "mango-bcreq-c39-manifest-alignment",
+          "classId": "К-39",
+          "file": "39-manifest-alignment.md",
+          "title": "К-39. Сверка результата с манифестом задачи",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/standards/bcreq-manual-classes/39-manifest-alignment.md"
+        },
+        "params": "class: К-39; phase: a-in / a-core / a-work / a-release; input_mode: CONTINUE",
+        "prepare": "baseline_manifest, generated_candidate, authorized_delta, decision_register",
+        "actions": [
+          "Скопировать промпт К-39 кнопкой ⧉ вместе с контрактом состояния и правилами из К-36",
+          "Заполнить блок входа: baseline_manifest, generated_candidate, authorized_delta, decision_register",
+          "Если обязательный элемент потерян, смысл условия изменён или согласование повышено без основания: FAIL затронутого результата, адресная правка К-30, манифест не переписывать под ответ",
+          "Проверить: каждый обязательный ID отражён, каждый новый элемент обоснован, числовая/семантическая дельта видна, draft не стал approved",
+          "Сохранить блок BCREQ_OUTPUT и решить, какой класс запустить следующим"
+        ],
+        "result": "manifest_diff{missing,changed_conditions,unsupported_additions,scope_changes,authority_promotions,preserved_ids,verdict}",
+        "gate": "—"
+      },
+      {
+        "number": 19,
+        "step": "Ш-19 Полная сборка фазы",
+        "stage": "A-IN, A-CORE, A-WORK, A-RELEASE",
+        "stages": [
+          "A-IN",
+          "A-CORE",
+          "A-WORK",
+          "A-RELEASE"
+        ],
+        "prompt": {
+          "id": "mango-bcreq-c12-phase-assembly",
+          "classId": "К-12",
+          "file": "12-phase-assembly.md",
+          "title": "К-12. Полная сборка фазы",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/standards/bcreq-manual-classes/12-phase-assembly.md"
+        },
+        "params": "class: К-12; phase: a-in / a-core / a-work / a-release; input_mode: CONTINUE",
+        "prepare": "base_snapshot, ordered_slices, tombstones, source_register, decisions",
+        "actions": [
+          "Скопировать промпт К-12 кнопкой ⧉ вместе с контрактом состояния и правилами из К-36",
+          "Заполнить блок входа: base_snapshot, ordered_slices, tombstones, source_register, decisions",
+          "Если пропущен slice, конфликт ревизий или не помещается вход: запросить недостающее/разбить сборку, не выдавать FULL",
+          "Проверить: каждый живой ID имеет полный текст, удаления явные, счётчики и цепочка сходятся",
+          "Сохранить блок BCREQ_OUTPUT и решить, какой класс запустить следующим"
+        ],
+        "result": "full_snapshot, entity_register, unresolved, superseded, completeness_receipt",
+        "gate": "—"
+      },
+      {
+        "number": 20,
+        "step": "Ш-20 Проверка переносимого контекста",
+        "stage": "A-IN, A-CORE, A-WORK, A-RELEASE",
+        "stages": [
+          "A-IN",
+          "A-CORE",
+          "A-WORK",
+          "A-RELEASE"
+        ],
+        "prompt": {
+          "id": "mango-bcreq-c13-handoff-check",
+          "classId": "К-13",
+          "file": "13-handoff-check.md",
+          "title": "К-13. Проверка переносимого контекста",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/standards/bcreq-manual-classes/13-handoff-check.md"
+        },
+        "params": "class: К-13; phase: a-in / a-core / a-work / a-release; input_mode: CONTINUE",
+        "prepare": "full_snapshot, required_inputs_for_target, source_bodies, rule_bundle",
+        "actions": [
+          "Скопировать промпт К-13 кнопкой ⧉ вместе с контрактом состояния и правилами из К-36",
+          "Заполнить блок входа: full_snapshot, required_inputs_for_target, source_bodies, rule_bundle",
+          "Если нет обязательного входа целевого шага: handoff FAIL, запросить его, не обещать восстановить памятью",
+          "Проверить: новый чат может восстановить условия и полномочия, нет скрытой зависимости от старых сообщений",
+          "Сохранить блок BCREQ_OUTPUT и решить, какой класс запустить следующим"
+        ],
+        "result": "handoff_receipt[{input,status,locator}], missing_inputs, recommendation",
+        "gate": "—"
+      },
+      {
+        "number": 21,
+        "step": "Ш-21 Подготовка доказательств гейта",
+        "stage": "A-IN, A-CORE, A-WORK, A-RELEASE",
+        "stages": [
+          "A-IN",
+          "A-CORE",
+          "A-WORK",
+          "A-RELEASE"
+        ],
+        "prompt": {
+          "id": "mango-bcreq-c20-gate-evidence",
+          "classId": "К-20",
+          "file": "20-gate-evidence.md",
+          "title": "К-20. Подготовка доказательств гейта",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/standards/bcreq-manual-classes/20-gate-evidence.md"
+        },
+        "params": "class: К-20; phase: a-in / a-core / a-work / a-release; input_mode: CONTINUE",
+        "prepare": "gate_id, gate_type, candidate_revision, applicable_gate_contract, checklist_evidence, human_records",
+        "actions": [
+          "Скопировать промпт К-20 кнопкой ⧉ вместе с контрактом состояния и правилами из К-36",
+          "Заполнить блок входа: gate_id, gate_type, candidate_revision, applicable_gate_contract, checklist_evidence, human_records",
+          "Если любое обязательное условие без evidence: не рекомендовать прохождение, чужое или старое одобрение недействительно",
+          "Проверить: есть ревизия, область и полный чек-лист, ни один гейт не пройден моделью",
+          "Сохранить блок BCREQ_OUTPUT и решить, какой класс запустить следующим"
+        ],
+        "result": "gate_report{criteria,evidence,gaps,eligible_for_review,required_actors}, recommendation",
+        "gate": "Предложение гейта стадии: Г-IN (A-IN) — решает БА; Г-С1 (A-CORE) — решает Заказчик; Г-W (A-WORK) — решают ПО продукта, архитектор продукта, руководитель КК"
+      },
+      {
+        "number": 22,
+        "step": "Ш-22 ФТ изменения существующего поведения",
+        "stage": "A-CORE, A-WORK",
+        "stages": [
+          "A-CORE",
+          "A-WORK"
+        ],
+        "prompt": {
+          "id": "mango-bcreq-c16-fr-delta",
+          "classId": "К-16",
+          "file": "16-fr-delta.md",
+          "title": "К-16. ФТ изменения существующего поведения",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/standards/bcreq-manual-classes/16-fr-delta.md"
+        },
+        "params": "class: К-16; phase: a-core / a-work; input_mode: CONTINUE; альтернатива К-17: delta по решению БА",
+        "prepare": "request_atoms, verified_as_is, scope, BA_accepted_recommendations",
+        "actions": [
+          "Скопировать промпт К-16 кнопкой ⧉ вместе с контрактом состояния и правилами из К-36",
+          "Заполнить блок входа: request_atoms, verified_as_is, scope, BA_accepted_recommendations",
+          "Если не подтверждён As-Is, от которого зависит дельта: gap, а не выдуманное новое требование",
+          "Проверить: каждое ФТ имеет заказанный delta и источник, рекомендация включена только после решения БА",
+          "Сохранить блок BCREQ_OUTPUT и решить, какой класс запустить следующим"
+        ],
+        "result": "section_3[{id,capability,requirement,delta,source}], rejected_candidates",
+        "gate": "—"
+      },
+      {
+        "number": 23,
+        "step": "Ш-23 ФТ нового поведения с нуля",
+        "stage": "A-CORE, A-WORK",
+        "stages": [
+          "A-CORE",
+          "A-WORK"
+        ],
+        "prompt": {
+          "id": "mango-bcreq-c17-fr-new",
+          "classId": "К-17",
+          "file": "17-fr-new.md",
+          "title": "К-17. ФТ нового поведения с нуля",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/standards/bcreq-manual-classes/17-fr-new.md"
+        },
+        "params": "class: К-17; phase: a-core / a-work; input_mode: CONTINUE; альтернатива К-16: new только по явному решению БА",
+        "prepare": "explicit_new_mode_decision, request_atoms, scope, product_context",
+        "actions": [
+          "Скопировать промпт К-17 кнопкой ⧉ вместе с контрактом состояния и правилами из К-36",
+          "Заполнить блок входа: explicit_new_mode_decision, request_atoms, scope, product_context",
+          "Если нет решения о режиме или новизна спорна: вернуть БА выбор К-16/К-17",
+          "Проверить: не переписан весь продукт, источник каждого намерения есть, два режима не смешаны",
+          "Сохранить блок BCREQ_OUTPUT и решить, какой класс запустить следующим"
+        ],
+        "result": "section_3_new[{id,capability,requirement,source}], novelty_boundary",
+        "gate": "—"
+      },
+      {
+        "number": 24,
+        "step": "Ш-24 Нефункциональные требования",
+        "stage": "A-CORE, A-WORK",
+        "stages": [
+          "A-CORE",
+          "A-WORK"
+        ],
+        "prompt": {
+          "id": "mango-bcreq-c18-nfr",
+          "classId": "К-18",
+          "file": "18-nfr.md",
+          "title": "К-18. Нефункциональные требования",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/standards/bcreq-manual-classes/18-nfr.md"
+        },
+        "params": "class: К-18; phase: a-core / a-work; input_mode: CONTINUE",
+        "prepare": "supplied_quality_requirements, scope, applicable_source_thresholds",
+        "actions": [
+          "Скопировать промпт К-18 кнопкой ⧉ вместе с контрактом состояния и правилами из К-36",
+          "Заполнить блок входа: supplied_quality_requirements, scope, applicable_source_thresholds",
+          "Если порог без единицы/условий: неполный кандидат, вопрос, не выдавать проверяемым НФТ",
+          "Проверить: нет ФТ в разделе 4, каждая цифра прослеживается, шаблонный порог не появился",
+          "Сохранить блок BCREQ_OUTPUT и решить, какой класс запустить следующим"
+        ],
+        "result": "section_4[{id,characteristic,metric,threshold,conditions,source}], nfr_questions",
+        "gate": "—"
+      },
+      {
+        "number": 25,
+        "step": "Ш-25 Первый прогон UC и покрытие ФТ",
+        "stage": "A-CORE",
+        "stages": [
+          "A-CORE"
+        ],
+        "prompt": {
+          "id": "mango-bcreq-c19-uc-coverage",
+          "classId": "К-19",
+          "file": "19-uc-coverage.md",
+          "title": "К-19. Первый прогон UC и покрытие ФТ",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/standards/bcreq-manual-classes/19-uc-coverage.md"
+        },
+        "params": "class: К-19; phase: a-core; input_mode: CONTINUE",
+        "prepare": "sections_2_3_4, scope",
+        "actions": [
+          "Скопировать промпт К-19 кнопкой ⧉ вместе с контрактом состояния и правилами из К-36",
+          "Заполнить блок входа: sections_2_3_4, scope",
+          "Если покрытие ФТ меньше 100% или влияющий UC без ФТ: не рекомендовать Г-С1",
+          "Проверить: матрица двунаправленная, UC не дублируется сменой имени актора, это внутренний материал",
+          "Сохранить блок BCREQ_OUTPUT и решить, какой класс запустить следующим"
+        ],
+        "result": "section_7_first[{id,actor,precondition,flow,alternatives,result,fr_ids,class}], coverage_matrix",
+        "gate": "—"
+      },
+      {
+        "number": 26,
+        "step": "Ш-26 Независимая содержательная проверка",
+        "stage": "A-CORE, A-WORK, A-RELEASE",
+        "stages": [
+          "A-CORE",
+          "A-WORK",
+          "A-RELEASE"
+        ],
+        "prompt": {
+          "id": "mango-bcreq-c28-independent-review",
+          "classId": "К-28",
+          "file": "28-independent-review.md",
+          "title": "К-28. Независимая содержательная проверка",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/standards/bcreq-manual-classes/28-independent-review.md"
+        },
+        "params": "class: К-28; phase: a-core / a-work / a-release; input_mode: CONTINUE; отдельный чат с ролью критика",
+        "prepare": "frozen_candidate, source_bodies, applicable_rules, approved_scope, decisions",
+        "actions": [
+          "Скопировать промпт К-28 кнопкой ⧉ вместе с контрактом состояния и правилами из К-36",
+          "Заполнить блок входа: frozen_candidate, source_bodies, applicable_rules, approved_scope, decisions",
+          "Если источник недоступен: unverifiable, а не PASS, материальное противоречие блокирует рекомендацию гейта",
+          "Проверить: у finding есть конкретный фрагмент, основание и последствия, наличие правила не считается соблюдением",
+          "Сохранить блок BCREQ_OUTPUT и решить, какой класс запустить следующим"
+        ],
+        "result": "findings[{id,claim,source,rule,severity,affected_ids}], checked_claims, unresolved",
+        "gate": "—"
+      },
+      {
+        "number": 27,
+        "step": "Ш-27 Анализ влияния изменения",
+        "stage": "A-CORE, A-WORK, A-RELEASE",
+        "stages": [
+          "A-CORE",
+          "A-WORK",
+          "A-RELEASE"
+        ],
+        "prompt": {
+          "id": "mango-bcreq-c29-impact",
+          "classId": "К-29",
+          "file": "29-impact.md",
+          "title": "К-29. Анализ влияния изменения",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/standards/bcreq-manual-classes/29-impact.md"
+        },
+        "params": "class: К-29; phase: a-core / a-work / a-release; input_mode: CONTINUE; только при изменении кандидата",
+        "prepare": "baseline_revision, change_request, dependency_graph, prior_approvals",
+        "actions": [
+          "Скопировать промпт К-29 кнопкой ⧉ вместе с контрактом состояния и правилами из К-36",
+          "Заполнить блок входа: baseline_revision, change_request, dependency_graph, prior_approvals",
+          "Если нельзя установить затронутую ревизию или границу: запросить baseline, не править весь документ",
+          "Проверить: все зависимые узлы перечислены, одобрение изменённого кандидата сброшено, причины видны",
+          "Сохранить блок BCREQ_OUTPUT и решить, какой класс запустить следующим"
+        ],
+        "result": "impact_set, stale_ids, invalidated_approvals, proposed_edit_scope",
+        "gate": "—"
+      },
+      {
+        "number": 28,
+        "step": "Ш-28 Адресная правка",
+        "stage": "A-CORE, A-WORK, A-RELEASE",
+        "stages": [
+          "A-CORE",
+          "A-WORK",
+          "A-RELEASE"
+        ],
+        "prompt": {
+          "id": "mango-bcreq-c30-targeted-edit",
+          "classId": "К-30",
+          "file": "30-targeted-edit.md",
+          "title": "К-30. Адресная правка",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/standards/bcreq-manual-classes/30-targeted-edit.md"
+        },
+        "params": "class: К-30; phase: a-core / a-work / a-release; input_mode: CONTINUE; только при изменении кандидата",
+        "prepare": "candidate_revision, authorized_edit_scope, findings, human_instructions",
+        "actions": [
+          "Скопировать промпт К-30 кнопкой ⧉ вместе с контрактом состояния и правилами из К-36",
+          "Заполнить блок входа: candidate_revision, authorized_edit_scope, findings, human_instructions",
+          "Если команда конфликтует с границей/полномочием: изолировать спорную часть и запросить решение, независимое продолжить",
+          "Проверить: before совпадает с входом, semantic_diff объясняет смысл, нет улучшений вне запроса",
+          "Сохранить блок BCREQ_OUTPUT и решить, какой класс запустить следующим"
+        ],
+        "result": "patch[{id,before,after,reason}], preserved_ids, semantic_diff, stale_ids",
+        "gate": "—"
+      },
+      {
+        "number": 29,
+        "step": "Ш-29 Структурная сверка документа",
+        "stage": "A-CORE, A-WORK, A-RELEASE",
+        "stages": [
+          "A-CORE",
+          "A-WORK",
+          "A-RELEASE"
+        ],
+        "prompt": {
+          "id": "mango-bcreq-c31-conformance",
+          "classId": "К-31",
+          "file": "31-conformance.md",
+          "title": "К-31. Структурная сверка документа",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/standards/bcreq-manual-classes/31-conformance.md"
+        },
+        "params": "class: К-31; phase: a-core / a-work / a-release; input_mode: CONTINUE",
+        "prepare": "candidate, schema_version, entity_register, trace_matrix",
+        "actions": [
+          "Скопировать промпт К-31 кнопкой ⧉ вместе с контрактом состояния и правилами из К-36",
+          "Заполнить блок входа: candidate, schema_version, entity_register, trace_matrix",
+          "Если потерян ID/ссылка/раздел: FAIL и адресная правка, не переименовывать разделы ради старого примера",
+          "Проверить: входная схема явно названа, нет фантомного раздела 9, semantic PASS из структуры не выводится",
+          "Сохранить блок BCREQ_OUTPUT и решить, какой класс запустить следующим"
+        ],
+        "result": "conformance_report{missing,duplicates,broken_refs,section_order,counts,verdict}",
+        "gate": "—"
+      },
+      {
+        "number": 30,
+        "step": "Ш-30 ОРР L1",
+        "stage": "A-WORK",
+        "stages": [
+          "A-WORK"
+        ],
+        "prompt": {
+          "id": "mango-bcreq-c21-solution-l1",
+          "classId": "К-21",
+          "file": "21-solution-l1.md",
+          "title": "К-21. ОРР L1",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/standards/bcreq-manual-classes/21-solution-l1.md"
+        },
+        "params": "class: К-21; phase: a-work; input_mode: CONTINUE",
+        "prepare": "sections_1_to_4, UC_first, verified_claims, scope",
+        "actions": [
+          "Скопировать промпт К-21 кнопкой ⧉ вместе с контрактом состояния и правилами из К-36",
+          "Заполнить блок входа: sections_1_to_4, UC_first, verified_claims, scope",
+          "Если не известен необходимый факт продукта: запрос извлечения, не заполнять архитектуру догадкой",
+          "Проверить: все ФТ покрыты, границы и существующие роли сохранены, технологические детали не просочились в L1",
+          "Сохранить блок BCREQ_OUTPUT и решить, какой класс запустить следующим"
+        ],
+        "result": "section_5_1{actors,context,behavior,interactions,fr_trace}, design_questions",
+        "gate": "—"
+      },
+      {
+        "number": 31,
+        "step": "Ш-31 ОРР L2 и контракты стыков",
+        "stage": "A-WORK",
+        "stages": [
+          "A-WORK"
+        ],
+        "prompt": {
+          "id": "mango-bcreq-c22-solution-l2",
+          "classId": "К-22",
+          "file": "22-solution-l2.md",
+          "title": "К-22. ОРР L2 и контракты стыков",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/standards/bcreq-manual-classes/22-solution-l2.md"
+        },
+        "params": "class: К-22; phase: a-work; input_mode: CONTINUE; по уровню: L1+L2",
+        "prepare": "BA_level_decision, section_5_1, supplied_API_events, product_profiles",
+        "actions": [
+          "Скопировать промпт К-22 кнопкой ⧉ вместе с контрактом состояния и правилами из К-36",
+          "Заполнить блок входа: BA_level_decision, section_5_1, supplied_API_events, product_profiles",
+          "Если выбран L2 без контракта: запросить его, обязательный L2 нельзя обходить fast track",
+          "Проверить: у каждого стыка две стороны, владелец и совместимость, единый каркас 5 сохранён",
+          "Сохранить блок BCREQ_OUTPUT и решить, какой класс запустить следующим"
+        ],
+        "result": "section_5_2{components,contract_deltas,compatibility,owners,fr_trace}, unresolved_contracts",
+        "gate": "—"
+      },
+      {
+        "number": 32,
+        "step": "Ш-32 Особенности и ограничения",
+        "stage": "A-WORK",
+        "stages": [
+          "A-WORK"
+        ],
+        "prompt": {
+          "id": "mango-bcreq-c23-constraints",
+          "classId": "К-23",
+          "file": "23-constraints.md",
+          "title": "К-23. Особенности и ограничения",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/standards/bcreq-manual-classes/23-constraints.md"
+        },
+        "params": "class: К-23; phase: a-work; input_mode: CONTINUE",
+        "prepare": "section_5, source_constraints, scope_exclusions",
+        "actions": [
+          "Скопировать промпт К-23 кнопкой ⧉ вместе с контрактом состояния и правилами из К-36",
+          "Заполнить блок входа: section_5, source_constraints, scope_exclusions",
+          "Если ограничение без основания: вопрос, а не абсолютный запрет продукта",
+          "Проверить: нет дубля раздела 5, каждое ограничение прослеживается, целевые исключения сохранены",
+          "Сохранить блок BCREQ_OUTPUT и решить, какой класс запустить следующим"
+        ],
+        "result": "section_6{features_refs,external_constraints[{id,source,consequence}]}",
+        "gate": "—"
+      },
+      {
+        "number": 33,
+        "step": "Ш-33 Второй прогон UC и граничные случаи",
+        "stage": "A-WORK",
+        "stages": [
+          "A-WORK"
+        ],
+        "prompt": {
+          "id": "mango-bcreq-c24-uc-boundaries",
+          "classId": "К-24",
+          "file": "24-uc-boundaries.md",
+          "title": "К-24. Второй прогон UC и граничные случаи",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/standards/bcreq-manual-classes/24-uc-boundaries.md"
+        },
+        "params": "class: К-24; phase: a-work; input_mode: CONTINUE",
+        "prepare": "sections_3_to_6, UC_first, supplied_UI_API_contracts",
+        "actions": [
+          "Скопировать промпт К-24 кнопкой ⧉ вместе с контрактом состояния и правилами из К-36",
+          "Заполнить блок входа: sections_3_to_6, UC_first, supplied_UI_API_contracts",
+          "Если нет раздела 5: остановить этот прогон. Новое поведение без ФТ вернуть на К-16/К-17 через БА",
+          "Проверить: каждая граница имеет основание, числа не придуманы, матрица покрытия не потеряна",
+          "Сохранить блок BCREQ_OUTPUT и решить, какой класс запустить следующим"
+        ],
+        "result": "section_7_second, boundary_matrix, uncovered_behavior",
+        "gate": "—"
+      },
+      {
+        "number": 34,
+        "step": "Ш-34 Анализ рисков",
+        "stage": "A-WORK",
+        "stages": [
+          "A-WORK"
+        ],
+        "prompt": {
+          "id": "mango-bcreq-c25-risks",
+          "classId": "К-25",
+          "file": "25-risks.md",
+          "title": "К-25. Анализ рисков",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/standards/bcreq-manual-classes/25-risks.md"
+        },
+        "params": "class: К-25; phase: a-work; input_mode: CONTINUE",
+        "prepare": "scope, design, uncertainty, evidence",
+        "actions": [
+          "Скопировать промпт К-25 кнопкой ⧉ вместе с контрактом состояния и правилами из К-36",
+          "Заполнить блок входа: scope, design, uncertainty, evidence",
+          "Если критический риск блокирует оценку, а решения нет: gate gap, не самостоятельное принятие риска",
+          "Проверить: риск отличается от зависимости и известного ограничения, мера проверяема, источник указан",
+          "Сохранить блок BCREQ_OUTPUT и решить, какой класс запустить следующим"
+        ],
+        "result": "section_8_1[{id,cause,event,consequence,probability,impact,measure,owner,source}], risk_questions",
+        "gate": "—"
+      },
+      {
+        "number": 35,
+        "step": "Ш-35 Реестр зависимостей поставки",
+        "stage": "A-WORK",
+        "stages": [
+          "A-WORK"
+        ],
+        "prompt": {
+          "id": "mango-bcreq-c26-delivery-dependencies",
+          "classId": "К-26",
+          "file": "26-delivery-dependencies.md",
+          "title": "К-26. Реестр зависимостей поставки",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/standards/bcreq-manual-classes/26-delivery-dependencies.md"
+        },
+        "params": "class: К-26; phase: a-work; input_mode: CONTINUE",
+        "prepare": "dependency_manifest, design, team_responses, scope",
+        "actions": [
+          "Скопировать промпт К-26 кнопкой ⧉ вместе с контрактом состояния и правилами из К-36",
+          "Заполнить блок входа: dependency_manifest, design, team_responses, scope",
+          "Если блокирующая зависимость без владельца: вопрос 8.4 с пометкой блокировки оценки",
+          "Проверить: указано что именно блокируется, источник статуса и дата есть, отсутствие ответа не равно готовности",
+          "Сохранить блок BCREQ_OUTPUT и решить, какой класс запустить следующим"
+        ],
+        "result": "section_8_2[{id,depends_on,type,blocks,human_status,owner,source}]",
+        "gate": "—"
+      },
+      {
+        "number": 36,
+        "step": "Ш-36 План приёмки",
+        "stage": "A-WORK",
+        "stages": [
+          "A-WORK"
+        ],
+        "prompt": {
+          "id": "mango-bcreq-c27-acceptance",
+          "classId": "К-27",
+          "file": "27-acceptance.md",
+          "title": "К-27. План приёмки",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/standards/bcreq-manual-classes/27-acceptance.md"
+        },
+        "params": "class: К-27; phase: a-work; input_mode: CONTINUE",
+        "prepare": "FR, NFR, UC, source_thresholds, proposed_acceptors",
+        "actions": [
+          "Скопировать промпт К-27 кнопкой ⧉ вместе с контрактом состояния и правилами из К-36",
+          "Заполнить блок входа: FR, NFR, UC, source_thresholds, proposed_acceptors",
+          "Если критерий без требования или неизвестный порог: вернуть на уточнение, не подбирать число",
+          "Проверить: каждый критерий воспроизводим, приёмщик не назначен моделью, покрыты условные ветки",
+          "Сохранить блок BCREQ_OUTPUT и решить, какой класс запустить следующим"
+        ],
+        "result": "section_8_3[{id,given,when,then,requirement_id,method,acceptor}], acceptance_gaps",
+        "gate": "—"
+      },
+      {
+        "number": 37,
+        "step": "Ш-37 Подготовка пакетов адресатам",
+        "stage": "A-RELEASE",
+        "stages": [
+          "A-RELEASE"
+        ],
+        "prompt": {
+          "id": "mango-bcreq-c32-audience-projection",
+          "classId": "К-32",
+          "file": "32-audience-projection.md",
+          "title": "К-32. Подготовка пакетов адресатам",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/standards/bcreq-manual-classes/32-audience-projection.md"
+        },
+        "params": "class: К-32; phase: a-release; input_mode: CONTINUE",
+        "prepare": "approved_or_draft_candidate, audience_policy, scope, approvals",
+        "actions": [
+          "Скопировать промпт К-32 кнопкой ⧉ вместе с контрактом состояния и правилами из К-36",
+          "Заполнить блок входа: approved_or_draft_candidate, audience_policy, scope, approvals",
+          "Если не задан адресат/состав или нет требуемого решения: только draft-пакет, не объявлять отправленным",
+          "Проверить: каждый файл соответствует ревизии, исключения явные, внутренний материал не ушёл наружу",
+          "Сохранить блок BCREQ_OUTPUT и решить, какой класс запустить следующим"
+        ],
+        "result": "customer_packet, internal_packet, delivery_manifest, excluded_items",
+        "gate": "—"
+      },
+      {
+        "number": 38,
+        "step": "Ш-38 Контроль выпускного комплекта",
+        "stage": "A-RELEASE",
+        "stages": [
+          "A-RELEASE"
+        ],
+        "prompt": {
+          "id": "mango-bcreq-c33-release-audit",
+          "classId": "К-33",
+          "file": "33-release-audit.md",
+          "title": "К-33. Контроль выпускного комплекта",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/standards/bcreq-manual-classes/33-release-audit.md"
+        },
+        "params": "class: К-33; phase: a-release; input_mode: CONTINUE",
+        "prepare": "delivery_manifest, packets, candidate_revision, required_approvals, source_receipts",
+        "actions": [
+          "Скопировать промпт К-33 кнопкой ⧉ вместе с контрактом состояния и правилами из К-36",
+          "Заполнить блок входа: delivery_manifest, packets, candidate_revision, required_approvals, source_receipts",
+          "Если старое одобрение/непроверенный источник/неполный пакет: выпуск заблокирован до исправления и решения человека на гейте выпуска (человек)",
+          "Проверить: ревизии всех частей совпадают, реальные полномочия подтверждены, статус отправки не выдуман",
+          "Сохранить блок BCREQ_OUTPUT и решить, какой класс запустить следующим"
+        ],
+        "result": "release_report{revision_checks,approval_checks,missing,stale,ready_for_human_release}",
+        "gate": "Выпуск — решает человек; К-35 фиксирует baseline"
+      },
+      {
+        "number": 39,
+        "step": "Ш-39 Фиксация baseline и передача",
+        "stage": "A-RELEASE",
+        "stages": [
+          "A-RELEASE"
+        ],
+        "prompt": {
+          "id": "mango-bcreq-c35-baseline-handover",
+          "classId": "К-35",
+          "file": "35-baseline-handover.md",
+          "title": "К-35. Фиксация baseline и передача",
+          "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/standards/bcreq-manual-classes/35-baseline-handover.md"
+        },
+        "params": "class: К-35; phase: a-release; input_mode: CONTINUE",
+        "prepare": "release_report, human_release_record?, final_packets, unresolved, owners",
+        "actions": [
+          "Скопировать промпт К-35 кнопкой ⧉ вместе с контрактом состояния и правилами из К-36",
+          "Заполнить блок входа: release_report, human_release_record?, final_packets, unresolved, owners",
+          "Если нет обязательного release-record: допустим кандидат baseline, но не released/accepted",
+          "Проверить: состав восстановим без чата, все открытые вопросы переданы, статус соответствует evidence",
+          "Сохранить блок BCREQ_OUTPUT и решить, какой класс запустить следующим"
+        ],
+        "result": "baseline_manifest{revision,artifacts,decisions,open_items,owners,delivery_status}, change_entrypoint",
+        "gate": "—"
+      }
+    ],
+    "sequences": [
+      {
+        "stage": "A-IN",
+        "chain": [
+          {
+            "classId": "К-36",
+            "number": 1,
+            "title": "К-36. Загрузка правил и параметров чата"
+          },
+          {
+            "classId": "К-01",
+            "number": 2,
+            "title": "К-01. Приём исходного запроса"
+          },
+          {
+            "classId": "К-02",
+            "number": 3,
+            "title": "К-02. Атомарная нормализация"
+          },
+          {
+            "classId": "К-03",
+            "number": 4,
+            "title": "К-03. Оценка неоднозначности"
+          },
+          {
+            "classId": "К-04",
+            "number": 5,
+            "title": "К-04. Пакет вопросов"
+          },
+          {
+            "classId": "К-05",
+            "number": 6,
+            "title": "К-05. Сопоставление с таксономией"
+          },
+          {
+            "classId": "К-06",
+            "number": 7,
+            "title": "К-06. Границы изменения"
+          },
+          {
+            "classId": "К-07",
+            "number": 8,
+            "title": "К-07. Извлечение из web"
+          },
+          {
+            "classId": "К-08",
+            "number": 9,
+            "title": "К-08. Извлечение из PDF и runtime"
+          },
+          {
+            "classId": "К-09",
+            "number": 10,
+            "title": "К-09. Дообогащение материалами БА"
+          },
+          {
+            "classId": "К-10",
+            "number": 11,
+            "title": "К-10. Разрешение конфликтов источников"
+          },
+          {
+            "classId": "К-11",
+            "number": 12,
+            "title": "К-11. Контроль полноты зависимостей"
+          },
+          {
+            "classId": "К-37",
+            "number": 13,
+            "title": "К-37. User Story по запросу БА"
+          },
+          {
+            "classId": "К-38",
+            "number": 14,
+            "title": "К-38. Отдельное моделирование UC по запросу БА"
+          },
+          {
+            "classId": "К-14",
+            "number": 15,
+            "title": "К-14. Глоссарий"
+          },
+          {
+            "classId": "К-15",
+            "number": 16,
+            "title": "К-15. Бизнес-контекст"
+          },
+          {
+            "classId": "К-34",
+            "number": 17,
+            "title": "К-34. Регистрация решений и согласований"
+          },
+          {
+            "classId": "К-39",
+            "number": 18,
+            "title": "К-39. Сверка результата с манифестом задачи"
+          },
+          {
+            "classId": "К-12",
+            "number": 19,
+            "title": "К-12. Полная сборка фазы"
+          },
+          {
+            "classId": "К-13",
+            "number": 20,
+            "title": "К-13. Проверка переносимого контекста"
+          },
+          {
+            "classId": "К-20",
+            "number": 21,
+            "title": "К-20. Подготовка доказательств гейта"
+          }
+        ],
+        "gate": "Г-IN",
+        "decides": "БА"
+      },
+      {
+        "stage": "A-CORE",
+        "chain": [
+          {
+            "classId": "К-36",
+            "number": 1,
+            "title": "К-36. Загрузка правил и параметров чата"
+          },
+          {
+            "classId": "К-13",
+            "number": 20,
+            "title": "К-13. Проверка переносимого контекста"
+          },
+          {
+            "classId": "К-03",
+            "number": 4,
+            "title": "К-03. Оценка неоднозначности"
+          },
+          {
+            "classId": "К-04",
+            "number": 5,
+            "title": "К-04. Пакет вопросов"
+          },
+          {
+            "classId": "К-06",
+            "number": 7,
+            "title": "К-06. Границы изменения"
+          },
+          {
+            "classId": "К-07",
+            "number": 8,
+            "title": "К-07. Извлечение из web"
+          },
+          {
+            "classId": "К-08",
+            "number": 9,
+            "title": "К-08. Извлечение из PDF и runtime"
+          },
+          {
+            "classId": "К-09",
+            "number": 10,
+            "title": "К-09. Дообогащение материалами БА"
+          },
+          {
+            "classId": "К-10",
+            "number": 11,
+            "title": "К-10. Разрешение конфликтов источников"
+          },
+          {
+            "classId": "К-11",
+            "number": 12,
+            "title": "К-11. Контроль полноты зависимостей"
+          },
+          {
+            "classId": "К-14",
+            "number": 15,
+            "title": "К-14. Глоссарий"
+          },
+          {
+            "classId": "К-15",
+            "number": 16,
+            "title": "К-15. Бизнес-контекст"
+          },
+          {
+            "classId": "К-16",
+            "number": 22,
+            "title": "К-16. ФТ изменения существующего поведения"
+          },
+          {
+            "classId": "К-17",
+            "number": 23,
+            "title": "К-17. ФТ нового поведения с нуля"
+          },
+          {
+            "classId": "К-18",
+            "number": 24,
+            "title": "К-18. Нефункциональные требования"
+          },
+          {
+            "classId": "К-37",
+            "number": 13,
+            "title": "К-37. User Story по запросу БА"
+          },
+          {
+            "classId": "К-38",
+            "number": 14,
+            "title": "К-38. Отдельное моделирование UC по запросу БА"
+          },
+          {
+            "classId": "К-19",
+            "number": 25,
+            "title": "К-19. Первый прогон UC и покрытие ФТ"
+          },
+          {
+            "classId": "К-28",
+            "number": 26,
+            "title": "К-28. Независимая содержательная проверка"
+          },
+          {
+            "classId": "К-29",
+            "number": 27,
+            "title": "К-29. Анализ влияния изменения"
+          },
+          {
+            "classId": "К-30",
+            "number": 28,
+            "title": "К-30. Адресная правка"
+          },
+          {
+            "classId": "К-31",
+            "number": 29,
+            "title": "К-31. Структурная сверка документа"
+          },
+          {
+            "classId": "К-34",
+            "number": 17,
+            "title": "К-34. Регистрация решений и согласований"
+          },
+          {
+            "classId": "К-39",
+            "number": 18,
+            "title": "К-39. Сверка результата с манифестом задачи"
+          },
+          {
+            "classId": "К-12",
+            "number": 19,
+            "title": "К-12. Полная сборка фазы"
+          },
+          {
+            "classId": "К-20",
+            "number": 21,
+            "title": "К-20. Подготовка доказательств гейта"
+          }
+        ],
+        "gate": "Г-С1 «Согласование 1»",
+        "decides": "Заказчик"
+      },
+      {
+        "stage": "A-WORK",
+        "chain": [
+          {
+            "classId": "К-36",
+            "number": 1,
+            "title": "К-36. Загрузка правил и параметров чата"
+          },
+          {
+            "classId": "К-13",
+            "number": 20,
+            "title": "К-13. Проверка переносимого контекста"
+          },
+          {
+            "classId": "К-03",
+            "number": 4,
+            "title": "К-03. Оценка неоднозначности"
+          },
+          {
+            "classId": "К-04",
+            "number": 5,
+            "title": "К-04. Пакет вопросов"
+          },
+          {
+            "classId": "К-06",
+            "number": 7,
+            "title": "К-06. Границы изменения"
+          },
+          {
+            "classId": "К-07",
+            "number": 8,
+            "title": "К-07. Извлечение из web"
+          },
+          {
+            "classId": "К-08",
+            "number": 9,
+            "title": "К-08. Извлечение из PDF и runtime"
+          },
+          {
+            "classId": "К-09",
+            "number": 10,
+            "title": "К-09. Дообогащение материалами БА"
+          },
+          {
+            "classId": "К-10",
+            "number": 11,
+            "title": "К-10. Разрешение конфликтов источников"
+          },
+          {
+            "classId": "К-11",
+            "number": 12,
+            "title": "К-11. Контроль полноты зависимостей"
+          },
+          {
+            "classId": "К-14",
+            "number": 15,
+            "title": "К-14. Глоссарий"
+          },
+          {
+            "classId": "К-15",
+            "number": 16,
+            "title": "К-15. Бизнес-контекст"
+          },
+          {
+            "classId": "К-16",
+            "number": 22,
+            "title": "К-16. ФТ изменения существующего поведения"
+          },
+          {
+            "classId": "К-17",
+            "number": 23,
+            "title": "К-17. ФТ нового поведения с нуля"
+          },
+          {
+            "classId": "К-18",
+            "number": 24,
+            "title": "К-18. Нефункциональные требования"
+          },
+          {
+            "classId": "К-21",
+            "number": 30,
+            "title": "К-21. ОРР L1"
+          },
+          {
+            "classId": "К-22",
+            "number": 31,
+            "title": "К-22. ОРР L2 и контракты стыков"
+          },
+          {
+            "classId": "К-23",
+            "number": 32,
+            "title": "К-23. Особенности и ограничения"
+          },
+          {
+            "classId": "К-24",
+            "number": 33,
+            "title": "К-24. Второй прогон UC и граничные случаи"
+          },
+          {
+            "classId": "К-25",
+            "number": 34,
+            "title": "К-25. Анализ рисков"
+          },
+          {
+            "classId": "К-26",
+            "number": 35,
+            "title": "К-26. Реестр зависимостей поставки"
+          },
+          {
+            "classId": "К-27",
+            "number": 36,
+            "title": "К-27. План приёмки"
+          },
+          {
+            "classId": "К-37",
+            "number": 13,
+            "title": "К-37. User Story по запросу БА"
+          },
+          {
+            "classId": "К-38",
+            "number": 14,
+            "title": "К-38. Отдельное моделирование UC по запросу БА"
+          },
+          {
+            "classId": "К-28",
+            "number": 26,
+            "title": "К-28. Независимая содержательная проверка"
+          },
+          {
+            "classId": "К-29",
+            "number": 27,
+            "title": "К-29. Анализ влияния изменения"
+          },
+          {
+            "classId": "К-30",
+            "number": 28,
+            "title": "К-30. Адресная правка"
+          },
+          {
+            "classId": "К-31",
+            "number": 29,
+            "title": "К-31. Структурная сверка документа"
+          },
+          {
+            "classId": "К-34",
+            "number": 17,
+            "title": "К-34. Регистрация решений и согласований"
+          },
+          {
+            "classId": "К-39",
+            "number": 18,
+            "title": "К-39. Сверка результата с манифестом задачи"
+          },
+          {
+            "classId": "К-12",
+            "number": 19,
+            "title": "К-12. Полная сборка фазы"
+          },
+          {
+            "classId": "К-20",
+            "number": 21,
+            "title": "К-20. Подготовка доказательств гейта"
+          }
+        ],
+        "gate": "Г-W",
+        "decides": "ПО продукта, архитектор продукта, руководитель КК"
+      },
+      {
+        "stage": "A-RELEASE",
+        "chain": [
+          {
+            "classId": "К-36",
+            "number": 1,
+            "title": "К-36. Загрузка правил и параметров чата"
+          },
+          {
+            "classId": "К-13",
+            "number": 20,
+            "title": "К-13. Проверка переносимого контекста"
+          },
+          {
+            "classId": "К-04",
+            "number": 5,
+            "title": "К-04. Пакет вопросов"
+          },
+          {
+            "classId": "К-29",
+            "number": 27,
+            "title": "К-29. Анализ влияния изменения"
+          },
+          {
+            "classId": "К-30",
+            "number": 28,
+            "title": "К-30. Адресная правка"
+          },
+          {
+            "classId": "К-31",
+            "number": 29,
+            "title": "К-31. Структурная сверка документа"
+          },
+          {
+            "classId": "К-28",
+            "number": 26,
+            "title": "К-28. Независимая содержательная проверка"
+          },
+          {
+            "classId": "К-34",
+            "number": 17,
+            "title": "К-34. Регистрация решений и согласований"
+          },
+          {
+            "classId": "К-39",
+            "number": 18,
+            "title": "К-39. Сверка результата с манифестом задачи"
+          },
+          {
+            "classId": "К-12",
+            "number": 19,
+            "title": "К-12. Полная сборка фазы"
+          },
+          {
+            "classId": "К-20",
+            "number": 21,
+            "title": "К-20. Подготовка доказательств гейта"
+          },
+          {
+            "classId": "К-32",
+            "number": 37,
+            "title": "К-32. Подготовка пакетов адресатам"
+          },
+          {
+            "classId": "К-33",
+            "number": 38,
+            "title": "К-33. Контроль выпускного комплекта"
+          },
+          {
+            "classId": "К-35",
+            "number": 39,
+            "title": "К-35. Фиксация baseline и передача"
+          }
+        ],
+        "gate": "выпуск",
+        "decides": "по процессу A-RELEASE"
+      }
+    ]
+  },
+  "approval": {
+    "title": "Согласование BCREQ с командой и Заказчиком",
+    "basis": {
+      "label": "KK-289887877-231026-2259-652.pdf",
+      "url": "https://github.com/user-attachments/files/33892143/KK-289887877-231026-2259-652.pdf"
+    },
+    "contract": {
+      "label": "Контракт стадий и гейтов BCREQ",
+      "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/docs/contracts/bcreq-stage-gates.md"
+    },
+    "stages": [
+      {
+        "stage": "1. Приём задачи",
+        "phase": "A-IN",
+        "gate": "Г-IN",
+        "goal": "подготовить данные для ФТ или выйти в поток CS, если функция уже есть",
+        "input": "сырой запрос Заказчика в Jira",
+        "actions": [
+          "Матчинг на продуктовую принадлежность по таксономии Mango, командам и модулям",
+          "Проверка, что запрос — дельта к доработке",
+          "Вопросы Заказчику",
+          "Нормализация запроса"
+        ],
+        "output": "разделы 1, 2, ＋2.5; вопросы 8.4 с адресатом",
+        "approver": "БА по критериям Г-IN.1–Г-IN.5",
+        "outcomes": [
+          "Дальше в A-CORE",
+          "Доработать A-IN"
+        ]
+      },
+      {
+        "stage": "2. Согласование 1: ФТ и оценка «от»",
+        "phase": "A-CORE",
+        "gate": "Г-С1",
+        "goal": "согласовать ФТ с Заказчиком до технической спецификации",
+        "input": "решение Г-IN; разделы 1, 2, ＋2.5",
+        "actions": [
+          "Консультация с продуктовой командой (по необходимости)",
+          "ФТ как дельта по BABOK",
+          "НФТ",
+          "UC без UI",
+          "Матрица UC × ФТ",
+          "Верхнеуровневая оценка «от» от команды"
+        ],
+        "output": "разделы 3, 4, 7 (прогон 1); оценка «от»",
+        "approver": "Заказчик по критериям Г-С1.1–Г-С1.5",
+        "outcomes": [
+          "Согласование → A-WORK",
+          "Уточнение → возврат в A-IN или A-CORE",
+          "Отказ → стоп"
+        ]
+      },
+      {
+        "stage": "3. Внутреннее согласование решения и итоговой оценки",
+        "phase": "A-WORK",
+        "gate": "Г-W",
+        "goal": "подготовить решение и итоговую оценку",
+        "input": "решение Заказчика по Г-С1; разделы 1–4 и 7",
+        "actions": [
+          "Консультация с КК, архитектором и продуктовой командой",
+          "ОРР L1 и при необходимости L2",
+          "Ограничения",
+          "Граничные UC с UI",
+          "Риски и план приёмки",
+          "Независимая проверка К-28 в отдельном чате с ролью критика"
+        ],
+        "output": "разделы 5, 6, 7 (прогон 2), 8; итоговая оценка",
+        "approver": "ПО продукта, архитектор продукта, руководитель КК по критериям Г-W.1–Г-W.5",
+        "outcomes": [
+          "Согласование → передача Заказчику",
+          "Уточнение → возврат в A-IN, A-CORE или A-WORK",
+          "Отказ → стоп"
+        ]
+      },
+      {
+        "stage": "4. Итоговая оценка Заказчику",
+        "phase": "A-WORK",
+        "gate": "Г-W (исход)",
+        "goal": "согласовать итоговую оценку с Заказчиком",
+        "input": "решение Г-W",
+        "actions": [
+          "Передача итоговой оценки, раздела 5 L1 и раздела 6 по существующему процессу выставления оценки"
+        ],
+        "output": "согласованная оценка",
+        "approver": "Заказчик",
+        "outcomes": [
+          "Согласование → A-RELEASE",
+          "Отказ или замечания → исход «уточнение» гейта Г-W"
+        ]
+      },
+      {
+        "stage": "5. Выпуск",
+        "phase": "A-RELEASE",
+        "gate": "—",
+        "goal": "утверждение и baselining документа",
+        "input": "согласованная оценка",
+        "actions": [
+          "По процессу A-RELEASE",
+          "Содержание стадии вне контракта гейтов"
+        ],
+        "output": "утверждённый BCREQ",
+        "approver": "по процессу A-RELEASE",
+        "outcomes": [
+          "—"
+        ]
+      }
+    ],
+    "returns": [
+      {
+        "reason": "Термин, контекст, границы, состав продуктов",
+        "stage": "A-IN",
+        "entry": "Ш-6 (К-05), Ш-7 (К-06), Ш-15 (К-14) или Ш-16 (К-15)",
+        "action": "К-29 помечает зависимое stale; повторить шаг; К-30 правит адресно затронутое; К-34 записывает возврат в 8.5"
+      },
+      {
+        "reason": "Пробел или противоречие источников, неполные зависимости",
+        "stage": "стадия, где найден пробел",
+        "entry": "Ш-8 … Ш-11 (К-07–К-10) по рекомендации Ш-12 (К-11)",
+        "action": "повторить извлечение по доступному источнику; К-10 разрешает конфликт; повторить К-11; К-34 записывает решение в 8.5"
+      },
+      {
+        "reason": "ФТ, НФТ, полнота UC",
+        "stage": "A-CORE",
+        "entry": "Ш-22 или Ш-23 (К-16 / К-17), Ш-24 (К-18), Ш-25 (К-19)",
+        "action": "К-29 помечает зависимое stale; повторить шаг; К-30 правит адресно затронутое; К-34 записывает возврат в 8.5"
+      },
+      {
+        "reason": "ОРР, ограничения, граничные кейсы, риски, зависимости поставки, приёмка",
+        "stage": "A-WORK",
+        "entry": "Ш-30 … Ш-36 (К-21–К-27)",
+        "action": "К-29 помечает зависимое stale; повторить шаг; К-30 правит адресно затронутое; К-34 записывает возврат в 8.5"
+      }
+    ],
+    "improvements": [
+      {
+        "id": "У-1",
+        "before": "Открытый вопрос п. 3: давать Заказчику ФТ с предварительной оценкой или сначала согласовать ФТ без оценки.",
+        "after": "Выбран вариант 1: Согласование 1 включает оценку «от» (критерий Г-С1.4 контракта гейтов).",
+        "why": "Выше вероятность раннего «стоп» или сокращения scope до технической спецификации."
+      },
+      {
+        "id": "У-2",
+        "before": "Завершение A-IN «определяется на уровне БА».",
+        "after": "Гейт Г-IN с пятью проверяемыми критериями Г-IN.1–Г-IN.5.",
+        "why": "Готовность к Согласованию 1 проверяется одинаково у всех БА."
+      },
+      {
+        "id": "У-3",
+        "before": "Исходы этапов: согласование, уточнение или отказ без условий.",
+        "after": "Критерии Г-С1.1–Г-С1.5 и Г-W.1–Г-W.5; К-20 готовит отчёт по критериям, решает человек, К-34 фиксирует решение.",
+        "why": "Согласующий видит, по какому критерию документ не готов."
+      },
+      {
+        "id": "У-4",
+        "before": "«Возврат в цикл A-IN или A-CORE» без точки входа.",
+        "after": "Таблица возвратов «причина → стадия → шаг»; К-29 помечает зависимое stale, К-30 правит адресно; возврат пишется в 8.5 через К-34.",
+        "why": "Повторно проходят только затронутые шаги; история решений сохраняется."
+      },
+      {
+        "id": "У-5",
+        "before": "Проверка документа перед внутренним согласованием не описана.",
+        "after": "Шаг Ш-26 (К-28): независимая содержательная проверка в отдельном чате с ролью критика перед гейтом (критерий Г-W.3); структура — К-31, верность манифесту — К-39.",
+        "why": "Автор документа не проверяет сам себя."
+      },
+      {
+        "id": "У-6",
+        "before": "Раздел 5 «Риски / вопросы» пуст.",
+        "after": "Вопросы ведутся в реестре 8.4 с адресатом и сроком; риски — в 8.1 с владельцем (критерий Г-W.4).",
+        "why": "Риски и вопросы конкретной задачи не теряются между этапами."
+      },
+      {
+        "id": "У-7",
+        "before": "Выставление оценки Заказчику — «по существующему процессу», вне этапов.",
+        "after": "Этап 4: после Г-W Заказчику передаются итоговая оценка, раздел 5 L1 и раздел 6; отказ — исход «уточнение» гейта Г-W.",
+        "why": "Видно, какие разделы видит Заказчик и куда идёт отказ."
+      },
+      {
+        "id": "У-8",
+        "before": "Нумерация разделов AS-IS: 4 — ТС, 5 — НФТ, 7 — внутренняя документация.",
+        "after": "Нумерация BCREQ: 3 — ФТ, 4 — НФТ, 5 — ОРР, 6 — ограничения, 7 — UC, 8 — дополнительные разделы.",
+        "why": "Одна нумерация в промптах, мета-стандартах и на сайте."
+      },
+      {
+        "id": "У-9",
+        "before": "UC «пользовательские» и «граничные» без связи между собой.",
+        "after": "Два класса UC: К-19 — прогон 1 без UI в A-CORE (покрытие ФТ 100 %, Г-С1.2), К-24 — прогон 2 с граничными кейсами и UI в A-WORK.",
+        "why": "Сценарии Согласования 1 не переписываются, а дополняются."
+      }
+    ]
+  }
+}

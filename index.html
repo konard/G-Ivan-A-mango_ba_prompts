@@ -1,0 +1,551 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="gate.js"></script>
+    <title>Mango BA Prompts</title>
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="standards.css" />
+    <link rel="stylesheet" href="v2.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="#about" aria-label="Mango BA Prompts">
+        <span class="brand-mark" aria-hidden="true">M</span>
+        <span>
+          <span class="brand-title">Mango BA Prompts</span>
+          <span class="brand-subtitle">каталог промптов · <span class="site-version" data-site-version>v2.8.2</span></span>
+        </span>
+      </a>
+      <nav class="topnav" id="topnav" aria-label="Разделы">
+        <a href="#about" data-nav="about">О проекте</a>
+        <a href="#catalog" data-nav="catalog">Каталог</a>
+        <a href="#standards" data-nav="standards">Стандарты</a>
+        <a href="#processes" data-nav="processes">Процессы</a>
+        <a href="#dashboard" data-nav="dashboard">Дашборд</a>
+        <a href="#glossary" data-nav="glossary">Справочник</a>
+        <button
+          class="icon-button"
+          id="site-logout"
+          type="button"
+          title="Выйти: снова спросить пароль"
+          aria-label="Выйти из сайта"
+        >
+          ⏻
+        </button>
+        <button
+          class="icon-button theme-toggle"
+          id="theme-toggle"
+          type="button"
+          title="Переключить тему"
+          aria-label="Переключить светлую и тёмную тему"
+        >
+          ◐
+        </button>
+      </nav>
+    </header>
+
+    <main>
+
+      <section class="page-band v2-about" id="about" data-page="about" aria-labelledby="about-title" hidden>
+        <div class="section-head"><div><h1 id="about-title">Mango BA Prompts</h1></div></div>
+        <p class="v2-lead">Требование без потери смысла. Бизнес-аналитик Манго получает полное и проверяемое требование — от обращения Заказчика до согласованного документа — быстрее, чем вручную. Каждое решение прослеживается до источника.</p>
+        <div class="v2-about-grid">
+          <article class="v2-panel"><h2>Видение</h2><dl class="v2-dl"><div><dt>Миссия</dt><dd>Превращать практику <a class="v2-term" href="#glossary?term=ba" title="Справочник: БА">БА</a> Манго в проверенные шаги процессов и измерять каждый шаг статистикой прогонов.</dd></div><div><dt>Для кого</dt><dd><a class="v2-term" href="#glossary?term=ba" title="Справочник: БА">БА</a> Манго ведут процессы. Заказчики и согласующие получают требования. ИИ-инженер сопровождает промпты, проверки и статистику прогонов. Руководство оценивает ход автоматизации.</dd></div><div><dt>Ключевая идея</dt><dd>Процесс не зависит от исполнителя: одни и те же шаги, гейты и проверки работают в чате, в агентном клиенте и в n8n.</dd></div><div><dt>Текущий фокус</dt><dd><a class="v2-term" href="#glossary?term=stage" title="Справочник: Этап 1–4">Этап 1</a>: процесс <a class="v2-term" href="#glossary?term=bcreq" title="Справочник: BCREQ">BCREQ</a> в чате LLM по инструкции сайта и статистика прогонов.</dd></div><div><dt>Долгосрочная цель</dt><dd>Промышленная эксплуатация процессов БА на выделенном сервере в контуре Манго.</dd></div></dl></article>
+          <article class="v2-panel"><h2>Принципы</h2><ul class="v2-list"><li>Человек решает на гейтах. Модель только рекомендует.</li><li>Статистика прогонов неизменна: новые требования дают новую статистику.</li><li>Изменения — по RFC или ADR с решением владельца.</li><li>Один источник истины на тип решения. Сайт — проекция репозитория.</li></ul>
+            <h2>Мета-модель бизнес-анализа</h2><p>Нормы и <a class="v2-term" href="#glossary?term=meta" title="Справочник: Мета-модель БА">мета-модель бизнес-анализа</a> задаёт Хаб hybrid-Intelligence-lab. Исполняемая реализация мета-модели — репозиторий mango-ba-ai-runtime: классы артефактов, проекции документа для Заказчика и разработки, процессы.</p><p class="v2-links"><a href="https://github.com/G-Ivan-A/hybrid-Intelligence-lab" target="_blank" rel="noreferrer">Хаб hybrid-Intelligence-lab</a> · <a href="https://github.com/G-Ivan-A/mango-ba-ai-runtime" target="_blank" rel="noreferrer">mango-ba-ai-runtime</a></p></article>
+        </div>
+        <article class="v2-panel" id="about-version" aria-live="polite"><h2>Версия сайта</h2></article>
+        <article class="v2-panel"><h2>Этапы автоматизации</h2><ol class="v2-stages"><li data-status="current"><span class="v2-stage-num">1</span><div><strong>Промпты в чате LLM</strong><p>БА копирует промпты процесса шаг за шагом в один чат с моделью.</p></div><span class="status-pill">сейчас</span></li><li data-status="planned"><span class="v2-stage-num">2</span><div><strong>Агентный клиент</strong><p>Клиент выполняет шаги по пакету правил и останавливается на гейтах.</p></div><span class="status-pill">план</span></li><li data-status="planned"><span class="v2-stage-num">3</span><div><strong>Оркестрация в n8n</strong><p>Поток n8n ведёт процесс и ждёт решения человека на гейтах.</p></div><span class="status-pill">план</span></li><li data-status="planned"><span class="v2-stage-num">4</span><div><strong>Промышленная эксплуатация</strong><p>Потоки работают на сервере в контуре Манго для всей команды БА.</p></div><span class="status-pill">план</span></li></ol></article>
+        <article class="v2-panel"><h2>Разделы сайта</h2><ul class="v2-list"><li><a href="#catalog">Каталог</a> — 39 классов промптов BCREQ с фильтрами; 14 промптов этапа 1 — в архиве.</li><li><a href="#standards">Стандарты</a> — Структура документа <a class="v2-term" href="#glossary?term=bcreq" title="Справочник: BCREQ">BCREQ</a> и критерии приёмки каждого раздела.</li><li><a href="#processes">Процессы</a> — Маршрут 39 классов по стадиям, шаги Ш-1…Ш-39 и согласование документа.</li><li><a href="#dashboard">Дашборд</a> — Статистика прогонов.</li><li><a href="#glossary">Справочник</a> — Термины и сокращения сайта.</li></ul>
+          <p class="v2-links">Документы проекта: <a href="https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/docs/vision.md" target="_blank" rel="noreferrer">Видение</a> · <a href="https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/docs/concept.md" target="_blank" rel="noreferrer">Концепция</a> · <a href="https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/docs/architecture.md" target="_blank" rel="noreferrer">Архитектура</a> · <a href="https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/docs/roadmap.md" target="_blank" rel="noreferrer">Roadmap</a></p></article>
+      </section>
+      <section
+        class="page-band catalog-band"
+        id="catalog"
+        data-page="catalog"
+        aria-labelledby="catalog-title"
+      >
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Prompt library</p>
+            <h1 id="catalog-title">Каталог промптов</h1>
+          </div>
+          <output class="result-count" id="result-count" aria-live="polite"></output>
+        </div>
+
+        <div class="toolbar">
+          <div class="toolbar-top">
+            <label class="sort-box">
+              <span class="sort-label">📅 Сортировать</span>
+              <select id="sort-select">
+                <option value="updated">По дате ↓</option>
+                <option value="usage">По популярности</option>
+                <option value="alpha">По алфавиту</option>
+                <option value="status">По статусу</option>
+              </select>
+            </label>
+            <button class="export-button" id="export-button" type="button" title="Скачать каталог (Markdown) по текущим фильтрам" aria-label="Скачать каталог в Markdown">📥 Скачать</button>
+          </div>
+          <div class="toolbar-bottom">
+            <label class="search-box">
+              <span class="search-icon" aria-hidden="true">⌕</span>
+              <input
+                id="search-input"
+                type="search"
+                autocomplete="off"
+                list="search-suggestions"
+                placeholder="Поиск по названию, ID, описанию, тегам"
+              />
+              <datalist id="search-suggestions"></datalist>
+            </label>
+            <button class="secondary-button" id="clear-search-button" type="button" title="Очистить поиск" aria-label="Очистить поиск" hidden>✕ Очистить поиск</button>
+            <button class="secondary-button" id="clear-filters-button" type="button" title="Сбросить фильтры" aria-label="Сбросить все фильтры" hidden>↺ Сбросить фильтры</button>
+          </div>
+        </div>
+
+        <div class="filters" id="filters-root" aria-label="Фильтры каталога"></div>
+        <div class="prompt-grid" id="prompt-grid"></div>
+      </section>
+
+      <section
+        class="page-band dashboard-band"
+        id="dashboard"
+        data-page="dashboard"
+        aria-labelledby="dashboard-title"
+      >
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">GitHub Pages</p>
+            <h2 id="dashboard-title">Внедрение промптов, агентов и мультиагентов</h2>
+          </div>
+          <a class="source-link" href="https://github.com/G-Ivan-A/mango_ba_prompts" target="_blank" rel="noreferrer">↗</a>
+        </div>
+        <div class="metrics-grid" id="metrics-grid" aria-live="polite"></div>
+        <div class="phase-lane" id="phase-lane"></div>
+      </section>
+
+      <section
+        class="page-band checks-band"
+        id="checks"
+        data-page="dashboard"
+        aria-labelledby="checks-title"
+      >
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Prompt observability</p>
+            <h2 id="checks-title">Проверки</h2>
+          </div>
+          <a class="source-link" href="https://github.com/G-Ivan-A/mango_ba_prompts/tree/main/runs" target="_blank" rel="noreferrer">↗</a>
+        </div>
+        <div class="checks-grid" id="checks-grid" aria-live="polite"></div>
+        <div class="checks-byprocess" id="checks-byprocess"></div>
+        <div class="checks-activity" id="checks-activity"></div>
+      </section>
+
+      <section
+        class="page-band roadmap-band"
+        id="roadmap"
+        data-page="roadmap"
+        aria-labelledby="roadmap-title"
+      >
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Maturity roadmap</p>
+            <h2 id="roadmap-title">Переход от промптов к агентам</h2>
+          </div>
+          <a class="source-link" href="https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/docs/ba-ecosystem.md" target="_blank" rel="noreferrer">↗</a>
+        </div>
+        <div class="roadmap-timeline" id="roadmap-levels"></div>
+        <div class="gap-grid" id="roadmap-gaps"></div>
+      </section>
+
+      <section
+        class="page-band bcreq-band process-nav-band"
+        id="process-nav"
+        data-page="processes"
+        aria-label="Подстраницы процессов"
+      >
+        <nav class="process-tabs" id="process-tabs" aria-label="Этапы формирования документа"></nav>
+        <!-- issue-468:start -->
+        <details class="process-help" id="a-in-proposal">
+          <summary>Проект A-IN: 24 шага до перехода к следующей стадии</summary>
+          <p><strong>RFC-AIN-001 · на рассмотрении.</strong> Предлагаем разделить сбор, проверку источников, вопросы и написание контекста. Это принципы будущих промптов; текущий комплект из 14 шагов ниже пока сохраняется.</p>
+          <p>На каждом шаге — проверяемый результат и отчёт об источниках. Вопросы адресованы Заказчику; БА принимает пакет и может явно согласовать гипотезу. До допуска по данным и вопросам раздел 2 не создаётся.</p>
+          <ol class="v2-list">
+            <li data-ain-step="AIN-01"><strong>Правила и версия</strong> — Паспорт запуска и применимые нормы.</li>
+            <li data-ain-step="AIN-02"><strong>Данные у БА</strong> — Пакет имеющихся материалов без интерпретации.</li>
+            <li data-ain-step="AIN-03"><strong>Реестр источников</strong> — Реестр происхождения и доступа.</li>
+            <li data-ain-step="AIN-04"><strong>Атомизация</strong> — Реестр атомов с исходными фрагментами.</li>
+            <li data-ain-step="AIN-05"><strong>Качество и смысл</strong> — Реестр дефектов и проверяемых предпосылок.</li>
+            <li data-ain-step="AIN-06"><strong>Кандидаты продуктов</strong> — Карта прямых, опорных и внешних компонентов.</li>
+            <li data-ain-step="AIN-07"><strong>План retrieval</strong> — Проверяемый план покрытия документацией.</li>
+            <li data-ain-step="AIN-08"><strong>Веб-извлечение</strong> — Квитанция чтения внешних и нормативных источников.</li>
+            <li data-ain-step="AIN-09"><strong>Извлечение БЗ</strong> — Квитанция чтения продуктовой и внешней БЗ.</li>
+            <li data-ain-step="AIN-10"><strong>Замыкание зависимостей</strong> — Матрица покрытия и открытый frontier.</li>
+            <li data-ain-step="AIN-11"><strong>Сверка противоречий</strong> — Журнал расхождений источников.</li>
+            <li data-ain-step="AIN-12"><strong>Исполнимость сейчас</strong> — Матрица атом → возможность → доказательство.</li>
+            <li data-ain-step="AIN-13"><strong>Согласование пула</strong> — Принятый БА пул продуктов и оснований.</li>
+            <li data-ain-step="AIN-14"><strong>Словарь — раздел 1</strong> — Согласованный словарь.</li>
+            <li data-ain-step="AIN-15"><strong>Остаточные пробелы</strong> — Полный реестр нерешённых вопросов качества.</li>
+            <li data-ain-step="AIN-16"><strong>Вопросы Заказчику</strong> — Нумерованный список вопросов до раздела 2.</li>
+            <li data-ain-step="AIN-17"><strong>Решение БА по вопросам</strong> — Поэлементный протокол решения.</li>
+            <li data-ain-step="AIN-18"><strong>Новые данные</strong> — Реестр ответов и гипотез.</li>
+            <li data-ain-step="AIN-19"><strong>Повторная нормализация</strong> — Новая версия атомов и impact set.</li>
+            <li data-ain-step="AIN-20"><strong>Снимок памяти</strong> — Принятый БА evidence-пакет всей спецификации.</li>
+            <li data-ain-step="AIN-21"><strong>Гейт до раздела 2</strong> — Протокол допуска или остановки.</li>
+            <li data-ain-step="AIN-22"><strong>Сборка раздела 2</strong> — Черновик контекста только из принятого snapshot.</li>
+            <li data-ain-step="AIN-23"><strong>Проверка раздела 2</strong> — Отчёт соответствия и BA-review.</li>
+            <li data-ain-step="AIN-24"><strong>Г-IN и передача</strong> — Принятый пакет A-IN либо возврат/CS.</li>
+          </ol>
+          <p>Если evidence недостаточно, возвращаемся к сбору и извлечению из БЗ. В память следующего шага переносится только согласованное БА, с происхождением и статусом гипотез.</p>
+          <p><a href="https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/docs/rfc/2026-11-a-in-decomposition.md" target="_blank" rel="noreferrer">Подробный RFC: контракты, возвраты, роли, бюджет и план производства промптов</a></p>
+          <p id="rfc-audit-link"><a href="https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/docs/audit/2026-11-07-bcreq-ttz-rfc-audit.md" target="_blank" rel="noreferrer">Аудит RFC: что уже проверено, какие риски поведения модели учтены и что решить дальше</a></p>
+        </details>
+        <!-- issue-468:end -->
+        <details class="process-help" id="process-help">
+          <summary>Как пользоваться</summary>
+          <ol class="process-help-steps">
+            <li>Идите по шагам сверху вниз: вкладка «Все шаги» показывает весь набор, вкладки 1–4 — один этап. Один документ ведётся в одном чате с моделью.</li>
+            <li>В карточке шага подготовьте то, что указано в «Что подготовить».</li>
+            <li>Прочитайте текст в карточке; кнопки редакций переключают «по тесту» и опубликованную версию. По умолчанию выбрана редакция, назначенная шагу для теста.</li>
+            <li>Нажмите «⧉ Копировать» — скопируется выбранная редакция; первая строка с именем промпта и шага останется в чате и покажет, что применено.</li>
+            <li>Выполните «Что делает БА» по пунктам и сверьте ответ модели с «Результатом».</li>
+            <li>На шаге с ⛳ решает человек: БА, Заказчик или команда. Решение записывается в журнал гейтов; модель только советует.</li>
+          </ol>
+          <dl class="process-help-terms">
+            <div><dt>ФТ / НФТ</dt><dd>функциональные требования (что делает система) и нефункциональные (качество: скорость, доступность, безопасность)</dd></div>
+            <div><dt>UC</dt><dd>пользовательский сценарий: кто, что делает и какой результат получает</dd></div>
+            <div><dt>ОРР</dt><dd>описание разрабатываемого решения, раздел 5 документа</dd></div>
+            <div><dt>8.4 / 8.5</dt><dd>открытые вопросы и допущения документа: сюда модель пишет то, чего нет во входных данных</dd></div>
+            <div><dt>«Состояние BCREQ»</dt><dd>блок в конце ответа модели: какие разделы готовы и какой шаг следующий; сохраняйте его</dd></div>
+            <div><dt>Черновик «по тесту»</dt><dd>редакция промпта, которая ещё проверяется; опубликованный промпт — прошедший замер</dd></div>
+          </dl>
+        </details>
+      </section>
+
+      <section
+        class="page-band bcreq-band"
+        id="bcreq-testkit"
+        data-page="processes"
+        aria-labelledby="bcreq-testkit-title"
+      >
+        <details class="v2-stream" open>
+        <summary class="v2-stream-summary"><div class="section-head">
+          <div>
+            <p class="eyebrow">Тестовый набор этапа 1 (BL-157б)</p>
+            <h2 id="bcreq-testkit-title">Промпты этапа 1 для тестового прогона</h2>
+          </div>
+          <a class="source-link" href="https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/docs/ba-processes/bcreq-run-kit.md#1-порядок-шагов" target="_blank" rel="noreferrer" title="Источник в репозитории">↗</a>
+        </div></summary>
+        <p class="bcreq-lead">
+          14 шагов комплекта прогона: один чат с моделью, шаги по порядку, на каждом шаге БА копирует
+          промпт кнопкой «⧉ Копировать». По умолчанию выбран текст, назначенный шагу для теста;
+          кнопки редакций показывают другой текст для сравнения. После гейтов решение записывает человек (П-5); карточку прогона,
+          журнал гейтов и форму обратной связи ведут по комплекту.
+        </p>
+        <p class="bcreq-lead" id="bcreq-testkit-summary"></p>
+        <ol class="bcreq-steps" id="bcreq-testkit-steps"></ol>
+        </details>
+      </section>
+
+      <section
+        class="page-band bcreq-band"
+        id="bcreq-manual"
+        data-page="processes"
+        aria-labelledby="bcreq-manual-title"
+      >
+        <details class="v2-stream" open>
+        <summary class="v2-stream-summary"><div class="section-head">
+          <div>
+            <p class="eyebrow">Поток 1. Формирование документа BCREQ</p>
+            <h2 id="bcreq-manual-title">Создание спецификации бизнес-требований и дизайна решения (BCREQ)</h2>
+          </div>
+          <a class="source-link" href="https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/docs/ba-processes/bcreq-manual-process.md#1-ручной-процесс-ба" target="_blank" rel="noreferrer" title="Источник в репозитории">↗</a>
+        </div></summary>
+        <p class="bcreq-lead">
+          Последовательность ручных операций бизнес-аналитика по 39 классам промптов BCREQ:
+          БА ведёт один чат с моделью и на каждом шаге копирует класс кнопкой ⧉ вместе с контрактом
+          состояния. Модель только рекомендует следующий класс; шаги, возвраты и гейты выбирают люди.
+        </p>
+        <h3 class="bcreq-subtitle">Маршрут по стадиям</h3>
+        <div class="bcreq-route" id="bcreq-route"></div>
+        <h3 class="bcreq-subtitle">Правила ведения чата</h3>
+        <ol class="bcreq-rules" id="bcreq-rules"></ol>
+        <h3 class="bcreq-subtitle">Шаги Ш-1…Ш-39</h3>
+        <ol class="bcreq-steps" id="bcreq-steps"></ol>
+              </details>
+      </section>
+
+      <section
+        class="page-band bcreq-band"
+        id="bcreq-approval"
+        data-page="processes"
+        aria-labelledby="bcreq-approval-title"
+      >
+        <details class="v2-stream" open>
+        <summary class="v2-stream-summary"><div class="section-head">
+          <div>
+            <p class="eyebrow">Поток 2. Согласование BCREQ</p>
+            <h2 id="bcreq-approval-title">Согласование BCREQ с командой и Заказчиком</h2>
+          </div>
+          <a class="source-link" href="https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/docs/ba-processes/bcreq-manual-process.md#2-согласование-с-командой-и-заказчиком" target="_blank" rel="noreferrer" title="Источник в репозитории">↗</a>
+        </div></summary>
+        <p class="bcreq-lead" id="bcreq-approval-lead"></p>
+        <div class="bcreq-stages" id="bcreq-stages"></div>
+        <h3 class="bcreq-subtitle">Возвраты при уточнении</h3>
+        <div class="bcreq-table-wrap"><table class="bcreq-table" id="bcreq-returns"></table></div>
+        <h3 class="bcreq-subtitle">Что улучшено относительно исходного описания</h3>
+        <div class="bcreq-table-wrap"><table class="bcreq-table" id="bcreq-improvements"></table></div>
+              </details>
+      </section>
+
+      <section
+        class="page-band patterns-band"
+        id="patterns"
+        data-page="patterns"
+        aria-labelledby="patterns-title"
+      >
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Pattern library</p>
+            <h2 id="patterns-title">Паттерны</h2>
+          </div>
+          <a class="source-link" href="https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/patterns/README.md" target="_blank" rel="noreferrer">↗</a>
+        </div>
+        <div class="pattern-grid" id="pattern-grid"></div>
+      </section>
+      <section class="page-band standards-band" id="standards" data-page="standards" aria-labelledby="standards-title" hidden>
+        <div class="standards-intro">
+          <h1 id="standards-title">Стандарты</h1>
+          <p class="standards-lead">Выберите направление: бизнес-спецификация BCREQ, проект оценки тендерных ТЗ или индустриальная практика. Каждый подраздел раскрывается отдельно.</p>
+        </div>
+        <details class="standards-group" id="standards-bcreq">
+          <summary><h2>BCREQ — стандарт бизнес-спецификации на доработку системы</h2></summary>
+          <p class="standards-group-lead">Структура документа из восьми разделов: назначение, состав, правила написания и критерии приёмки.</p>
+        <div class="standards-layout">
+          <nav class="standards-index" aria-label="Разделы стандарта BCREQ">
+            <a href="#standards?section=0" data-standard-target="0"><span>00</span> Введение</a>
+            <a href="#standards?section=1" data-standard-target="1"><span>01</span> Глоссарий</a>
+            <a href="#standards?section=2" data-standard-target="2"><span>02</span> Бизнес-контекст</a>
+            <a href="#standards?section=3" data-standard-target="3"><span>03</span> Функциональные требования</a>
+            <a href="#standards?section=4" data-standard-target="4"><span>04</span> Нефункциональные требования</a>
+            <a href="#standards?section=5" data-standard-target="5"><span>05</span> Описание разрабатываемого решения (ОРР)</a>
+            <a href="#standards?section=6" data-standard-target="6"><span>06</span> Особенности реализации и ограничения</a>
+            <a href="#standards?section=7" data-standard-target="7"><span>07</span> Пользовательские сценарии (UC)</a>
+            <a href="#standards?section=8" data-standard-target="8"><span>08</span> Дополнительные разделы</a>
+            <a href="#standards?section=9" data-standard-target="9"><span>И</span> Индустриальные стандарты</a>
+          </nav>
+
+          <div class="standards-content">
+            <section class="v2-intro" id="standard-intro" tabindex="-1" aria-labelledby="standard-intro-title"><h2 id="standard-intro-title">Введение. Структура документа</h2><ol class="v2-intro-list"><li><a href="#standards?section=1" data-standard-target="1"><span>1</span> Глоссарий</a> — <em>термины документа с определениями</em></li><li><a href="#standards?section=2" data-standard-target="2"><span>2</span> Бизнес-контекст</a> — <em>зачем нужна доработка и в каких границах</em><ol class="v2-intro-sub"><li><span>2.1</span> Контекст — <em>акторы и их сценарии работы в кейсах, где наблюдается проблема; продукты Mango, на уровне которых Заказчик фиксирует проблему</em></li><li><span>2.2</span> Проблема — <em>формулировка Заказчика, нормализованная до терминологически верной, однозначной, полной и проверяемой</em></li><li><span>2.3</span> Цель — <em>измеримый результат одной фразой</em></li><li><span>2.4</span> Границы — <em>2.4.1 В поставку включено · 2.4.2 В поставку не включено</em></li><li><span>2.5</span> Продукты и стейкхолдеры — <em>явно определённые продукты; стейкхолдеры: Заказчик и Продуктовая команда</em></li></ol></li><li><a href="#standards?section=3" data-standard-target="3"><span>3</span> Функциональные требования (ФТ)</a> — <em>что должна делать система: ФТ-01, ФТ-02 …</em></li><li><a href="#standards?section=4" data-standard-target="4"><span>4</span> Нефункциональные требования (НФТ)</a> — <em>показатели качества: 4.1, 4.2 …</em></li><li><a href="#standards?section=5" data-standard-target="5"><span>5</span> Описание разрабатываемого решения (ОРР)</a> — <em>как реализуется доработка: каждое <a class="v2-term" href="#glossary?term=ft" title="Справочник: ФТ">ФТ</a> и то, что нужно для полноты</em><ol class="v2-intro-sub"><li><span>L1</span> Функциональный дизайн решения (<a class="v2-term" href="#glossary?term=fdr" title="Справочник: ФДР">ФДР</a>) — <em>детализация разработки на уровне бизнес-логики, достаточная для однозначного согласования со стейкхолдерами; пункты 5.х — по выбранному стандарту</em></li><li><span>L2</span> Техническая спецификация (<a class="v2-term" href="#glossary?term=ts" title="Справочник: ТС">ТС</a>) — <em>полная детализация для команды разработки: бизнес-логика и внешне наблюдаемые технические параметры, не архитектура; по решению <a class="v2-term" href="#glossary?term=ba" title="Справочник: БА">БА</a></em></li></ol></li><li><a href="#standards?section=6" data-standard-target="6"><span>6</span> Особенности реализации и ограничения</a> — <em>что важно учесть Заказчику</em><ol class="v2-intro-sub"><li><span>6.1</span> Особенности реализации — <em>поведение решения, которое легко понять неверно</em></li><li><span>6.2</span> Ограничения — <em>внешние условия, сужающие решение; условия работы и сценарные исключения</em></li></ol></li><li><a href="#standards?section=7" data-standard-target="7"><span>7</span> Пользовательские сценарии (UC)</a> — <em>проверка полноты ФТ; Заказчику не передаётся</em></li><li><a href="#standards?section=8" data-standard-target="8"><span>8</span> Дополнительные разделы</a> — <em>риски, зависимости, приёмка, вопросы, решения</em><ol class="v2-intro-sub"><li><span>8.1</span> Риски</li><li><span>8.2</span> Зависимости</li><li><span>8.3</span> План приёмки</li><li><span>8.4</span> Реестр вопросов Заказчику</li><li><span>8.5</span> Журнал решений</li></ol></li></ol></section>
+
+            <article class="standard-card v2-card" id="standard-1" data-bcreq-section="1" tabindex="-1" aria-labelledby="standard-title-1">
+              <div class="standard-heading"><span class="standard-number">01</span><div><p class="eyebrow">Раздел 1</p><h2 id="standard-title-1">Глоссарий</h2></div></div>
+              <h3>Назначение</h3><p>Устраняет разные трактовки одного слова: у каждого термина документа одно определение и источник.</p>
+              <h3>Состав</h3><dl class="v2-composition"><div><dt>Термин</dt><dd>термин в форме, согласованной на продукте или соответствующей индустриальной практике; термин Заказчика допустим по согласованию с <a class="v2-term" href="#glossary?term=ba" title="Справочник: БА">БА</a>, чтобы Заказчик узнавал себя в документации</dd></div><div><dt>Определение</dt><dd>одно предложение: родовое понятие и отличительный признак</dd></div><div><dt>Источник</dt><dd>по приоритету: Словарь Манго <a class="v2-term" href="#glossary?term=d0" title="Справочник: D0">D0</a> → <a href="https://cpre.ireb.org/en/downloads-and-resources/glossary" target="_blank" rel="noreferrer">IREB CPRE Glossary</a> (отраслевой словарь по умолчанию) → исключения, согласованные с <a class="v2-term" href="#glossary?term=ba" title="Справочник: БА">БА</a>: термин Заказчика или явный ввод <a class="v2-term" href="#glossary?term=ba" title="Справочник: БА">БА</a></dd></div></dl>
+              <h3>Как пишем</h3><ul class="v2-list"><li>Заказчик часто применяет термины неточно: его слова — вход для нормализации, термин приводится к верной форме. Исходный текст остаётся в рабочих материалах.</li><li>Названия элементов продукта (кнопка, экран, раздел ЛК) переносятся дословно по документации.</li><li>Термин актора Заказчик обычно сохраняет: «Агент» и «Сотрудник» определяются так же, как «Оператор», замену согласует <a class="v2-term" href="#glossary?term=ba" title="Справочник: БА">БА</a>.</li><li>Есть функции настройки и исполнения: Пользователь — сотрудник с правом администрирования, Оператор или Сотрудник — актор сценария исполнения. Разделения нет: один термин Пользователь, в определении указано, что это агент, оператор или сотрудник.</li><li>Остальные термины сверяются со словарём Манго и индустриальной практикой; действует индустриальная практика.</li><li>Когда термин задаёт <a class="v2-term" href="#glossary?term=ba" title="Справочник: БА">БА</a>, ассистент — оппонент: сверяет термин со словарями, при нарушении приоритета цитирует словарь и описывает риск. Термин идёт в документ только после явного подтверждения с принятием риска. <a class="v2-term" href="#glossary?term=ba" title="Справочник: БА">БА</a> может принудительно выбрать другой индустриальный словарь.</li></ul>
+              <h3>Критерии приёмки</h3><table class="v2-criteria"><tbody><tr><th scope="row">Термин</th><td>Каждый предметный термин разделов 2–6 есть в глоссарии; каждый термин глоссария используется в разделах 2–6.</td></tr><tr><th scope="row">Определение</th><td>Одно предложение «родовое понятие + отличительный признак», без синонимов.</td></tr><tr><th scope="row">Источник</th><td>Связь с термином продукта имеет локатор; исключение из приоритета записано в 8.5 с подтверждением <a class="v2-term" href="#glossary?term=ba" title="Справочник: БА">БА</a> и принятием риска.</td></tr></tbody></table>
+              <h3>Метрики</h3><ul class="v2-metrics"><li><span>Термины без определения</span><strong>0</strong></li><li><span>Неиспользуемые термины</span><strong>0</strong></li></ul>
+              <details class="standard-detail"><summary>Пример определения</summary><p>Неверно: «Очередь — это очередь звонков». Верно: «Очередь обращений — упорядоченная группа обращений, ожидающих назначения исполнителя».</p></details>
+              <p class="standard-sources">Основание: <a href="https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/standards/bcreq-sections/01-glossary.md" target="_blank" rel="noreferrer">Стандарт раздела 1</a> · <a href="https://cpre.ireb.org/en/downloads-and-resources/glossary" target="_blank" rel="noreferrer">IREB: glossary</a></p>
+            </article>
+            <article class="standard-card v2-card" id="standard-2" data-bcreq-section="2" tabindex="-1" aria-labelledby="standard-title-2">
+              <div class="standard-heading"><span class="standard-number">02</span><div><p class="eyebrow">Раздел 2</p><h2 id="standard-title-2">Бизнес-контекст</h2></div></div>
+              <h3>Назначение</h3><p>Связывает проблему Заказчика, измеримую цель и объём задачи.</p>
+              <h3>Состав</h3><dl class="v2-composition"><div><dt>2.1 Контекст</dt><dd>акторы и их сценарии работы в кейсах, где наблюдается проблема; продукты Mango, на уровне которых Заказчик фиксирует проблему</dd></div><div><dt>2.2 Проблема</dt><dd>формулировка Заказчика, нормализованная: термины выверены, трактовка однозначна, полнота и проверяемость подтверждены</dd></div><div><dt>2.3 Цель</dt><dd>измеримый результат одной фразой</dd></div><div><dt>2.4 Границы</dt><dd>2.4.1 В поставку включено · 2.4.2 В поставку не включено</dd></div><div><dt>2.5 Продукты и стейкхолдеры</dt><dd>явно определённые продукты; стейкхолдеры всегда: Заказчик и Продуктовая команда</dd></div></dl>
+              <h3>Как пишем</h3><ul class="v2-list"><li>Короткий стиль: главное первым, одна мысль в предложении.</li><li>Раздел 2 — фиксация факта: только данные, собранные явно и однозначно, или гипотезы.</li><li>Неясное не выдумываем: спрашиваем <a class="v2-term" href="#glossary?term=ba" title="Справочник: БА">БА</a>; нет ответа — вопрос Заказчику в 8.4. До ответа работаем на гипотезе, согласованной с <a class="v2-term" href="#glossary?term=ba" title="Справочник: БА">БА</a>: где неоднозначно — уточняем и идём дальше. Работу останавливает только <a class="v2-term" href="#glossary?term=ba" title="Справочник: БА">БА</a>.</li><li>Переносить формулировку Заказчика без анализа запрещено: в ней бывают недоказанные ошибки, неточные названия, неоднозначный или неполный функционал.</li><li>Числа и сроки — только с источником.</li></ul>
+              <h3>Критерии приёмки</h3><table class="v2-criteria"><tbody><tr><th scope="row">2.1</th><td>Названы акторы, их сценарии в кейсах с проблемой и продукты Mango, на уровне которых зафиксирована проблема; 1–3 предложения.</td></tr><tr><th scope="row">2.2</th><td>Проблема нормализована, у утверждений есть источник, есть вердикт проверки исполнимости. Исходный текст Заказчика сохранён в рабочих материалах.</td></tr><tr><th scope="row">2.3</th><td>Цель — одна фраза; понятно, чем подтверждается результат.</td></tr><tr><th scope="row">2.4</th><td>Пункты 2.4.1 и 2.4.2 атомарны; 2.4.1 включает документацию, тестирование и вывод в эксплуатацию; ограничения платформы и версий — в 2.4.2. Каждая сущность и каждый интерфейс раскрыты до видов и записаны в 2.4.1 или 2.4.2. Условия работы и сценарные исключения — в 6.2.</td></tr><tr><th scope="row">2.5</th><td>Заполнен всегда: явно определённые продукты по классификации Mango, Заказчик, Продуктовая команда. Заглушка до документов команд Mango Office. Операторы и сотрудники — акторы 2.1.</td></tr></tbody></table>
+              <h3>Метрики</h3><ul class="v2-metrics"><li><span>Объём раздела без реестра 2.5</span><strong>≤ 250 слов</strong></li><li><span>Длина предложения</span><strong>≤ 20 слов</strong></li></ul>
+              <details class="standard-detail"><summary>Проверка исполнимости требования</summary><p>Проблема переводится в требование и оценивается по документации. Пример: «Отсутствует транскрибация звонков во внешней системе Х» → «Система должна предоставить Пользователю транскрибацию звонков в системе Х». Проверяемость — свойство формулировки, исполнимость — результат оценки. Вердикт утверждает <a class="v2-term" href="#glossary?term=ba" title="Справочник: БА">БА</a>.</p><div class="v2-table-scroll"><table class="v2-criteria"><tbody><tr><th scope="row">Да</th><td>Функция есть, цитата обязательна. Заказчик ошибся: выход из BCREQ в поток CS — клиентский сервис (заглушка). BCREQ завершается, пока <a class="v2-term" href="#glossary?term=ba" title="Справочник: БА">БА</a> не вернётся с новыми данными.</td></tr><tr><th scope="row">Частично</th><td>Требование разбивается на атомы, у каждого свой вердикт. Атомы «Да» — в CS, остальное — однозначный факт для доработки.</td></tr><tr><th scope="row">Нет</th><td>Функции нет или она работает иначе, цитата обязательна. Однозначный факт для доработки или новой разработки.</td></tr><tr><th scope="row">UNKNOWN</th><td>Подтверждения нет. Это не вердикт: вопрос <a class="v2-term" href="#glossary?term=ba" title="Справочник: БА">БА</a>, затем команде или Заказчику, и гипотеза.</td></tr></tbody></table></div></details><details class="standard-detail"><summary>Однозначность границ 2.4</summary><p>Упомянутый класс раскрывается до видов, каждый вид записан в 2.4.1 или 2.4.2. Ассистент сам спрашивает о видах по документации продукта.</p><div class="v2-table-scroll"><table class="v2-criteria"><tbody><tr><th scope="row">Сущность</th><td>Звонок: входящий, исходящий, внутренний, исходящий обзвон (для абонента и оператора фактически входящий), АПП (авто-перезвон по пропущенным), ЗОЗ (заказ обратного звонка). Текстовая коммуникация: виды каналов.</td></tr><tr><th scope="row">Интерфейс, компонент, сервис</th><td>Где видно или работает результат: ЛК, КЦ Десктоп, Web-софтфон, API.</td></tr></tbody></table></div><p>Пример: 2.4.1 Входящие и исходящие звонки. 2.4.2 Внутренние звонки, исходящий обзвон, АПП, ЗОЗ. Условие «работает только при подключённой записи разговоров» — не граница, а пункт 6.2.</p></details><details class="standard-detail"><summary>Пример цели</summary><p>«Ускорить работу» не проверяется. Шаблон: «К [дате] снизить [показатель] с [значения] до [порога] по [источнику измерения]». Значения в скобках — вопросы Заказчику.</p></details>
+              <p class="standard-sources">Основание: <a href="https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/standards/bcreq-sections/02-business-context.md" target="_blank" rel="noreferrer">Стандарт раздела 2</a> · <a href="https://www.iiba.org/knowledgehub/business-analysis-body-of-knowledge-babok-guide/6-strategy-analysis/6-2-define-future-state/" target="_blank" rel="noreferrer">BABOK 6.2</a> · <a href="https://cpre.ireb.org/en/downloads-and-resources/glossary" target="_blank" rel="noreferrer">IREB CPRE Glossary</a></p>
+            </article>
+            <article class="standard-card v2-card" id="standard-3" data-bcreq-section="3" tabindex="-1" aria-labelledby="standard-title-3">
+              <div class="standard-heading"><span class="standard-number">03</span><div><p class="eyebrow">Раздел 3</p><h2 id="standard-title-3">Функциональные требования</h2></div></div>
+              <h3>Назначение</h3><p>Фиксирует, что должна делать система, чтобы достичь цели 2.3 в границах 2.4. В раздел входят ФТ, которые определяет проблема Заказчика, и ФТ, без которых нельзя подтвердить однозначность доработки. Заказчик видит не все: только запрошенные решения и дополнительные критичные ФТ, остальное покрывает раздел 5.</p>
+              <h3>Состав</h3><dl class="v2-composition"><div><dt>ФТ-01, ФТ-02 …</dt><dd>одно требование — один пункт, сквозная нумерация</dd></div><div><dt>Блоки</dt><dd>блок — одна бизнес-возможность; внутри блока: настройка → исполнение → ресурсы и данные, см. <a href="#standards?section=9" data-standard-target="9">Индустриальные стандарты</a></dd></div><div><dt>Предложение ФТ</dt><dd>полный набор для полноты с пометками: [Запрос] — совпадает с запросом Заказчика; [Предложено] — предлагается включить, в том числе ФТ отраслевой практики; без пометки — нужно для полноты, покрывает раздел 5. Состав итогового списка согласует <a class="v2-term" href="#glossary?term=ba" title="Справочник: БА">БА</a></dd></div></dl>
+              <h3>Как пишем</h3><ul class="v2-list"><li>Каждое ФТ — по стандарту. По умолчанию задан BABOK, <a class="v2-term" href="#glossary?term=ba" title="Справочник: БА">БА</a> может инициировать смену стандарта. Формула BABOK: «Система должна предоставлять Пользователю возможность …» или «Система должна обеспечивать …».</li><li>Для доработки (<a class="v2-term" href="#glossary?term=vd" title="Справочник: В-Д">В-Д</a>) — только дельта к текущему поведению; для новой разработки (<a class="v2-term" href="#glossary?term=vd" title="Справочник: В-Н">В-Н</a>) — полный набор функций.</li><li>Без интерфейса, архитектуры и показателей качества.</li><li>Необходимо: без этого ФТ результат 2.3 не достигается, проблема 2.2 остаётся или элемент 2.4.1 не покрыт. Достаточно: ФТ вместе покрывают цель 2.3 и все элементы 2.4.1 на уровне требований Заказчика, доработка понимается однозначно. Что ниже этого уровня — раздел 5.</li><li>Предложение не ограничено 5±2, итоговый список ориентируется на 5±2. Пункт без связи с атомом 2.2, 2.3, 2.4.1 или с источником удаляется.</li></ul>
+              <h3>Критерии приёмки</h3><table class="v2-criteria"><tbody><tr><th scope="row">Каждое ФТ</th><td>Сформулировано по формуле «Система должна …» с субъектом и объектом; проходит фильтры дельты, трассировки, единичности и чистоты.</td></tr><tr><th scope="row">Список ФТ</th><td>Каждый пункт 2.4.1 покрыт ФТ или помечен «→ раздел 5».</td></tr><tr><th scope="row">Предложение ФТ</th><td>У пунктов [Предложено] есть источник; они не вошли в итоговый список без решения <a class="v2-term" href="#glossary?term=ba" title="Справочник: БА">БА</a>.</td></tr></tbody></table>
+              <h3>Метрики</h3><ul class="v2-metrics"><li><span>ФТ верхнего уровня в итоговом списке</span><strong>3–7 (правило 5±2) или «Обоснование отклонения 5±2»</strong></li><li><span>Пункты 2.4.1 без ФТ</span><strong>0</strong></li></ul>
+              <details class="standard-detail"><summary>Пример ФТ</summary><p>ФТ-01. Система должна предоставлять Пользователю возможность включать и выключать уведомление для выбранных контактов.</p></details>
+              <p class="standard-sources">Основание: <a href="https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/standards/bcreq-sections/03-functional-requirements.md" target="_blank" rel="noreferrer">Стандарт раздела 3</a> · <a href="https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/runs/2026/RUN-0074/outputs/section-prompts.md" target="_blank" rel="noreferrer">RUN-0074: финальная редакция БА</a> · <a href="https://www.iiba.org/career-resources/a-business-analysis-professionals-foundation-for-success/babok/" target="_blank" rel="noreferrer">BABOK v3</a></p>
+            </article>
+            <article class="standard-card v2-card" id="standard-4" data-bcreq-section="4" tabindex="-1" aria-labelledby="standard-title-4">
+              <div class="standard-heading"><span class="standard-number">04</span><div><p class="eyebrow">Раздел 4</p><h2 id="standard-title-4">Нефункциональные требования</h2></div></div>
+              <h3>Назначение</h3><p>Задаёт измеримые показатели качества: насколько быстро, надёжно и безопасно работает решение.</p>
+              <h3>Состав</h3><dl class="v2-composition"><div><dt>4.1, 4.2 …</dt><dd>одно НФТ — один пункт</dd></div></dl>
+              <h3>Как пишем</h3><ul class="v2-list"><li>Каждое НФТ: характеристика качества, метрика, порог, условие измерения, источник.</li><li>Пороги — только из входных данных; типовые SLA без источника не подставляются.</li></ul>
+              <h3>Критерии приёмки</h3><table class="v2-criteria"><tbody><tr><th scope="row">Каждое НФТ</th><td>Есть характеристика, метрика, порог, условие и источник; проверяющий понимает, как подтвердить выполнение.</td></tr><tr><th scope="row">Раздел</th><td>НФТ не дублирует ФТ и не описывает архитектуру; при отсутствии НФТ раздел сохранён с вопросами.</td></tr></tbody></table>
+              <h3>Метрики</h3><ul class="v2-metrics"><li><span>НФТ без источника</span><strong>0</strong></li><li><span>Вопросы при отсутствии НФТ</span><strong>≤ 5</strong></li></ul>
+              <details class="standard-detail"><summary>Пример НФТ</summary><p>4.1. При [нагрузке] время отклика [операции] не превышает [порог] по [методу измерения]; источник — [согласованный документ].</p></details>
+              <p class="standard-sources">Основание: <a href="https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/standards/bcreq-sections/04-non-functional-requirements.md" target="_blank" rel="noreferrer">Стандарт раздела 4</a> · <a href="https://www.iso.org/standard/78176.html" target="_blank" rel="noreferrer">ISO/IEC 25010:2023</a></p>
+            </article>
+            <article class="standard-card v2-card" id="standard-5" data-bcreq-section="5" tabindex="-1" aria-labelledby="standard-title-5">
+              <div class="standard-heading"><span class="standard-number">05</span><div><p class="eyebrow">Раздел 5</p><h2 id="standard-title-5">Описание разрабатываемого решения (ОРР)</h2></div></div>
+              <h3>Назначение</h3><p>Показывает, как будет реализована доработка целиком: каждое ФТ и то, что нужно для полноты, но не вынесено в раздел 3. Сначала для Заказчика, затем при необходимости для разработки.</p>
+              <h3>Состав</h3><dl class="v2-composition"><div><dt>L1: 5.х Название (ФТ-01, ФТ-03)</dt><dd><a class="v2-term" href="#glossary?term=fdr" title="Справочник: ФДР">ФДР</a> — детализация разработки на уровне бизнес-логики, достаточная для однозначного согласования со стейкхолдерами; обязателен</dd></div><div><dt>L2: техническая спецификация</dt><dd><a class="v2-term" href="#glossary?term=ts" title="Справочник: ТС">ТС</a> — полная детализация разработки на уровне бизнес-логики и внешне наблюдаемых технических параметров: термины, поля, статусы, форматы, известные контракты. Не архитектура и не системный анализ: у <a class="v2-term" href="#glossary?term=ba" title="Справочник: БА">БА</a> нет доступа к архитектуре. По решению <a class="v2-term" href="#glossary?term=ba" title="Справочник: БА">БА</a></dd></div></dl>
+              <h3>Как пишем</h3><ul class="v2-list"><li><a class="v2-term" href="#glossary?term=fdr" title="Справочник: ФДР">ФДР</a>: кто, где, что делает и какой результат получает; без API, баз данных и имён сервисов.</li><li>Структуру раздела 5 задаёт выбранный стандарт, а не блоки ФТ: C4 по умолчанию, TM Forum ODA или другой по ссылке, см. <a href="#standards?section=9" data-standard-target="9">Индустриальные стандарты</a>. <a class="v2-term" href="#glossary?term=ba" title="Справочник: БА">БА</a> выбирает на шаге Ш-А.</li><li>Номера 5.х не зависят от номеров ФТ. Покрытие указывается только в скобках на уровне 5.х: пункт покрывает ФТ. Совпадение номеров допустимо, но ни из чего не следует.</li><li><a class="v2-term" href="#glossary?term=ts" title="Справочник: ТС">ТС</a>: внешне наблюдаемые изменения и известные контракты с типом изменения и совместимостью. Внутреннее устройство — за командой разработки; что <a class="v2-term" href="#glossary?term=ba" title="Справочник: БА">БА</a> неизвестно — вопрос команде.</li></ul>
+              <h3>Критерии приёмки</h3><table class="v2-criteria"><tbody><tr><th scope="row">5.х (ФДР)</th><td>Структура выведена из выбранного стандарта; каждое ФТ раздела 3 указано в скобках хотя бы одного пункта 5.х; видны участник, действие, результат и граница системы.</td></tr><tr><th scope="row">ТС</th><td>Глубина выбрана <a class="v2-term" href="#glossary?term=ba" title="Справочник: БА">БА</a>; если ТС не готовится, явно написано «ТС — на стороне команды разработки».</td></tr></tbody></table>
+              <h3>Метрики</h3><ul class="v2-metrics"><li><span>ФТ без пункта 5.х</span><strong>0</strong></li><li><span>Объём ФДР</span><strong>≤ 900 слов</strong></li></ul>
+              <details class="standard-detail"><summary>Пример заголовков пунктов</summary><p>5.1. Контекст решения</p><p>5.2. Формулировка заявки (ФТ-01, ФТ-03)</p></details>
+              <p class="standard-sources">Основание: <a href="https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/standards/bcreq-sections/05-solution-description.md" target="_blank" rel="noreferrer">Стандарт раздела 5</a> · <a href="https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/runs/2026/RUN-0074/outputs/section-prompts.md" target="_blank" rel="noreferrer">RUN-0074: правки БА</a> · <a href="https://c4model.com/diagrams/system-context" target="_blank" rel="noreferrer">C4: system context</a></p>
+            </article>
+            <article class="standard-card v2-card" id="standard-6" data-bcreq-section="6" tabindex="-1" aria-labelledby="standard-title-6">
+              <div class="standard-heading"><span class="standard-number">06</span><div><p class="eyebrow">Раздел 6</p><h2 id="standard-title-6">Особенности реализации и ограничения</h2></div></div>
+              <h3>Назначение</h3><p>Предупреждает Заказчика о поведении решения и внешних условиях, которые сужают решение.</p>
+              <h3>Состав</h3><dl class="v2-composition"><div><dt>6.1 Особенности реализации</dt><dd>задержки, порядок, частичная обработка, поведение при ошибке</dd></div><div><dt>6.2 Ограничения</dt><dd>«ограничение · источник · последствие для Заказчика»; сюда же условия работы и сценарные исключения</dd></div></dl>
+              <h3>Как пишем</h3><ul class="v2-list"><li>Короткий стиль: факт и последствие.</li><li>Пустой подраздел помечается «нет».</li></ul>
+              <h3>Критерии приёмки</h3><table class="v2-criteria"><tbody><tr><th scope="row">6.1</th><td>Каждая особенность ведёт к пункту раздела 5.</td></tr><tr><th scope="row">6.2</th><td>Каждое ограничение имеет источник и последствие; условия работы («только при настройке или подключённой услуге») и сценарные исключения («не работает в таких сценариях») — здесь, а не в 2.4; ограничения платформы и версий — в 2.4.2.</td></tr></tbody></table>
+              <h3>Метрики</h3><ul class="v2-metrics"><li><span>Объём раздела</span><strong>≤ 250 слов</strong></li><li><span>Длина предложения</span><strong>≤ 20 слов</strong></li></ul>
+              <details class="standard-detail"><summary>Пример ограничения</summary><p>6.2. Внешняя CRM принимает не более [N] запросов в минуту · документация CRM · при пиковой нагрузке доставка откладывается.</p></details>
+              <p class="standard-sources">Основание: <a href="https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/standards/bcreq-sections/06-implementation-constraints.md" target="_blank" rel="noreferrer">Стандарт раздела 6</a> · <a href="https://www.iso.org/standard/72089.html" target="_blank" rel="noreferrer">ISO/IEC/IEEE 29148: constraint</a></p>
+            </article>
+            <article class="standard-card v2-card" id="standard-7" data-bcreq-section="7" tabindex="-1" aria-labelledby="standard-title-7">
+              <div class="standard-heading"><span class="standard-number">07</span><div><p class="eyebrow">Раздел 7</p><h2 id="standard-title-7">Пользовательские сценарии (UC)</h2></div></div>
+              <h3>Назначение</h3><p>Проверяет полноту ФТ сценариями. Внутренний раздел: Заказчику не передаётся.</p>
+              <h3>Состав</h3><dl class="v2-composition"><div><dt>Сценарии UC</dt><dd>ID, участник, предусловие, основной ход, альтернативы, результат, ФТ, класс</dd></div><div><dt>Матрица покрытия</dt><dd>UC × ФТ</dd></div><div><dt>Граничные кейсы</dt><dd>граничные значения, классы эквивалентности, переходы состояний</dd></div></dl>
+              <h3>Как пишем</h3><ul class="v2-list"><li>Первый проход — после раздела 3, без интерфейса.</li><li>Второй проход — после раздела 5: граничные кейсы и стыки продуктов.</li></ul>
+              <h3>Критерии приёмки</h3><table class="v2-criteria"><tbody><tr><th scope="row">Сценарии UC</th><td>Каждый UC заполнен по шаблону и имеет класс; UC «не влияет» сохранены с меткой.</td></tr><tr><th scope="row">Матрица покрытия</th><td>Каждое ФТ покрыто хотя бы одним UC; нет UC «влияет» без ФТ.</td></tr><tr><th scope="row">Граничные кейсы</th><td>Есть для граничных значений, классов эквивалентности и переходов состояний; стыковые ФТ имеют UC через оба продукта.</td></tr></tbody></table>
+              <h3>Метрики</h3><ul class="v2-metrics"><li><span>Покрытие ФТ сценариями</span><strong>100 %</strong></li><li><span>Шагов в основном ходе</span><strong>≤ 7</strong></li></ul>
+              <details class="standard-detail"><summary>Пример расчёта покрытия</summary><p>4 ФТ из 5 покрыты сценариями — покрытие 80 %: одно ФТ без сценария, документ не принимается.</p></details>
+              <p class="standard-sources">Основание: <a href="https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/standards/bcreq-sections/07-use-cases.md" target="_blank" rel="noreferrer">Стандарт раздела 7</a> · <a href="https://cpre.ireb.org/en/downloads-and-resources/glossary" target="_blank" rel="noreferrer">IREB: use case</a></p>
+            </article>
+            <article class="standard-card v2-card" id="standard-8" data-bcreq-section="8" tabindex="-1" aria-labelledby="standard-title-8">
+              <div class="standard-heading"><span class="standard-number">08</span><div><p class="eyebrow">Раздел 8</p><h2 id="standard-title-8">Дополнительные разделы</h2></div></div>
+              <h3>Назначение</h3><p>Сохраняет риски, зависимости, условия приёмки, вопросы Заказчику и решения.</p>
+              <h3>Состав</h3><dl class="v2-composition"><div><dt>8.1 Риски</dt><dd>причина → событие → последствие, мера, владелец</dd></div><div><dt>8.2 Зависимости</dt><dd>от чего зависит и что блокирует</dd></div><div><dt>8.3 План приёмки</dt><dd>критерий, ФТ или НФТ, способ проверки, кто принимает</dd></div><div><dt>8.4 Реестр вопросов Заказчику</dt><dd>вопрос, адресат, срок, ответ</dd></div><div><dt>8.5 Журнал решений</dt><dd>решение, кто принял, дата, основание</dd></div></dl>
+              <h3>Как пишем</h3><ul class="v2-list"><li>Строки с ID, до двух предложений в ячейке.</li><li>Решение записывает человек; модель не согласует документ.</li></ul>
+              <h3>Критерии приёмки</h3><table class="v2-criteria"><tbody><tr><th scope="row">8.1</th><td>У каждого риска есть причина, последствие, мера и владелец.</td></tr><tr><th scope="row">8.2</th><td>Каждая зависимость указывает, что блокирует.</td></tr><tr><th scope="row">8.3</th><td>Каждый критерий проверяем и ведёт к ФТ или НФТ.</td></tr><tr><th scope="row">8.4</th><td>У каждого вопроса есть адресат, срок и ответ либо «нет ответа».</td></tr><tr><th scope="row">8.5</th><td>У каждого решения есть автор, дата и основание.</td></tr></tbody></table>
+              <h3>Метрики</h3><ul class="v2-metrics"><li><span>Риски без владельца</span><strong>0</strong></li><li><span>Критерии приёмки без ФТ или НФТ</span><strong>0</strong></li></ul>
+              <details class="standard-detail"><summary>Пример критерия приёмки</summary><p>8.3. Дано: уведомление включено. Когда: звонок завершён. Тогда: уведомление получено не позднее [порога] · ФТ-01, 4.1.</p></details>
+              <p class="standard-sources">Основание: <a href="https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/standards/bcreq-sections/08-supplementary.md" target="_blank" rel="noreferrer">Стандарт раздела 8</a> · <a href="https://www.iiba.org/career-resources/a-business-analysis-professionals-foundation-for-success/babok/" target="_blank" rel="noreferrer">BABOK 10.1: acceptance criteria</a></p>
+            </article>
+
+          </div>
+        </div>
+        </details>
+        <details class="standards-group" id="standards-ttz">
+          <summary><h2>ТТЗ — оценка исполнимости тендерных ТЗ</h2></summary>
+          <article class="standard-card v2-card ttz-card" id="standard-ttz" tabindex="-1" aria-labelledby="standard-title-ttz">
+            <p class="eyebrow">Проект потока · RFC-TTZ-001 · на рассмотрении</p>
+            <h3 id="standard-title-ttz">От внешнего требования к проверяемому решению</h3>
+            <p>БА оценивает тендерное ТЗ в его исходных формулировках: что исполнимо сейчас, при каких условиях, что не подтверждено и что требует разработки. Пробный поток подготовлен к рассмотрению; новая оценка ТЗ и автоматизация ещё не проводились.</p>
+            <h3>Как проходит оценка</h3>
+            <ol class="v2-list">
+              <li><strong>Принять ТЗ.</strong> Зафиксировать версию, область оценки, среду и принимающего.</li>
+              <li><strong>Разобрать пункты.</strong> Сохранить исходные строки, выделить части составных требований, заголовки и дубли.</li>
+              <li><strong>Выбрать маршрут.</strong> Сопоставить внешний термин с одним или несколькими продуктами Mango; различить альтернативы и совместную работу.</li>
+              <li><strong>Собрать основания.</strong> Для каждой части — применимый источник, версия, цитата, ограничения. Если подтверждения нет, так и записать.</li>
+              <li><strong>Принять оценку.</strong> БА проверяет вывод, спорные пункты и риски; коммерческие и договорные условия передаются их владельцам.</li>
+              <li><strong>Собрать отчёт.</strong> Записка, матрица, вопросы, доказательства и статистика из одной версии данных; публикация после решения человека.</li>
+            </ol>
+            <h3>Что важно в матрице</h3>
+            <dl class="v2-composition">
+              <div><dt>Продукт и сценарий</dt><dd>Название раздела заказчика не определяет продукт Mango. «Речевая аналитика» может требовать проверки РА, Роботов или их границ; запись и живой диалог — разные режимы.</dd></div>
+              <div><dt>Оценка и основание</dt><dd>Да / Частично / Нет / Не подтверждено / б/о. Отсутствие найденной цитаты не доказывает отсутствие функции. Общий API не доказывает наличие готового коннектора.</dd></div>
+              <div><dt>Решение БА</dt><dd>Оценка ИИ, итог БА и комментарий хранятся отдельно. Готовность разработать показывается отдельным сценарием.</dd></div>
+              <div><dt>Проверенное знание</dt><dd>Повтор комментария не делает его правилом. Для эталонного случая нужны независимое первичное основание и явное подтверждение вторым компетентным человеком.</dd></div>
+            </dl>
+            <h3>Следующий шаг</h3>
+            <p>Рассмотреть проект, затем провести ручную пробу с БА. Автоматизацию планируем по результатам: агентный маршрут → n8n → серверный поток при подтверждённой потребности.</p>
+            <p class="standard-sources"><a href="https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/docs/rfc/2026-11-ttz-feasibility-flow.md" target="_blank" rel="noreferrer">Подробный RFC: постановка, восемь RUN, практика БА, мета-модель и план</a> · <a href="https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/pr-ops/BACKLOG.md#поток-ттз-issue-466" target="_blank" rel="noreferrer">Бэклог ТТЗ и статусы</a></p>
+          </article>
+        </details>
+        <details class="standards-group" id="standards-industry">
+          <summary><h2>Индустриальные стандарты</h2></summary>
+            <section class="standard-card v2-card standards-industry" id="standard-industry" tabindex="-1" aria-labelledby="standard-title-industry">
+              <div class="standard-heading"><span class="standard-number">И</span><div><p class="eyebrow">Дополнительный раздел</p><h2 id="standard-title-industry">Индустриальные стандарты</h2></div></div>
+              <h3>Назначение</h3><p>Делает ссылки вида «по BABOK» однозначными: у каждого стандарта указано, что именно он определяет в BCREQ и как из него выводится структура.</p>
+              <h3>Выбор стандартов</h3><p>Согласие <a class="v2-term" href="#glossary?term=ba" title="Справочник: БА">БА</a> даёт на шаге Ш-А Анкета: значение по умолчанию, выбор из предложенных или ссылка на другой стандарт. Молчание или пропуск шага — значения по умолчанию; они записываются в 8.5.</p>
+              <div class="v2-table-scroll"><table class="v2-criteria standards-industry-table"><thead><tr><th scope="col">Что определяет</th><th scope="col">По умолчанию</th><th scope="col">Что может выбрать БА</th></tr></thead><tbody>
+                <tr><td>Термины раздела 1</td><td>Словарь Манго <a class="v2-term" href="#glossary?term=d0" title="Справочник: D0">D0</a> → <a href="https://cpre.ireb.org/en/downloads-and-resources/glossary" target="_blank" rel="noreferrer">IREB CPRE Glossary</a></td><td>другой отраслевой словарь со ссылкой</td></tr>
+                <tr><td>Формулировка и группировка ФТ, раздел 3</td><td>BABOK Guide v3</td><td>другой стандарт со ссылкой</td></tr>
+                <tr><td>Структура раздела 5</td><td>C4 model</td><td>TM Forum ODA или другой стандарт со ссылкой</td></tr>
+              </tbody></table></div>
+              <h3>BABOK Guide v3: что берём по пунктам</h3>
+              <div class="v2-table-scroll"><table class="v2-criteria standards-industry-table"><thead><tr><th scope="col">Пункт</th><th scope="col">Что определяет</th><th scope="col">Где в BCREQ</th></tr></thead><tbody>
+                <tr><td>2.3 Requirements Classification Schema</td><td>Виды требований: бизнес, стейкхолдеров, решения, перехода</td><td>2.2–2.3 — бизнес; 3 — функциональные; 4 — нефункциональные; 2.4.1 — работы перехода</td></tr>
+                <tr><td>4.1–4.3 Elicitation and Collaboration</td><td>Подготовка и проведение сбора данных, подтверждение результата</td><td>Ш-А, подшаги сбора Ш-1</td></tr>
+                <tr><td>5.1 Trace Requirements</td><td>Связи требований, включая Satisfy: элемент решения покрывает требование</td><td>Скобки покрытия «5.х Название (ФТ-01, ФТ-03)», таблица трассировки</td></tr>
+                <tr><td>5.3 Prioritize Requirements</td><td>Основание для приоритета</td><td>Разметка чернового списка ФТ</td></tr>
+                <tr><td>6.1 Analyze Current State</td><td>Текущее состояние</td><td>2.1, дайджест As-Is</td></tr>
+                <tr><td>6.2 Define Future State</td><td>Целевое состояние</td><td>2.3</td></tr>
+                <tr><td>7.1 Specify and Model Requirements</td><td>Запись требований и категории моделирования</td><td>Формула ФТ и группировка раздела 3</td></tr>
+                <tr><td>7.2 Verify Requirements</td><td>Качество: атомарность, полнота, однозначность, тестируемость и другие</td><td>Фильтры Ф1–Ф4, проверки 2.2</td></tr>
+                <tr><td>7.3 Validate Requirements</td><td>Требование ведёт к ценности</td><td>Раздел 7, гейт Г-С1</td></tr>
+                <tr><td>7.4 Define Requirements Architecture</td><td>Требования образуют целое без пробелов</td><td>Определение «необходимые и достаточные»</td></tr>
+                <tr><td>7.5 Define Design Options</td><td>Варианты решения</td><td>Раздел 5</td></tr>
+                <tr><td>10.6 Business Capability Analysis</td><td>Что организация умеет делать</td><td>Один блок ФТ — одна бизнес-возможность</td></tr>
+                <tr><td>10.23 Glossary</td><td>Единый словарь</td><td>Раздел 1</td></tr>
+                <tr><td>10.43 Stakeholder List, Map, or Personas</td><td>Кто влияет и на кого влияет</td><td>2.5</td></tr>
+                <tr><td>10.45 Survey or Questionnaire</td><td>Сбор данных анкетой</td><td>Ш-А</td></tr>
+                <tr><td>10.47 Use Cases and Scenarios</td><td>Сценарии</td><td>Раздел 7</td></tr>
+              </tbody></table></div>
+              <h3>Группировка ФТ: как она следует из BABOK</h3><p>Блок ФТ — одна бизнес-возможность (Capability). Внутри блока — порядок по категориям BABOK 7.1. BABOK задаёт категории, порядок — договорённость BCREQ. Пустую категорию пропускают.</p>
+              <div class="v2-table-scroll"><table class="v2-criteria standards-industry-table"><thead><tr><th scope="col">Группа</th><th scope="col">Категория BABOK 7.1</th><th scope="col">Что значит в разделе 3</th></tr></thead><tbody>
+                <tr><td>1. Настройка</td><td>People and Roles</td><td>Кто и что настраивает, какие права для этого нужны</td></tr>
+                <tr><td>2. Исполнение</td><td>Activity Flow</td><td>Что происходит в сценарии работы</td></tr>
+                <tr><td>3. Ресурсы и данные</td><td>Data and Information</td><td>Какие данные, отчёты и ресурсы создаёт и использует возможность</td></tr>
+              </tbody></table></div>
+              <h3>Раздел 5: выбор между C4 и TM Forum ODA</h3><p>Оба стандарта дают метамодель: типы элементов и правило, какой элемент становится пунктом. Поэтому структура выводится детерминированно и не зависит от номеров ФТ.</p>
+              <div class="v2-table-scroll"><table class="v2-criteria standards-industry-table"><thead><tr><th scope="col"></th><th scope="col">C4 model (по умолчанию)</th><th scope="col">TM Forum ODA (по выбору БА)</th></tr></thead><tbody>
+                <tr><th scope="row">Что это</th><td>Открытая модель описания программной системы</td><td>Отраслевая архитектура телеком-оператора</td></tr>
+                <tr><th scope="row">Когда подходит</th><td>Доработка или новая система Mango; интеграция с внешней системой</td><td>Заказчик или внешняя система работает в терминах TMF; продолжение такого документа</td></tr>
+                <tr><th scope="row">Метамодель</th><td>Person → Software System → Container → Component → Code</td><td>Functional Block → ODA Component → Open API</td></tr>
+                <tr><th scope="row">Пункт L1 ФДР</th><td>5.1 — контекст решения. Далее один пункт 5.х на связь системы с человеком или внешней системой</td><td>Один пункт 5.х на затронутый функциональный блок</td></tr>
+                <tr><th scope="row">Пункт L2 ТС</th><td>Один пункт на изменённый Container</td><td>Один пункт на затронутый ODA Component</td></tr>
+                <tr><th scope="row">Доступ</th><td>Открыт</td><td>Полные спецификации — участникам TM Forum; Open API открыты, Apache-2.0</td></tr>
+              </tbody></table></div>
+              <details class="standard-detail"><summary>C4: как получить структуру</summary><ol><li>Назвать систему в рамке (Software System): одну на документ.</li><li>Выписать людей (Person) и внешние системы, связанные с ней напрямую.</li><li>Пункт 5.1 — контекст: все элементы шага 2 и связи между ними.</li><li>Каждая связь — кандидат в пункт 5.х. Связи с одним элементом можно объединить, если они согласуются одним решением.</li><li>Для каждого 5.х отметить в скобках ФТ, которые пункт покрывает.</li></ol><p>Пример: 5.1. Контекст решения · 5.2. Подключение интеграции Пользователем в ЛК (ФТ-01) · 5.3. Передача звонков и заявок: ВАТС ↔ внешняя система (ФТ-02, ФТ-03) · 5.4. Работа Оператора с заявкой при звонке (ФТ-03, ФТ-04).</p></details>
+              <details class="standard-detail"><summary>TM Forum ODA: как получить структуру</summary><ol><li>Отнести каждое изменение к функциональному блоку ODA: Engagement Management, Party Management, Core Commerce Management, Production, Intelligence Management. Точный состав зависит от версии ODA.</li><li>Один затронутый блок — один пункт 5.х.</li><li>На L2 назвать ODA Component и Open API (TMF NNN). Компонент неизвестен — вопрос команде.</li><li>Для каждого 5.х отметить в скобках ФТ, которые пункт покрывает.</li></ol></details>
+              <details class="standard-detail"><summary>Другой стандарт по ссылке БА</summary><p>Ассистент выписывает из него элементы модели, правило «один пункт раздела — один элемент» и способ отметить покрытие ФТ. Если стандарт закрыт или таких правил в нём нет, ассистент говорит об этом и предлагает значение по умолчанию. Решение за БА.</p></details>
+              <p class="standard-sources">Основание: <a href="https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/standards/bcreq-industry-practice.md" target="_blank" rel="noreferrer">Справочник индустриальных стандартов</a> · <a href="https://www.iiba.org/career-resources/a-business-analysis-professionals-foundation-for-success/babok/" target="_blank" rel="noreferrer">BABOK v3</a> · <a href="https://c4model.com/diagrams/system-context" target="_blank" rel="noreferrer">C4: system context</a> · <a href="https://c4model.com/abstractions" target="_blank" rel="noreferrer">C4: абстракции</a> · <a href="https://www.tmforum.org/oda/" target="_blank" rel="noreferrer">TM Forum ODA</a> · <a href="https://github.com/tmforum-apis" target="_blank" rel="noreferrer">TMF Open API</a> · <a href="https://cpre.ireb.org/en/downloads-and-resources/glossary" target="_blank" rel="noreferrer">IREB CPRE Glossary</a></p>
+            </section>
+          <div class="standard-card v2-card ttz-card">
+            <h3>Для тендерных ТЗ</h3>
+            <p>Внешняя классификация и каталог Mango сопоставляются отдельно. Одно индустриальное понятие может вести к нескольким продуктам; близкие названия не доказывают равенство функций.</p>
+            <ul class="v2-list">
+              <li><a href="https://www.w3.org/TR/skos-reference/#mapping" target="_blank" rel="noreferrer">W3C SKOS</a> — различать точное, близкое, широкое и узкое соответствие.</li>
+              <li><a href="https://www.tmforum.org/oda/information-systems/information-framework-sid/" target="_blank" rel="noreferrer">TM Forum SID</a> — общий язык отрасли для сопоставления.</li>
+              <li><a href="https://doi.org/10.6028/NIST.AI.100-1" target="_blank" rel="noreferrer">NIST AI RMF</a> — независимая проверка, документированные тесты и границы применения ИИ.</li>
+            </ul>
+          </div>
+        </details>
+      </section>
+
+      <section class="page-band v2-glossary-band" id="glossary" data-page="glossary" aria-labelledby="glossary-title" hidden>
+        <div class="section-head"><div><h1 id="glossary-title">Справочник</h1></div></div>
+        <h2>Документ BCREQ</h2><dl class="v2-glossary"><div class="v2-term-row" id="term-bcreq" tabindex="-1"><dt><strong>BCREQ</strong><span>Спецификация бизнес-требований и дизайна решения</span></dt><dd>Документ из восьми разделов, по которому Заказчик согласует требования, а команда оценивает и реализует доработку. <span class="v2-term-source">Источник: <a href="https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/standards/bcreq-composition-standard.md" target="_blank" rel="noreferrer">Состав BCREQ</a></span></dd></div><div class="v2-term-row" id="term-ft" tabindex="-1"><dt><strong>ФТ</strong><span>Функциональное требование</span></dt><dd>Требование к поведению системы: что система должна делать. Нумеруется ФТ-01, ФТ-02 … и формулируется по BABOK: «Система должна …». <span class="v2-term-source">Источник: <a href="https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/runs/2026/RUN-0074/outputs/section-prompts.md" target="_blank" rel="noreferrer">RUN-0074, финальная редакция БА</a></span></dd></div><div class="v2-term-row" id="term-nft" tabindex="-1"><dt><strong>НФТ</strong><span>Нефункциональное требование</span></dt><dd>Требование к качеству системы: характеристика, метрика, порог, условие и источник. Нумеруется 4.1, 4.2 …; одно НФТ — один пункт. <span class="v2-term-source">Источник: <a href="https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/standards/bcreq-sections/04-non-functional-requirements.md" target="_blank" rel="noreferrer">Стандарт раздела 4</a></span></dd></div><div class="v2-term-row" id="term-orr" tabindex="-1"><dt><strong>ОРР</strong><span>Описание разрабатываемого решения</span></dt><dd>Раздел 5 BCREQ: как реализуется доработка, каждое ФТ и то, что нужно для полноты. Состоит из ФДР (обязательно) и ТС (по решению БА). Структуру задаёт выбранный стандарт. <span class="v2-term-source">Источник: <a href="https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/runs/2026/RUN-0073/outputs/section-prompts.md" target="_blank" rel="noreferrer">RUN-0073, шаблон раздела</a></span></dd></div><div class="v2-term-row" id="term-fdr" tabindex="-1"><dt><strong>ФДР</strong><span>Функциональный дизайн решения</span></dt><dd>Уровень 1 ОРР: детализация разработки на уровне бизнес-логики, достаточная для однозначного согласования со стейкхолдерами. Без API, баз данных и имён сервисов. Покрываемые ФТ указаны в скобках пункта 5.х. <span class="v2-term-source">Источник: <a href="https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/runs/2026/RUN-0074/outputs/section-prompts.md" target="_blank" rel="noreferrer">RUN-0074, правки БА</a></span></dd></div><div class="v2-term-row" id="term-ts" tabindex="-1"><dt><strong>ТС</strong><span>Техническая спецификация</span></dt><dd>Уровень 2 ОРР для команды разработки: полная детализация на уровне бизнес-логики и внешне наблюдаемых технических параметров. Не архитектура и не системный анализ. Добавляется по решению БА. <span class="v2-term-source">Источник: <a href="https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/standards/bcreq-sections/05-solution-description.md" target="_blank" rel="noreferrer">Стандарт раздела 5</a></span></dd></div><div class="v2-term-row" id="term-uc" tabindex="-1"><dt><strong>UC</strong><span>Пользовательский сценарий (use case)</span></dt><dd>Взаимодействие участника с системой ради наблюдаемого результата: предусловие, основной ход, альтернативы, результат. <span class="v2-term-source">Источник: <a href="https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/standards/bcreq-sections/07-use-cases.md" target="_blank" rel="noreferrer">Стандарт раздела 7</a></span></dd></div><div class="v2-term-row" id="term-vd" tabindex="-1"><dt><strong>В-Д / В-Н</strong><span>Вариант документа: доработка / новая разработка</span></dt><dd>В-Д — доработка существующего продукта, описывается только дельта (по умолчанию). В-Н — новый сервис, описывается полный набор функций. <span class="v2-term-source">Источник: <a href="https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/standards/bcreq-sections/03-functional-requirements.md" target="_blank" rel="noreferrer">Стандарт раздела 3</a></span></dd></div><div class="v2-term-row" id="term-d0" tabindex="-1"><dt><strong>D0</strong><span>Справочник согласованных терминов Манго</span></dt><dd>Приоритетный источник терминов глоссария. Пока не заполнен: 0 терминов; место в модели зарезервировано. <span class="v2-term-source">Источник: <a href="https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/docs/rfc/2026-10-standards-page.md" target="_blank" rel="noreferrer">RFC страницы «Стандарты»</a></span></dd></div><div class="v2-term-row" id="term-tz" tabindex="-1"><dt><strong>ТЗ</strong><span>Техническое задание</span></dt><dd>Документ для договора с Заказчиком, собранный из разделов BCREQ без рассуждений и комментариев. Не равно ТТЗ. <span class="v2-term-source">Источник: <a href="https://github.com/G-Ivan-A/mango_ba_prompts/pull/422" target="_blank" rel="noreferrer">Решение владельца, PR #422</a></span></dd></div><div class="v2-term-row" id="term-ttz" tabindex="-1"><dt><strong>ТТЗ</strong><span>Тендерное техническое задание</span></dt><dd>Документ Заказчика в его собственном формате. Принимается как есть для оценки исполнимости, а не для описания доработок. Не равно ТЗ. <span class="v2-term-source">Источник: <a href="https://github.com/G-Ivan-A/mango_ba_prompts/pull/422" target="_blank" rel="noreferrer">Решение владельца, PR #422</a></span></dd></div></dl><h2>Процесс и согласование</h2><dl class="v2-glossary"><div class="v2-term-row" id="term-ba" tabindex="-1"><dt><strong>БА</strong><span>Бизнес-аналитик</span></dt><dd>Ведёт процесс BCREQ, запускает промпты и принимает решения на гейтах. Модель только рекомендует. <span class="v2-term-source">Источник: <a href="https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/docs/concept.md" target="_blank" rel="noreferrer">Концепция</a></span></dd></div><div class="v2-term-row" id="term-a-in" tabindex="-1"><dt><strong>A-IN</strong><span>Стадия «Приём задачи»</span></dt><dd>Первая стадия BCREQ: фиксация данных, анкета, сбор и интерпретация, затем глоссарий, бизнес-контекст, вопросы Заказчику. <span class="v2-term-source">Источник: <a href="https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/docs/contracts/bcreq-stage-gates.md" target="_blank" rel="noreferrer">Контракт гейтов</a></span></dd></div><div class="v2-term-row" id="term-a-core" tabindex="-1"><dt><strong>A-CORE</strong><span>Стадия «Требования»</span></dt><dd>Вторая стадия: ФТ, НФТ, сценарии UC и предварительная оценка для Заказчика. <span class="v2-term-source">Источник: <a href="https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/docs/contracts/bcreq-stage-gates.md" target="_blank" rel="noreferrer">Контракт гейтов</a></span></dd></div><div class="v2-term-row" id="term-a-work" tabindex="-1"><dt><strong>A-WORK</strong><span>Стадия «Решение»</span></dt><dd>Третья стадия: описание разрабатываемого решения, ограничения, граничные сценарии и итоговая оценка. <span class="v2-term-source">Источник: <a href="https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/docs/contracts/bcreq-stage-gates.md" target="_blank" rel="noreferrer">Контракт гейтов</a></span></dd></div><div class="v2-term-row" id="term-a-release" tabindex="-1"><dt><strong>A-RELEASE</strong><span>Стадия «Выпуск»</span></dt><dd>Выпуск согласованного документа после гейта Г-W. Содержание стадии вне контракта гейтов и уточняется. <span class="v2-term-source">Источник: <a href="https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/docs/contracts/bcreq-stage-gates.md" target="_blank" rel="noreferrer">Контракт гейтов</a></span></dd></div><div class="v2-term-row" id="term-g-in" tabindex="-1"><dt><strong>Г-IN</strong><span>Гейт приёма задачи</span></dt><dd>Переход A-IN → A-CORE. Решает БА. <span class="v2-term-source">Источник: <a href="https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/docs/contracts/bcreq-stage-gates.md" target="_blank" rel="noreferrer">Контракт гейтов</a></span></dd></div><div class="v2-term-row" id="term-g-s1" tabindex="-1"><dt><strong>Г-С1</strong><span>Гейт «Согласование 1»</span></dt><dd>Переход A-CORE → A-WORK. Решает Заказчик: согласует требования, возвращает на уточнение или отказывает. <span class="v2-term-source">Источник: <a href="https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/docs/contracts/bcreq-stage-gates.md" target="_blank" rel="noreferrer">Контракт гейтов</a></span></dd></div><div class="v2-term-row" id="term-g-w" tabindex="-1"><dt><strong>Г-W</strong><span>Гейт внутреннего согласования</span></dt><dd>Переход A-WORK → A-RELEASE. Решают владелец продукта, архитектор продукта и руководитель КК. <span class="v2-term-source">Источник: <a href="https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/docs/contracts/bcreq-stage-gates.md" target="_blank" rel="noreferrer">Контракт гейтов</a></span></dd></div><div class="v2-term-row" id="term-sh" tabindex="-1"><dt><strong>Ш-1 … Ш-39</strong><span>Шаги ручного процесса</span></dt><dd>Порядок запуска 39 классов промптов BCREQ на странице «Процессы»: один шаг — один класс C01–C39 по процессу v0.2. <span class="v2-term-source">Источник: <a href="https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/docs/ba-processes/bcreq-manual-process.md" target="_blank" rel="noreferrer">Ручной процесс BCREQ</a></span></dd></div></dl><h2>Проект</h2><dl class="v2-glossary"><div class="v2-term-row" id="term-prompt" tabindex="-1"><dt><strong>Промпт</strong><span>Инструкция для модели</span></dt><dd>Текст, который БА копирует в чат с моделью на шаге процесса. Каталог — 39 классов ручного процесса BCREQ; 14 промптов этапа 1 — в архиве каталога. <span class="v2-term-source">Источник: <a href="https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/standards/bcreq-manual-classes/README.md" target="_blank" rel="noreferrer">Классы ручных промптов BCREQ</a></span></dd></div><div class="v2-term-row" id="term-run" tabindex="-1"><dt><strong>Прогон</strong><span>Запись выполнения процесса</span></dt><dd>Обезличенные вход, результат и метрики одного выполнения процесса. Хранится в runs/ и не правится. <span class="v2-term-source">Источник: <a href="https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/runs/README.md" target="_blank" rel="noreferrer">Прогоны</a></span></dd></div><div class="v2-term-row" id="term-meta" tabindex="-1"><dt><strong>Мета-модель БА</strong><span>Нормы и классы артефактов бизнес-анализа</span></dt><dd>Общие нормы задаёт Хаб hybrid-Intelligence-lab; исполняемая реализация — репозиторий mango-ba-ai-runtime. <span class="v2-term-source">Источник: <a href="https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/docs/concept.md" target="_blank" rel="noreferrer">Концепция</a></span></dd></div><div class="v2-term-row" id="term-stage" tabindex="-1"><dt><strong>Этап 1–4</strong><span>Этап автоматизации</span></dt><dd>1 — промпты в чате LLM; 2 — агентный клиент; 3 — оркестрация в n8n; 4 — промышленная эксплуатация. <span class="v2-term-source">Источник: <a href="https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/docs/roadmap.md" target="_blank" rel="noreferrer">Roadmap</a></span></dd></div><div class="v2-term-row" id="term-class" tabindex="-1"><dt><strong>C01–C39</strong><span>Класс ручного промпта BCREQ</span></dt><dd>Стандарт одного вызова модели: вход, выход, стоп-условие и проверки. Каталог сайта показывает 39 классов; номер класса не равен номеру шага. <span class="v2-term-source">Источник: <a href="https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/standards/bcreq-manual-classes/README.md" target="_blank" rel="noreferrer">Классы ручных промптов BCREQ</a></span></dd></div><div class="v2-term-row" id="term-state" tabindex="-1"><dt><strong>Контракт состояния</strong><span>Общие правила ручного чата BCREQ</span></dt><dd>Документ, который БА вставляет вместе с каждым классом: подготовка вызова, блок BCREQ_OUTPUT, перенос в новый чат. <span class="v2-term-source">Источник: <a href="https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/docs/contracts/bcreq-manual-state.md" target="_blank" rel="noreferrer">Контракт состояния</a></span></dd></div><div class="v2-term-row" id="term-archive" tabindex="-1"><dt><strong>Архив</strong><span>14 промптов этапа 1</span></dt><dd>Промпты prompts/bcreq-*.md, заменённые 39 классами. Видны в каталоге при фильтре «Архив»; файлы сохранены для ссылок из стандартов, RFC и прогонов. <span class="v2-term-source">Источник: <a href="https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/prompts/README.md" target="_blank" rel="noreferrer">Каталог промптов</a></span></dd></div></dl>
+      </section>
+
+    </main>
+
+    <footer class="site-footer">
+      Mango BA Prompts · версия сайта <a class="site-version" data-site-version href="https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/CHANGELOG.md">v2.8.2</a>
+      · каталог: 39 классов BCREQ, архив: 14 промптов этапа 1
+    </footer>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <div class="modal" id="process-modal" hidden>
+      <div class="modal-backdrop" data-modal-close></div>
+      <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+        <button class="modal-close" id="modal-close" type="button" aria-label="Закрыть">×</button>
+        <div class="modal-body" id="modal-body"></div>
+      </div>
+    </div>
+    <script src="app.js" type="module"></script>
+    <script src="v2.js" defer></script>
+    <!-- Mango Office Widget -->
+    <script>
+      (function(w, d, u, i, o, s, p) {
+          if (d.getElementById(i)) { return; } w['MangoObject'] = o;
+          w[o] = w[o] || function() { (w[o].q = w[o].q || []).push(arguments) }; w[o].u = u; w[o].t = 1 * new Date();
+          s = d.createElement('script'); s.async = 1; s.id = i; s.src = u; s.charset = 'utf-8';
+          p = d.getElementsByTagName('script')[0]; p.parentNode.insertBefore(s, p);
+      })(window, document, '//widgets.mango-office.ru/widgets/mango.js', 'mango-js', 'mgo');
+      mgo({multichannel: {id: 23303}});
+    </script>
+  </body>
+</html>
