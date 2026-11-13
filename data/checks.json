@@ -1,0 +1,1014 @@
+{
+  "generatedAt": "2026-11-13T10:14:03.141Z",
+  "sourceFiles": [
+    {
+      "path": "runs/",
+      "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/runs/"
+    },
+    {
+      "path": "pr-ops/prompt-feedback.json",
+      "url": "https://github.com/G-Ivan-A/mango_ba_prompts/blob/main/pr-ops/prompt-feedback.json"
+    }
+  ],
+  "statuses": {
+    "draft": 39,
+    "canonical": 0,
+    "archived": 18
+  },
+  "tests": {
+    "logs": 823,
+    "total": 87,
+    "coveredPrompts": 11
+  },
+  "feedback": {
+    "label": "prompt:feedback",
+    "total": 0,
+    "prompts": 0
+  },
+  "totalChecked": 87,
+  "testsPassed": {
+    "covered": 0,
+    "total": 39,
+    "percent": 0
+  },
+  "byProcess": [
+    {
+      "label": "A-IN · Приём задачи",
+      "emoji": "📥",
+      "checks": 0,
+      "coveredPrompts": 0
+    },
+    {
+      "label": "A-CORE · Требования",
+      "emoji": "📋",
+      "checks": 0,
+      "coveredPrompts": 0
+    },
+    {
+      "label": "A-WORK · Решение",
+      "emoji": "⚙️",
+      "checks": 0,
+      "coveredPrompts": 0
+    },
+    {
+      "label": "A-RELEASE · Выпуск",
+      "emoji": "🚀",
+      "checks": 0,
+      "coveredPrompts": 0
+    }
+  ],
+  "activity": [],
+  "prompts": [
+    {
+      "id": "mango-bcreq-constitution-governance-oneshot",
+      "file": "bcreq-constitution-governance-oneshot.md",
+      "status": "archived",
+      "operation": "governance",
+      "processes": [
+        "Конституция и управление"
+      ],
+      "tests": 38,
+      "testFiles": [
+        "runs/2026/RUN-0083/logs/preregistration.md",
+        "runs/2026/RUN-0083/outputs/P-transcript.md",
+        "runs/2026/RUN-0083/outputs/T-transcript.md",
+        "runs/2026/RUN-0086/outputs/r1/executor/S1-B.md",
+        "runs/2026/RUN-0086/outputs/r1/executor/S3-B.md",
+        "runs/2026/RUN-0088/outputs/steps/T-Ш-3/transcript.md",
+        "runs/2026/RUN-0088/outputs/steps/T-Ш-3в/transcript.md",
+        "runs/2026/RUN-0088/outputs/steps/T-Ш-4/transcript.md",
+        "runs/2026/RUN-0088/outputs/steps/T-Ш-4в/transcript.md",
+        "runs/2026/RUN-0088/outputs/steps/T-Ш-5/transcript.md",
+        "runs/2026/RUN-0088/outputs/steps/Ш-0/transcript.md",
+        "runs/2026/RUN-0088/outputs/steps/Ш-1/transcript.md",
+        "runs/2026/RUN-0088/outputs/steps/Ш-1в/transcript.md",
+        "runs/2026/RUN-0088/outputs/steps/Ш-2/transcript.md",
+        "runs/2026/RUN-0088/outputs/steps/Ш-2в/transcript.md",
+        "runs/2026/RUN-0088/outputs/steps/Ш-3/transcript.md",
+        "runs/2026/RUN-0088/outputs/steps/Ш-3в/transcript.md",
+        "runs/2026/RUN-0088/outputs/steps/Ш-4/transcript.md",
+        "runs/2026/RUN-0088/outputs/steps/Ш-4в/transcript.md",
+        "runs/2026/RUN-0088/outputs/steps/Ш-5/transcript.md",
+        "runs/2026/RUN-0088/outputs/steps/Ш-5в/transcript.md",
+        "runs/2026/RUN-0088/outputs/steps/Ш-6/transcript.md",
+        "runs/2026/RUN-0088/outputs/steps/Ш-7/transcript.md",
+        "runs/2026/RUN-0088/outputs/steps/Ш-8/transcript.md",
+        "runs/2026/RUN-0088/outputs/steps/Ш-9/transcript.md",
+        "runs/2026/RUN-0088/outputs/steps/Ш-С/transcript.md",
+        "runs/2026/RUN-0089/outputs/K-transcript.md",
+        "runs/2026/RUN-0089/outputs/T-transcript.md",
+        "runs/2026/RUN-0089/outputs/common-transcript.md",
+        "runs/2026/RUN-0090/logs/session-journal.md",
+        "runs/2026/RUN-0090/outputs/transcripts/transcript-Ш-0.md",
+        "runs/2026/RUN-0091/logs/session-journal.md",
+        "runs/2026/RUN-0092/outputs/gate-c1-01-dialogue.md",
+        "runs/2026/RUN-0092/outputs/gate-c1-99-executor-log.md",
+        "runs/2026/RUN-0092/outputs/gate-in-01-dialogue.md",
+        "runs/2026/RUN-0092/outputs/gate-in-99-executor-log.md",
+        "runs/2026/RUN-0092/outputs/sc-01-dialogue.md",
+        "runs/2026/RUN-0092/outputs/sc-99-executor-log.md"
+      ],
+      "feedback": 0,
+      "feedbackIssues": [],
+      "usage": 38
+    },
+    {
+      "id": "mango-bcreq-review-validation-oneshot",
+      "file": "bcreq-review-validation-oneshot.md",
+      "status": "archived",
+      "operation": "validation",
+      "processes": [
+        "Валидация второй ролью"
+      ],
+      "tests": 10,
+      "testFiles": [
+        "runs/2026/RUN-0079/logs/experiment-log.md",
+        "runs/2026/RUN-0079/outputs/README.md",
+        "runs/2026/RUN-0079/outputs/golden-set-report.md",
+        "runs/2026/RUN-0080/outputs/golden-set-report.md",
+        "runs/2026/RUN-0081/outputs/golden-set-report.md",
+        "runs/2026/RUN-0084/outputs/golden-set-report.md",
+        "runs/2026/RUN-0088/outputs/steps/Ш-0/transcript.md",
+        "runs/2026/RUN-0089/outputs/common-transcript.md",
+        "runs/2026/RUN-0090/outputs/transcripts/transcript-Ш-0.md",
+        "runs/2026/RUN-0091/outputs/transcripts/transcript-Ш-0.md"
+      ],
+      "feedback": 0,
+      "feedbackIssues": [],
+      "usage": 10
+    },
+    {
+      "id": "mango-bcreq-context-understanding-stepwise",
+      "file": "bcreq-context-understanding-stepwise.md",
+      "status": "archived",
+      "operation": "understanding",
+      "processes": [
+        "Приём и контекст"
+      ],
+      "tests": 6,
+      "testFiles": [
+        "runs/2026/RUN-0083/outputs/P-transcript.md",
+        "runs/2026/RUN-0083/outputs/T-transcript.md",
+        "runs/2026/RUN-0088/outputs/steps/Ш-0/transcript.md",
+        "runs/2026/RUN-0089/outputs/common-transcript.md",
+        "runs/2026/RUN-0090/outputs/transcripts/transcript-Ш-0.md",
+        "runs/2026/RUN-0091/outputs/transcripts/transcript-Ш-0.md"
+      ],
+      "feedback": 0,
+      "feedbackIssues": [],
+      "usage": 6
+    },
+    {
+      "id": "mango-bcreq-products-impact-analysis-stepwise",
+      "file": "bcreq-products-impact-analysis-stepwise.md",
+      "status": "archived",
+      "operation": "impact_analysis",
+      "processes": [
+        "Приём и контекст"
+      ],
+      "tests": 6,
+      "testFiles": [
+        "runs/2026/RUN-0083/outputs/P-transcript.md",
+        "runs/2026/RUN-0083/outputs/T-transcript.md",
+        "runs/2026/RUN-0088/outputs/steps/Ш-0/transcript.md",
+        "runs/2026/RUN-0089/outputs/common-transcript.md",
+        "runs/2026/RUN-0090/outputs/transcripts/transcript-Ш-0.md",
+        "runs/2026/RUN-0091/outputs/transcripts/transcript-Ш-0.md"
+      ],
+      "feedback": 0,
+      "feedbackIssues": [],
+      "usage": 6
+    },
+    {
+      "id": "mango-bcreq-fr-documentation-stepwise",
+      "file": "bcreq-fr-documentation-stepwise.md",
+      "status": "archived",
+      "operation": "documentation",
+      "processes": [
+        "Требования и предварительное согласование"
+      ],
+      "tests": 5,
+      "testFiles": [
+        "runs/2026/RUN-0088/outputs/steps/T-Ш-3в/transcript.md",
+        "runs/2026/RUN-0088/outputs/steps/Ш-0/transcript.md",
+        "runs/2026/RUN-0089/outputs/common-transcript.md",
+        "runs/2026/RUN-0090/outputs/transcripts/transcript-Ш-0.md",
+        "runs/2026/RUN-0091/outputs/transcripts/transcript-Ш-0.md"
+      ],
+      "feedback": 0,
+      "feedbackIssues": [],
+      "usage": 5
+    },
+    {
+      "id": "mango-bcreq-constraints-documentation-stepwise",
+      "file": "bcreq-constraints-documentation-stepwise.md",
+      "status": "archived",
+      "operation": "documentation",
+      "processes": [
+        "Дизайн решения и оценка"
+      ],
+      "tests": 4,
+      "testFiles": [
+        "runs/2026/RUN-0088/outputs/steps/Ш-0/transcript.md",
+        "runs/2026/RUN-0089/outputs/common-transcript.md",
+        "runs/2026/RUN-0090/outputs/transcripts/transcript-Ш-0.md",
+        "runs/2026/RUN-0091/outputs/transcripts/transcript-Ш-0.md"
+      ],
+      "feedback": 0,
+      "feedbackIssues": [],
+      "usage": 4
+    },
+    {
+      "id": "mango-bcreq-extra-risk-analysis-stepwise",
+      "file": "bcreq-extra-risk-analysis-stepwise.md",
+      "status": "archived",
+      "operation": "risk_analysis",
+      "processes": [
+        "Дизайн решения и оценка"
+      ],
+      "tests": 4,
+      "testFiles": [
+        "runs/2026/RUN-0088/outputs/steps/Ш-0/transcript.md",
+        "runs/2026/RUN-0089/outputs/common-transcript.md",
+        "runs/2026/RUN-0090/outputs/transcripts/transcript-Ш-0.md",
+        "runs/2026/RUN-0091/outputs/transcripts/transcript-Ш-0.md"
+      ],
+      "feedback": 0,
+      "feedbackIssues": [],
+      "usage": 4
+    },
+    {
+      "id": "mango-bcreq-nfr-documentation-stepwise",
+      "file": "bcreq-nfr-documentation-stepwise.md",
+      "status": "archived",
+      "operation": "documentation",
+      "processes": [
+        "Требования и предварительное согласование"
+      ],
+      "tests": 4,
+      "testFiles": [
+        "runs/2026/RUN-0088/outputs/steps/Ш-0/transcript.md",
+        "runs/2026/RUN-0089/outputs/common-transcript.md",
+        "runs/2026/RUN-0090/outputs/transcripts/transcript-Ш-0.md",
+        "runs/2026/RUN-0091/outputs/transcripts/transcript-Ш-0.md"
+      ],
+      "feedback": 0,
+      "feedbackIssues": [],
+      "usage": 4
+    },
+    {
+      "id": "mango-bcreq-orr-solution-design-stepwise",
+      "file": "bcreq-orr-solution-design-stepwise.md",
+      "status": "archived",
+      "operation": "solution_design",
+      "processes": [
+        "Дизайн решения и оценка"
+      ],
+      "tests": 4,
+      "testFiles": [
+        "runs/2026/RUN-0088/outputs/steps/Ш-0/transcript.md",
+        "runs/2026/RUN-0089/outputs/common-transcript.md",
+        "runs/2026/RUN-0090/outputs/transcripts/transcript-Ш-0.md",
+        "runs/2026/RUN-0091/outputs/transcripts/transcript-Ш-0.md"
+      ],
+      "feedback": 0,
+      "feedbackIssues": [],
+      "usage": 4
+    },
+    {
+      "id": "mango-bcreq-uc-modeling-stepwise",
+      "file": "bcreq-uc-modeling-stepwise.md",
+      "status": "archived",
+      "operation": "modeling",
+      "processes": [
+        "Требования и предварительное согласование",
+        "Дизайн решения и оценка"
+      ],
+      "tests": 4,
+      "testFiles": [
+        "runs/2026/RUN-0088/outputs/steps/Ш-0/transcript.md",
+        "runs/2026/RUN-0089/outputs/common-transcript.md",
+        "runs/2026/RUN-0090/outputs/transcripts/transcript-Ш-0.md",
+        "runs/2026/RUN-0091/outputs/transcripts/transcript-Ш-0.md"
+      ],
+      "feedback": 0,
+      "feedbackIssues": [],
+      "usage": 4
+    },
+    {
+      "id": "mango-bcreq-scenarios-modeling-oneshot",
+      "file": "bcreq-scenarios-modeling-oneshot.md",
+      "status": "archived",
+      "operation": "modeling",
+      "processes": [
+        "Сценарии вне документа"
+      ],
+      "tests": 2,
+      "testFiles": [
+        "runs/2026/RUN-0088/outputs/steps/Ш-0/transcript.md",
+        "runs/2026/RUN-0089/outputs/common-transcript.md"
+      ],
+      "feedback": 0,
+      "feedbackIssues": [],
+      "usage": 2
+    },
+    {
+      "id": "mango-bcreq-c01-intake",
+      "file": "01-intake.md",
+      "status": "draft",
+      "operation": "ingestion",
+      "processes": [
+        "A-IN · Приём задачи"
+      ],
+      "tests": 0,
+      "testFiles": [],
+      "feedback": 0,
+      "feedbackIssues": [],
+      "usage": 0
+    },
+    {
+      "id": "mango-bcreq-c02-normalize",
+      "file": "02-normalize.md",
+      "status": "draft",
+      "operation": "ingestion",
+      "processes": [
+        "A-IN · Приём задачи"
+      ],
+      "tests": 0,
+      "testFiles": [],
+      "feedback": 0,
+      "feedbackIssues": [],
+      "usage": 0
+    },
+    {
+      "id": "mango-bcreq-c03-ambiguity",
+      "file": "03-ambiguity.md",
+      "status": "draft",
+      "operation": "understanding",
+      "processes": [
+        "A-IN · Приём задачи",
+        "A-CORE · Требования",
+        "A-WORK · Решение"
+      ],
+      "tests": 0,
+      "testFiles": [],
+      "feedback": 0,
+      "feedbackIssues": [],
+      "usage": 0
+    },
+    {
+      "id": "mango-bcreq-c04-questions",
+      "file": "04-questions.md",
+      "status": "draft",
+      "operation": "understanding",
+      "processes": [
+        "A-IN · Приём задачи",
+        "A-CORE · Требования",
+        "A-WORK · Решение",
+        "A-RELEASE · Выпуск"
+      ],
+      "tests": 0,
+      "testFiles": [],
+      "feedback": 0,
+      "feedbackIssues": [],
+      "usage": 0
+    },
+    {
+      "id": "mango-bcreq-c05-taxonomy",
+      "file": "05-taxonomy.md",
+      "status": "draft",
+      "operation": "impact_analysis",
+      "processes": [
+        "A-IN · Приём задачи"
+      ],
+      "tests": 0,
+      "testFiles": [],
+      "feedback": 0,
+      "feedbackIssues": [],
+      "usage": 0
+    },
+    {
+      "id": "mango-bcreq-c06-scope",
+      "file": "06-scope.md",
+      "status": "draft",
+      "operation": "impact_analysis",
+      "processes": [
+        "A-IN · Приём задачи",
+        "A-CORE · Требования",
+        "A-WORK · Решение"
+      ],
+      "tests": 0,
+      "testFiles": [],
+      "feedback": 0,
+      "feedbackIssues": [],
+      "usage": 0
+    },
+    {
+      "id": "mango-bcreq-c07-web-evidence",
+      "file": "07-web-evidence.md",
+      "status": "draft",
+      "operation": "research",
+      "processes": [
+        "A-IN · Приём задачи",
+        "A-CORE · Требования",
+        "A-WORK · Решение"
+      ],
+      "tests": 0,
+      "testFiles": [],
+      "feedback": 0,
+      "feedbackIssues": [],
+      "usage": 0
+    },
+    {
+      "id": "mango-bcreq-c08-document-evidence",
+      "file": "08-document-evidence.md",
+      "status": "draft",
+      "operation": "research",
+      "processes": [
+        "A-IN · Приём задачи",
+        "A-CORE · Требования",
+        "A-WORK · Решение"
+      ],
+      "tests": 0,
+      "testFiles": [],
+      "feedback": 0,
+      "feedbackIssues": [],
+      "usage": 0
+    },
+    {
+      "id": "mango-bcreq-c09-ba-enrichment",
+      "file": "09-ba-enrichment.md",
+      "status": "draft",
+      "operation": "ingestion",
+      "processes": [
+        "A-IN · Приём задачи",
+        "A-CORE · Требования",
+        "A-WORK · Решение"
+      ],
+      "tests": 0,
+      "testFiles": [],
+      "feedback": 0,
+      "feedbackIssues": [],
+      "usage": 0
+    },
+    {
+      "id": "mango-bcreq-c10-source-conflicts",
+      "file": "10-source-conflicts.md",
+      "status": "draft",
+      "operation": "validation",
+      "processes": [
+        "A-IN · Приём задачи",
+        "A-CORE · Требования",
+        "A-WORK · Решение"
+      ],
+      "tests": 0,
+      "testFiles": [],
+      "feedback": 0,
+      "feedbackIssues": [],
+      "usage": 0
+    },
+    {
+      "id": "mango-bcreq-c11-dependency-check",
+      "file": "11-dependency-check.md",
+      "status": "draft",
+      "operation": "validation",
+      "processes": [
+        "A-IN · Приём задачи",
+        "A-CORE · Требования",
+        "A-WORK · Решение"
+      ],
+      "tests": 0,
+      "testFiles": [],
+      "feedback": 0,
+      "feedbackIssues": [],
+      "usage": 0
+    },
+    {
+      "id": "mango-bcreq-c12-phase-assembly",
+      "file": "12-phase-assembly.md",
+      "status": "draft",
+      "operation": "documentation",
+      "processes": [
+        "A-IN · Приём задачи",
+        "A-CORE · Требования",
+        "A-WORK · Решение",
+        "A-RELEASE · Выпуск"
+      ],
+      "tests": 0,
+      "testFiles": [],
+      "feedback": 0,
+      "feedbackIssues": [],
+      "usage": 0
+    },
+    {
+      "id": "mango-bcreq-c13-handoff-check",
+      "file": "13-handoff-check.md",
+      "status": "draft",
+      "operation": "governance",
+      "processes": [
+        "A-IN · Приём задачи",
+        "A-CORE · Требования",
+        "A-WORK · Решение",
+        "A-RELEASE · Выпуск"
+      ],
+      "tests": 0,
+      "testFiles": [],
+      "feedback": 0,
+      "feedbackIssues": [],
+      "usage": 0
+    },
+    {
+      "id": "mango-bcreq-c14-glossary",
+      "file": "14-glossary.md",
+      "status": "draft",
+      "operation": "documentation",
+      "processes": [
+        "A-IN · Приём задачи",
+        "A-CORE · Требования",
+        "A-WORK · Решение"
+      ],
+      "tests": 0,
+      "testFiles": [],
+      "feedback": 0,
+      "feedbackIssues": [],
+      "usage": 0
+    },
+    {
+      "id": "mango-bcreq-c15-business-context",
+      "file": "15-business-context.md",
+      "status": "draft",
+      "operation": "documentation",
+      "processes": [
+        "A-IN · Приём задачи",
+        "A-CORE · Требования",
+        "A-WORK · Решение"
+      ],
+      "tests": 0,
+      "testFiles": [],
+      "feedback": 0,
+      "feedbackIssues": [],
+      "usage": 0
+    },
+    {
+      "id": "mango-bcreq-c16-fr-delta",
+      "file": "16-fr-delta.md",
+      "status": "draft",
+      "operation": "documentation",
+      "processes": [
+        "A-CORE · Требования",
+        "A-WORK · Решение"
+      ],
+      "tests": 0,
+      "testFiles": [],
+      "feedback": 0,
+      "feedbackIssues": [],
+      "usage": 0
+    },
+    {
+      "id": "mango-bcreq-c17-fr-new",
+      "file": "17-fr-new.md",
+      "status": "draft",
+      "operation": "documentation",
+      "processes": [
+        "A-CORE · Требования",
+        "A-WORK · Решение"
+      ],
+      "tests": 0,
+      "testFiles": [],
+      "feedback": 0,
+      "feedbackIssues": [],
+      "usage": 0
+    },
+    {
+      "id": "mango-bcreq-c18-nfr",
+      "file": "18-nfr.md",
+      "status": "draft",
+      "operation": "documentation",
+      "processes": [
+        "A-CORE · Требования",
+        "A-WORK · Решение"
+      ],
+      "tests": 0,
+      "testFiles": [],
+      "feedback": 0,
+      "feedbackIssues": [],
+      "usage": 0
+    },
+    {
+      "id": "mango-bcreq-c19-uc-coverage",
+      "file": "19-uc-coverage.md",
+      "status": "draft",
+      "operation": "modeling",
+      "processes": [
+        "A-CORE · Требования"
+      ],
+      "tests": 0,
+      "testFiles": [],
+      "feedback": 0,
+      "feedbackIssues": [],
+      "usage": 0
+    },
+    {
+      "id": "mango-bcreq-c20-gate-evidence",
+      "file": "20-gate-evidence.md",
+      "status": "draft",
+      "operation": "governance",
+      "processes": [
+        "A-IN · Приём задачи",
+        "A-CORE · Требования",
+        "A-WORK · Решение",
+        "A-RELEASE · Выпуск"
+      ],
+      "tests": 0,
+      "testFiles": [],
+      "feedback": 0,
+      "feedbackIssues": [],
+      "usage": 0
+    },
+    {
+      "id": "mango-bcreq-c21-solution-l1",
+      "file": "21-solution-l1.md",
+      "status": "draft",
+      "operation": "solution_design",
+      "processes": [
+        "A-WORK · Решение"
+      ],
+      "tests": 0,
+      "testFiles": [],
+      "feedback": 0,
+      "feedbackIssues": [],
+      "usage": 0
+    },
+    {
+      "id": "mango-bcreq-c22-solution-l2",
+      "file": "22-solution-l2.md",
+      "status": "draft",
+      "operation": "solution_design",
+      "processes": [
+        "A-WORK · Решение"
+      ],
+      "tests": 0,
+      "testFiles": [],
+      "feedback": 0,
+      "feedbackIssues": [],
+      "usage": 0
+    },
+    {
+      "id": "mango-bcreq-c23-constraints",
+      "file": "23-constraints.md",
+      "status": "draft",
+      "operation": "documentation",
+      "processes": [
+        "A-WORK · Решение"
+      ],
+      "tests": 0,
+      "testFiles": [],
+      "feedback": 0,
+      "feedbackIssues": [],
+      "usage": 0
+    },
+    {
+      "id": "mango-bcreq-c24-uc-boundaries",
+      "file": "24-uc-boundaries.md",
+      "status": "draft",
+      "operation": "modeling",
+      "processes": [
+        "A-WORK · Решение"
+      ],
+      "tests": 0,
+      "testFiles": [],
+      "feedback": 0,
+      "feedbackIssues": [],
+      "usage": 0
+    },
+    {
+      "id": "mango-bcreq-c25-risks",
+      "file": "25-risks.md",
+      "status": "draft",
+      "operation": "risk_analysis",
+      "processes": [
+        "A-WORK · Решение"
+      ],
+      "tests": 0,
+      "testFiles": [],
+      "feedback": 0,
+      "feedbackIssues": [],
+      "usage": 0
+    },
+    {
+      "id": "mango-bcreq-c26-delivery-dependencies",
+      "file": "26-delivery-dependencies.md",
+      "status": "draft",
+      "operation": "risk_analysis",
+      "processes": [
+        "A-WORK · Решение"
+      ],
+      "tests": 0,
+      "testFiles": [],
+      "feedback": 0,
+      "feedbackIssues": [],
+      "usage": 0
+    },
+    {
+      "id": "mango-bcreq-c27-acceptance",
+      "file": "27-acceptance.md",
+      "status": "draft",
+      "operation": "release_readiness",
+      "processes": [
+        "A-WORK · Решение"
+      ],
+      "tests": 0,
+      "testFiles": [],
+      "feedback": 0,
+      "feedbackIssues": [],
+      "usage": 0
+    },
+    {
+      "id": "mango-bcreq-c28-independent-review",
+      "file": "28-independent-review.md",
+      "status": "draft",
+      "operation": "validation",
+      "processes": [
+        "A-CORE · Требования",
+        "A-WORK · Решение",
+        "A-RELEASE · Выпуск"
+      ],
+      "tests": 0,
+      "testFiles": [],
+      "feedback": 0,
+      "feedbackIssues": [],
+      "usage": 0
+    },
+    {
+      "id": "mango-bcreq-c29-impact",
+      "file": "29-impact.md",
+      "status": "draft",
+      "operation": "impact_analysis",
+      "processes": [
+        "A-CORE · Требования",
+        "A-WORK · Решение",
+        "A-RELEASE · Выпуск"
+      ],
+      "tests": 0,
+      "testFiles": [],
+      "feedback": 0,
+      "feedbackIssues": [],
+      "usage": 0
+    },
+    {
+      "id": "mango-bcreq-c30-targeted-edit",
+      "file": "30-targeted-edit.md",
+      "status": "draft",
+      "operation": "documentation",
+      "processes": [
+        "A-CORE · Требования",
+        "A-WORK · Решение",
+        "A-RELEASE · Выпуск"
+      ],
+      "tests": 0,
+      "testFiles": [],
+      "feedback": 0,
+      "feedbackIssues": [],
+      "usage": 0
+    },
+    {
+      "id": "mango-bcreq-c31-conformance",
+      "file": "31-conformance.md",
+      "status": "draft",
+      "operation": "quality",
+      "processes": [
+        "A-CORE · Требования",
+        "A-WORK · Решение",
+        "A-RELEASE · Выпуск"
+      ],
+      "tests": 0,
+      "testFiles": [],
+      "feedback": 0,
+      "feedbackIssues": [],
+      "usage": 0
+    },
+    {
+      "id": "mango-bcreq-c32-audience-projection",
+      "file": "32-audience-projection.md",
+      "status": "draft",
+      "operation": "documentation",
+      "processes": [
+        "A-RELEASE · Выпуск"
+      ],
+      "tests": 0,
+      "testFiles": [],
+      "feedback": 0,
+      "feedbackIssues": [],
+      "usage": 0
+    },
+    {
+      "id": "mango-bcreq-c33-release-audit",
+      "file": "33-release-audit.md",
+      "status": "draft",
+      "operation": "release_readiness",
+      "processes": [
+        "A-RELEASE · Выпуск"
+      ],
+      "tests": 0,
+      "testFiles": [],
+      "feedback": 0,
+      "feedbackIssues": [],
+      "usage": 0
+    },
+    {
+      "id": "mango-bcreq-c34-human-record",
+      "file": "34-human-record.md",
+      "status": "draft",
+      "operation": "governance",
+      "processes": [
+        "A-IN · Приём задачи",
+        "A-CORE · Требования",
+        "A-WORK · Решение",
+        "A-RELEASE · Выпуск"
+      ],
+      "tests": 0,
+      "testFiles": [],
+      "feedback": 0,
+      "feedbackIssues": [],
+      "usage": 0
+    },
+    {
+      "id": "mango-bcreq-c35-baseline-handover",
+      "file": "35-baseline-handover.md",
+      "status": "draft",
+      "operation": "governance",
+      "processes": [
+        "A-RELEASE · Выпуск"
+      ],
+      "tests": 0,
+      "testFiles": [],
+      "feedback": 0,
+      "feedbackIssues": [],
+      "usage": 0
+    },
+    {
+      "id": "mango-bcreq-c36-rule-bundle",
+      "file": "36-rule-bundle.md",
+      "status": "draft",
+      "operation": "governance",
+      "processes": [
+        "A-IN · Приём задачи",
+        "A-CORE · Требования",
+        "A-WORK · Решение",
+        "A-RELEASE · Выпуск"
+      ],
+      "tests": 0,
+      "testFiles": [],
+      "feedback": 0,
+      "feedbackIssues": [],
+      "usage": 0
+    },
+    {
+      "id": "mango-bcreq-c37-user-story",
+      "file": "37-user-story.md",
+      "status": "draft",
+      "operation": "modeling",
+      "processes": [
+        "A-IN · Приём задачи",
+        "A-CORE · Требования",
+        "A-WORK · Решение"
+      ],
+      "tests": 0,
+      "testFiles": [],
+      "feedback": 0,
+      "feedbackIssues": [],
+      "usage": 0
+    },
+    {
+      "id": "mango-bcreq-c38-requested-uc",
+      "file": "38-requested-uc.md",
+      "status": "draft",
+      "operation": "modeling",
+      "processes": [
+        "A-IN · Приём задачи",
+        "A-CORE · Требования",
+        "A-WORK · Решение"
+      ],
+      "tests": 0,
+      "testFiles": [],
+      "feedback": 0,
+      "feedbackIssues": [],
+      "usage": 0
+    },
+    {
+      "id": "mango-bcreq-c39-manifest-alignment",
+      "file": "39-manifest-alignment.md",
+      "status": "draft",
+      "operation": "validation",
+      "processes": [
+        "A-IN · Приём задачи",
+        "A-CORE · Требования",
+        "A-WORK · Решение",
+        "A-RELEASE · Выпуск"
+      ],
+      "tests": 0,
+      "testFiles": [],
+      "feedback": 0,
+      "feedbackIssues": [],
+      "usage": 0
+    },
+    {
+      "id": "mango-bcreq-context-understanding-stepwise-by-test-site-v2p7p0",
+      "file": "bcreq-context-understanding-stepwise.md",
+      "status": "archived",
+      "operation": "understanding",
+      "processes": [
+        "Приём и контекст"
+      ],
+      "tests": 0,
+      "testFiles": [],
+      "feedback": 0,
+      "feedbackIssues": [],
+      "usage": 0
+    },
+    {
+      "id": "mango-bcreq-core-documentation-oneshot",
+      "file": "bcreq-core-documentation-oneshot.md",
+      "status": "archived",
+      "operation": "documentation",
+      "processes": [
+        "Требования и предварительное согласование"
+      ],
+      "tests": 0,
+      "testFiles": [],
+      "feedback": 0,
+      "feedbackIssues": [],
+      "usage": 0
+    },
+    {
+      "id": "mango-bcreq-in-understanding-oneshot",
+      "file": "bcreq-in-understanding-oneshot.md",
+      "status": "archived",
+      "operation": "understanding",
+      "processes": [
+        "Приём и контекст"
+      ],
+      "tests": 0,
+      "testFiles": [],
+      "feedback": 0,
+      "feedbackIssues": [],
+      "usage": 0
+    },
+    {
+      "id": "mango-bcreq-in-understanding-oneshot-site-v2p7p0",
+      "file": "bcreq-in-understanding-oneshot.md",
+      "status": "archived",
+      "operation": "understanding",
+      "processes": [
+        "Приём и контекст"
+      ],
+      "tests": 0,
+      "testFiles": [],
+      "feedback": 0,
+      "feedbackIssues": [],
+      "usage": 0
+    },
+    {
+      "id": "mango-bcreq-intake-questionnaire-stepwise-by-test-site-v2p7p0",
+      "file": "bcreq-intake-questionnaire-stepwise.md",
+      "status": "archived",
+      "operation": "ingestion",
+      "processes": [
+        "Приём и контекст"
+      ],
+      "tests": 0,
+      "testFiles": [],
+      "feedback": 0,
+      "feedbackIssues": [],
+      "usage": 0
+    },
+    {
+      "id": "mango-bcreq-products-impact-analysis-stepwise-by-test-site-v2p7p0",
+      "file": "bcreq-products-impact-analysis-stepwise.md",
+      "status": "archived",
+      "operation": "impact_analysis",
+      "processes": [
+        "Приём и контекст"
+      ],
+      "tests": 0,
+      "testFiles": [],
+      "feedback": 0,
+      "feedbackIssues": [],
+      "usage": 0
+    },
+    {
+      "id": "mango-bcreq-work-solution-design-oneshot",
+      "file": "bcreq-work-solution-design-oneshot.md",
+      "status": "archived",
+      "operation": "solution_design",
+      "processes": [
+        "Дизайн решения и оценка"
+      ],
+      "tests": 0,
+      "testFiles": [],
+      "feedback": 0,
+      "feedbackIssues": [],
+      "usage": 0
+    }
+  ]
+}
