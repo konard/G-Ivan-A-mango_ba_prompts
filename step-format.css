@@ -1,0 +1,30 @@
+/* Issue #490: строка проверки БА под «Результатом» в карточке шага и
+   переключатель формата шагов (системные / декомпозированные). Отдельный файл:
+   styles.css, v2.css и standards.css заморожены проверками релиза 2.8.6. */
+.testkit-check {
+  margin: 0;
+  padding: 6px 10px;
+  border-left: 3px solid var(--teal);
+  background: rgba(15, 118, 110, 0.08);
+  font-size: 0.86rem;
+}
+
+.testkit-check[data-check-kind="technical"] {
+  border-left-color: var(--border);
+  background: transparent;
+  color: var(--muted);
+}
+
+.step-format-switch {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  margin: 8px 0 12px;
+}
+
+.step-format-label {
+  color: var(--muted);
+  font-size: 0.9rem;
+  font-weight: 700;
+}
