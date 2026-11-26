@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Вход — Mango BA Prompts</title>
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="login.css" />
+    <script src="gate.js" data-page="login"></script>
+  </head>
+  <body class="login-page">
+    <main class="login-card">
+      <span class="brand-mark" aria-hidden="true">M</span>
+      <h1>Mango BA Prompts</h1>
+      <p>Введите пароль для доступа к каталогу.</p>
+      <form id="login-form" autocomplete="off">
+        <label for="password">Пароль</label>
+        <input id="password" name="password" type="password" autocomplete="off" required />
+        <p id="login-error" role="alert" aria-live="polite"></p>
+        <button type="submit">Войти</button>
+      </form>
+    </main>
+  </body>
+</html>

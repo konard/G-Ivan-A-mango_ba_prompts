@@ -1,0 +1,75 @@
+/* issue #420 site-v2 prototype: styles for О проекте, Справочник, the Standards
+   template v0.2 and the collapsible process streams. Theme tokens from styles.css. */
+.v2-about, .v2-glossary-band { background: var(--bg); }
+.v2-about > *, .v2-glossary-band > * { width: min(1240px, 100%); margin-left: auto; margin-right: auto; }
+.v2-about h1, .v2-glossary-band h1 { font-size: clamp(2rem, 4vw, 3rem); margin: 0; max-width: none; }
+.v2-lead { color: var(--muted); font-size: 1.1rem; margin: 16px auto 24px; padding-right: min(420px, 30%); box-sizing: border-box; }
+.v2-about-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; margin-bottom: 20px; }
+.v2-panel { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 20px 24px; margin-bottom: 20px; }
+.v2-panel h2 { font-size: 1.15rem; margin: 0 0 12px; }
+.v2-panel h2 + p, .v2-panel p { margin: 0 0 12px; }
+.v2-dl { display: grid; gap: 10px; margin: 0; }
+.v2-dl div { display: grid; grid-template-columns: 160px minmax(0, 1fr); gap: 12px; }
+.v2-dl dt { color: var(--teal); font-weight: 650; }
+.v2-dl dd { margin: 0; }
+.v2-list { margin: 0 0 12px; padding-left: 20px; display: grid; gap: 6px; }
+.v2-links { color: var(--muted); font-size: 0.92rem; }
+.v2-stages { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+.v2-stages li { display: grid; gap: 8px; align-content: start; border: 1px solid var(--border); border-radius: 6px; padding: 14px; }
+.v2-stages li[data-status="current"] { border-color: var(--teal); box-shadow: inset 0 3px 0 var(--teal); }
+.v2-stages p { margin: 4px 0 0; color: var(--muted); font-size: 0.92rem; }
+.v2-stage-num { font-weight: 800; color: var(--teal); }
+.v2-stages .status-pill { justify-self: start; font-size: 0.78rem; padding: 2px 8px; border-radius: 999px; border: 1px solid var(--border); }
+a.v2-term { color: inherit; text-decoration: underline dotted var(--teal); text-underline-offset: 3px; }
+a.v2-term:hover { color: var(--teal); }
+
+/* Справочник */
+.v2-glossary-band h2 { font-size: 1.2rem; margin: 28px auto 12px; max-width: none; }
+.v2-glossary { margin: 0 auto; display: grid; gap: 0; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; }
+.v2-term-row { display: grid; grid-template-columns: 280px minmax(0, 1fr); gap: 16px; padding: 12px 20px; border-top: 1px solid var(--border); scroll-margin-top: 110px; }
+.v2-term-row:first-child { border-top: 0; }
+.v2-term-row dt { display: grid; gap: 2px; }
+.v2-term-row dt span { color: var(--muted); font-size: 0.9rem; }
+.v2-term-row dd { margin: 0; }
+.v2-term-source { display: block; color: var(--muted); font-size: 0.85rem; margin-top: 4px; }
+.v2-term-row.is-highlighted { background: var(--surface-strong); box-shadow: inset 4px 0 0 var(--teal); }
+
+/* Стандарты: Введение = только структура */
+.v2-intro { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 20px 28px; margin-bottom: 28px; scroll-margin-top: 110px; }
+.v2-intro h2 { margin: 0 0 12px; font-size: 1.35rem; }
+.v2-intro-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.v2-intro-list > li > a { font-weight: 700; text-decoration: none; color: var(--text); }
+.v2-intro-list > li > a span { color: var(--teal); margin-right: 4px; }
+.v2-intro-list em, .v2-intro-sub em { color: var(--muted); font-style: normal; }
+.v2-intro-sub { list-style: none; margin: 6px 0 0; padding-left: 28px; display: grid; gap: 4px; }
+.v2-intro-sub li span { display: inline-block; min-width: 2.4em; color: var(--teal); font-weight: 650; }
+
+/* Стандарты: карточка по шаблону v0.2 */
+.v2-card h3 { font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--teal); margin: 18px 0 6px; }
+.v2-card > p { margin: 0; }
+.v2-composition { margin: 0; display: grid; gap: 6px; }
+.v2-composition div { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 12px; }
+.v2-composition dt { font-weight: 650; }
+.v2-composition dd { margin: 0; color: var(--muted); }
+.v2-criteria { width: 100%; border-collapse: collapse; }
+.v2-criteria th, .v2-criteria td { text-align: left; vertical-align: top; padding: 8px 10px; border-top: 1px solid var(--border); }
+.v2-criteria th { width: 220px; font-weight: 650; }
+.v2-metrics { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+.v2-metrics li { display: flex; gap: 8px; align-items: baseline; border: 1px solid var(--border); border-radius: 6px; padding: 6px 10px; }
+.v2-metrics span { color: var(--muted); font-size: 0.9rem; }
+.v2-card details { margin-top: 18px; }
+
+/* Процессы: два сворачиваемых потока */
+.v2-stream > summary { list-style: none; cursor: pointer; }
+.v2-stream > summary::-webkit-details-marker { display: none; }
+.v2-stream > summary .section-head h2::after { content: " ▾"; color: var(--teal); }
+.v2-stream:not([open]) > summary .section-head h2::after { content: " ▸"; }
+
+/* Дашборд: только цифры */
+[data-page="dashboard"] .phase-summary { display: none; }
+
+@media (max-width: 860px) {
+  .v2-about-grid, .v2-stages { grid-template-columns: minmax(0, 1fr); }
+  .v2-dl div, .v2-term-row, .v2-composition div { grid-template-columns: minmax(0, 1fr); gap: 4px; }
+  .v2-criteria th { width: auto; }
+}

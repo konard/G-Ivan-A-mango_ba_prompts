@@ -1,0 +1,2232 @@
+const state = {
+  prompts: [],
+  workingPrompts: [],
+  stats: null,
+  roadmap: null,
+  checks: null,
+  processes: null,
+  patterns: null,
+  processTree: null,
+  bcreqFlow: null,
+  testKit: null,
+  // Issue #490: исходные данные обоих форматов шагов; state.testKit — выбранный.
+  testKitSource: null,
+  ainKit: null,
+  stepFormat: "decomposed",
+  selectedFilters: new Set(),
+  query: "",
+  sort: "updated",
+};
+
+const PAGES = ["about", "catalog", "standards", "dashboard", "roadmap", "processes", "patterns", "glossary"];
+const THEME_KEY = "mango-theme";
+
+const nodes = {
+  metrics: document.querySelector("#metrics-grid"),
+  phases: document.querySelector("#phase-lane"),
+  filters: document.querySelector("#filters-root"),
+  promptGrid: document.querySelector("#prompt-grid"),
+  resultCount: document.querySelector("#result-count"),
+  search: document.querySelector("#search-input"),
+  suggestions: document.querySelector("#search-suggestions"),
+  sort: document.querySelector("#sort-select"),
+  exportButton: document.querySelector("#export-button"),
+  clearSearch: document.querySelector("#clear-search-button"),
+  clearFilters: document.querySelector("#clear-filters-button"),
+  checksGrid: document.querySelector("#checks-grid"),
+  checksByProcess: document.querySelector("#checks-byprocess"),
+  checksActivity: document.querySelector("#checks-activity"),
+  roadmapLevels: document.querySelector("#roadmap-levels"),
+  roadmapGaps: document.querySelector("#roadmap-gaps"),
+  processNote: document.querySelector("#process-note"),
+  processActions: document.querySelector("#process-actions"),
+  processExpand: document.querySelector("#process-expand"),
+  processCollapse: document.querySelector("#process-collapse"),
+  processTree: document.querySelector("#process-tree"),
+  processGrid: document.querySelector("#process-grid"),
+  bcreqRules: document.querySelector("#bcreq-rules"),
+  bcreqSteps: document.querySelector("#bcreq-steps"),
+  testKitSummary: document.querySelector("#bcreq-testkit-summary"),
+  stepFormatSwitch: document.querySelector("#step-format-switch"),
+  testKitSteps: document.querySelector("#bcreq-testkit-steps"),
+  processTabs: document.querySelector("#process-tabs"),
+  processHelp: document.querySelector("#process-help"),
+  bcreqRoute: document.querySelector("#bcreq-route"),
+  siteVersion: document.querySelectorAll("[data-site-version]"),
+  bcreqApprovalLead: document.querySelector("#bcreq-approval-lead"),
+  bcreqStages: document.querySelector("#bcreq-stages"),
+  bcreqReturns: document.querySelector("#bcreq-returns"),
+  bcreqImprovements: document.querySelector("#bcreq-improvements"),
+  patternGrid: document.querySelector("#pattern-grid"),
+  topnav: document.querySelector("#topnav"),
+  themeToggle: document.querySelector("#theme-toggle"),
+  logout: document.querySelector("#site-logout"),
+  modal: document.querySelector("#process-modal"),
+  modalBody: document.querySelector("#modal-body"),
+  modalClose: document.querySelector("#modal-close"),
+  toast: document.querySelector("#toast"),
+};
+
+// Режимы промптов: «manual» — 39 классов BCREQ (issue #423), БА копирует класс в чат.
+const MODE_LABELS = {
+  manual: "Ручной",
+  stepwise: "Stepwise",
+  oneshot: "One-shot",
+  legacy: "Legacy",
+};
+
+// Формат шагов (issue #490): системные (комплексные) шаги — промпты Ш-ХХ
+// и архив stepwise/oneshot; декомпозированные шаги — классы и AIN-01…24.
+const FORMAT_ICONS = {
+  system: "▣",
+  decomposed: "☰",
+};
+
+
+// Issue #495: site data хранит пути к файлам относительно корня репозитория, без
+// URL приватного репозитория (стандарт чистоты промптов, класс а). Ссылку для
+// сопровождающих с доступом к репозиторию собирает только интерфейс — здесь.
+const REPO_BLOB = "https://github.com/G-Ivan-A/mango_ba_prompts/blob";
+
+function repoHref(target, ref = "main") {
+  if (!target) return "";
+  if (/^[a-z][a-z0-9+.-]*:/i.test(target) || target.startsWith("#")) return target;
+  return `${REPO_BLOB}/${ref}/${target.replace(/^\.?\//, "")}`;
+}
+
+function formatLabel(format) {
+  return (state.promptsData?.filters?.formats || []).find((item) => item.id === format)?.label || format || "—";
+}
+
+const KIND_LABELS = {
+  direct: "промпт",
+  support: "поддержка",
+};
+
+function el(tag, className, text) {
+  const element = document.createElement(tag);
+  if (className) {
+    element.className = className;
+  }
+  if (text !== undefined) {
+    element.textContent = text;
+  }
+  return element;
+}
+
+function normalize(value) {
+  return String(value || "")
+    .toLowerCase()
+    .normalize("NFKD")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function promptStatus(prompt) {
+  return prompt.archived ? "archived" : prompt.status;
+}
+
+// Количество тестовых логов по промпту берём из checks.json (динамически).
+function testsFor(prompt) {
+  if (!state.checks) {
+    return 0;
+  }
+  const entry = state.checks.prompts.find((item) => item.id === prompt.id);
+  return entry ? entry.tests : 0;
+}
+
+function usageFor(prompt) {
+  if (!state.checks) {
+    return 0;
+  }
+  const entry = state.checks.prompts.find((item) => item.id === prompt.id);
+  return entry ? entry.usage : 0;
+}
+
+function selectedValues(kind) {
+  const prefix = `${kind}:`;
+  return [...state.selectedFilters]
+    .filter((token) => token.startsWith(prefix))
+    .map((token) => token.slice(prefix.length));
+}
+
+function promptSearchText(prompt) {
+  return normalize([
+    prompt.id,
+    prompt.file,
+    prompt.sourcePath,
+    prompt.version,
+    ...(prompt.contexts || []).map(({ step }) => step),
+    prompt.title,
+    prompt.description,
+    prompt.descriptionLong,
+    prompt.mode,
+    prompt.status,
+    prompt.operation.id,
+    prompt.operation.label,
+    prompt.processes.join(" "),
+    (prompt.filterProcesses || []).join(" "),
+    prompt.archiveInfo ? `Архивная версия ${prompt.archiveInfo.siteVersion} ${prompt.archiveInfo.step}` : "",
+  ].join(" "));
+}
+
+// Сортировка карточек (ФТ-4): дата обновления, популярность, алфавит, статус.
+function sortPrompts(prompts) {
+  const sorted = [...prompts];
+  const statusRank = { canonical: 0, draft: 1, archived: 2, unknown: 3 };
+  if (state.sort === "alpha") {
+    sorted.sort((left, right) => left.title.localeCompare(right.title, "ru"));
+  } else if (state.sort === "usage") {
+    sorted.sort((left, right) => usageFor(right) - usageFor(left) || left.title.localeCompare(right.title, "ru"));
+  } else if (state.sort === "status") {
+    sorted.sort(
+      (left, right) =>
+        (statusRank[promptStatus(left)] ?? 9) - (statusRank[promptStatus(right)] ?? 9) ||
+        left.title.localeCompare(right.title, "ru"),
+    );
+  } else {
+    // updated: свежие сверху, без даты — в конец.
+    sorted.sort((left, right) => String(right.updated || "").localeCompare(String(left.updated || "")));
+  }
+  return sorted;
+}
+
+// Внутри одного фильтра — ИЛИ (несколько значений), между фильтрами — И.
+// Архив (issue #423): 14 промптов этапа 1 скрыты, пока не выбран набор «Архив»;
+// по умолчанию каталог показывает 39 классов BCREQ.
+// Issue #490, п. 2.3: системные (комплексные) промпты лежат в архиве 2.7.0,
+// поэтому выбор формата «Системные» тоже открывает архив — иначе фасет пуст.
+function archiveSelected() {
+  return selectedValues("family").includes("archive") || selectedValues("format").includes("system");
+}
+
+function matchingPrompts(excludedKind = "", { includeArchive = archiveSelected() } = {}) {
+  const query = normalize(state.query);
+  const selectedProcesses = excludedKind === "process" ? [] : selectedValues("process");
+  const selectedOperations = excludedKind === "operation" ? [] : selectedValues("operation");
+  // Issue #490, п. 2.3: фасет «Формат шагов» (системные / декомпозированные)
+  // вместо stepwise/oneshot — БА выбирает формат взаимодействия, а не режим.
+  const selectedFormats = excludedKind === "format" ? [] : selectedValues("format");
+  const selectedFamilies = selectedValues("family");
+
+  const prompts = selectedFamilies.includes("working")
+    ? [...state.prompts, ...state.workingPrompts] : state.prompts;
+  const exactEdition = selectedFamilies.includes("working") &&
+    state.workingPrompts.some((prompt) => prompt.id === query);
+  return prompts.filter((prompt) => {
+    if (prompt.archived && !includeArchive) {
+      return false;
+    }
+    if (query && (exactEdition ? prompt.id !== query : !promptSearchText(prompt).includes(query))) {
+      return false;
+    }
+    if (
+      selectedProcesses.length > 0 &&
+      !(prompt.filterProcesses || prompt.processes).some((process) => selectedProcesses.includes(process))
+    ) {
+      return false;
+    }
+    if (selectedOperations.length > 0 && !selectedOperations.includes(prompt.operation.id)) {
+      return false;
+    }
+    if (selectedFormats.length > 0 && !promptFormats(prompt).some((format) => selectedFormats.includes(format))) {
+      return false;
+    }
+    if (selectedFamilies.length > 0 && !selectedFamilies.includes(prompt.family)) {
+      return false;
+    }
+    return true;
+  });
+}
+
+function promptFormats(prompt) {
+  return prompt.contexts
+    ? [...new Set(prompt.contexts.flatMap(({ formats }) => formats))]
+    : [prompt.format];
+}
+
+function visiblePrompts() {
+  return sortPrompts(matchingPrompts());
+}
+
+// Ignore only this facet's selection: alternatives within it remain OR choices.
+// Query, modes, family and the opposite facet still constrain each count.
+function facetCounts(kind) {
+  const counts = {};
+  // Фасет «Формат шагов» считает и архив: системный формат есть только там (#490).
+  const options = kind === "format" ? { includeArchive: true } : {};
+  for (const prompt of matchingPrompts(kind, options)) {
+    const values =
+      kind === "process" ? [...new Set(prompt.filterProcesses || prompt.processes)] : kind === "format" ? promptFormats(prompt) : [prompt.operation.id];
+    for (const value of values) {
+      counts[value] = (counts[value] || 0) + 1;
+    }
+  }
+  return counts;
+}
+
+function showToast(message) {
+  nodes.toast.textContent = message;
+  nodes.toast.dataset.visible = "true";
+  window.clearTimeout(showToast.timer);
+  showToast.timer = window.setTimeout(() => {
+    nodes.toast.dataset.visible = "false";
+  }, 2200);
+}
+
+async function copyText(text) {
+  if (navigator.clipboard?.writeText) {
+    await navigator.clipboard.writeText(text);
+    return;
+  }
+
+  const textarea = document.createElement("textarea");
+  textarea.value = text;
+  textarea.setAttribute("readonly", "");
+  textarea.style.position = "fixed";
+  textarea.style.left = "-9999px";
+  document.body.append(textarea);
+  textarea.select();
+  document.execCommand("copy");
+  textarea.remove();
+}
+
+function downloadFile(filename, text, type) {
+  const blob = new Blob([text], { type });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = filename;
+  document.body.append(link);
+  link.click();
+  link.remove();
+  URL.revokeObjectURL(url);
+}
+
+// Экспорт каталога по выделенным фильтрам в Markdown (ФТ-4).
+function exportCatalog() {
+  const prompts = visiblePrompts();
+  const working = selectedValues("family").includes("working") ? state.workingPrompts.length : 0;
+  const lines = ["# Каталог промптов Mango BA", "", `Промптов в выборке: ${prompts.length} из ${state.prompts.length + working}`, ""];
+  for (const prompt of prompts) {
+    lines.push(`## ${prompt.title}`);
+    lines.push("");
+    lines.push(`- **ID:** \`${prompt.id}\``);
+    lines.push(`- **Версия:** ${prompt.version} · **Обновлён:** ${prompt.updated || "—"}`);
+    lines.push(`- **Формат шагов:** ${promptFormats(prompt).map(formatLabel).join(" / ")} · **Режим:** ${prompt.mode} · **Статус:** ${promptStatus(prompt)} · **Тестов:** ${testsFor(prompt)}`);
+    lines.push(`- **Операция:** ${prompt.operation.label}`);
+    if (prompt.processes.length > 0) {
+      lines.push(`- **Процессы:** ${prompt.processes.join(", ")}`);
+    }
+    lines.push(`- **Файл:** ${prompt.url}`);
+    lines.push("");
+    lines.push(prompt.descriptionLong || prompt.description);
+    lines.push("");
+  }
+  downloadFile("mango-ba-catalog.md", lines.join("\n"), "text/markdown;charset=utf-8");
+  showToast(`Экспортировано промптов: ${prompts.length}`);
+}
+
+function renderSuggestions() {
+  const options = [...state.prompts, ...state.workingPrompts].map((prompt) => {
+    const option = document.createElement("option");
+    option.value = prompt.title;
+    option.label = prompt.id;
+    return option;
+  });
+  nodes.suggestions.replaceChildren(...options);
+}
+
+function renderMetrics() {
+  const totals = state.stats.totals;
+  const metrics = [
+    ["Всего", totals.allPrompts],
+    ["Активных", totals.activePrompts],
+    ["Архив", totals.archivedPrompts],
+    ["Canonical", totals.statuses.canonical || 0],
+    ["В работе", totals.inWork],
+    ["Операций", state.stats.taxonomy.operations],
+  ];
+  if (state.stats.siteVersion) {
+    metrics.push(["Версия сайта", state.stats.siteVersion.version]);
+  }
+
+  nodes.metrics.replaceChildren(
+    ...metrics.map(([label, value]) => {
+      const tile = el("div", "metric-tile");
+      tile.append(el("span", "metric-value", String(value)));
+      tile.append(el("span", "metric-label", label));
+      return tile;
+    }),
+  );
+}
+
+// Версия сайта (issue #423): единый источник — SITE_VERSION в
+// scripts/generate-pages-data.mjs → stats.json.siteVersion.
+function renderSiteVersion() {
+  const info = state.stats?.siteVersion;
+  if (!info) {
+    return;
+  }
+  const title = `Версия сайта ${info.version} от ${info.released} — ${info.basis} (issue #${info.issue})`;
+  for (const node of nodes.siteVersion) {
+    node.textContent = `v${info.version}`;
+    node.title = title;
+    if (node.tagName === "A") {
+      node.href = repoHref(info.changelog);
+      node.target = "_blank";
+      node.rel = "noreferrer";
+    }
+  }
+  const panel = document.querySelector("#about-version");
+  if (panel) {
+    const totals = state.stats.totals;
+    const list = el("ul", "v2-list");
+    list.append(
+      el("li", "", `Каталог: ${totals.activePrompts} классов ручных промптов BCREQ; ${totals.archivedPrompts} архивных редакций — в архиве (фильтр «Архив»).`),
+      el("li", "", "Процесс BCREQ на странице «Процессы» переписан под 39 классов: маршрут по стадиям, шаги Ш-1…Ш-39, гейты Г-IN, Г-С1, Г-W."),
+      el("li", "", "Разделы: О проекте, Каталог, Стандарты, Процессы, Дашборд, Справочник."),
+    );
+    const head = el("h2", "", `Версия сайта ${info.version}`);
+    const meta = el("p", "v2-links", `${info.released} · ${info.basis} · `);
+    meta.append(externalLink(repoHref(info.changelog), "CHANGELOG"));
+    panel.replaceChildren(head, meta, list);
+  }
+}
+
+function renderPhases() {
+  // Зрелость «Мультиагенты» вынесена в отдельный модуль «Проверки» (см. renderChecks).
+  const phases = state.stats.phases.filter((phase) => phase.id !== "multiagents");
+  nodes.phases.replaceChildren(
+    ...phases.map((phase) => {
+      const card = el("article", "phase-card");
+      card.dataset.status = phase.status;
+
+      const top = el("div", "phase-top");
+      top.append(el("span", "phase-index", String(phase.phase)));
+      top.append(el("span", "status-pill", phase.status === "current" ? "сейчас" : "план"));
+
+      const title = el("h3", "", phase.title);
+      const summary = el("p", "phase-summary", phase.summary);
+      const track = el("div", "progress-track");
+      const bar = el("div", "progress-bar");
+      bar.style.width = `${phase.progress}%`;
+      track.append(bar);
+
+      const metrics = el("div", "phase-metrics");
+      for (const metric of phase.metrics) {
+        const item = el("span", "phase-metric");
+        item.append(el("strong", "", String(metric.value)));
+        item.append(document.createTextNode(metric.label));
+        metrics.append(item);
+      }
+
+      card.append(top, title, summary, track, metrics);
+      return card;
+    }),
+  );
+}
+
+function filterButton({ token, icon, label, count, title, unavailable }) {
+  const button = el("button", "filter-button");
+  button.type = "button";
+  button.dataset.filterToken = token;
+  button.setAttribute("aria-pressed", String(state.selectedFilters.has(token)));
+  if (unavailable && !state.selectedFilters.has(token)) {
+    button.disabled = true;
+    button.dataset.unavailable = "true";
+    button.setAttribute("aria-disabled", "true");
+  }
+  button.title = title || label;
+  button.append(el("span", "filter-icon", icon));
+  button.append(el("span", "filter-label", label));
+  button.append(el("span", "filter-count", String(count || 0)));
+  return button;
+}
+
+function renderFilterGroup(title, items, groupClass) {
+  const group = el("section", `filter-group${groupClass ? ` ${groupClass}` : ""}`);
+  const heading = el("div", "filter-title", title);
+  const row = el("div", "filter-row");
+  row.append(...items.map(filterButton));
+  group.append(heading, row);
+  return group;
+}
+
+function renderFilters() {
+  const processCounts = facetCounts("process");
+  const operationCounts = facetCounts("operation");
+  const processes = state.promptsData.filters.processes.map((process) => ({
+    token: `process:${process.label}`,
+    icon: process.emoji || process.icon,
+    label: process.label,
+    count: processCounts[process.label] || 0,
+    title: `${process.label}: ${process.description}`,
+    unavailable: !processCounts[process.label],
+  }));
+
+  const operations = state.promptsData.filters.operations.map((operation) => ({
+    token: `operation:${operation.id}`,
+    icon: operation.icon,
+    label: operation.label,
+    count: operationCounts[operation.id] || 0,
+    title:
+      !operationCounts[operation.id]
+        ? `${operation.label}: нет промптов при текущих фильтрах`
+        : `${operation.label}: ${operation.description}`,
+    unavailable: !operationCounts[operation.id],
+  }));
+
+  const formatCounts = facetCounts("format");
+  const formats = (state.promptsData.filters.formats || []).map((format) => ({
+    token: `format:${format.id}`,
+    icon: FORMAT_ICONS[format.id] || "•",
+    label: format.label,
+    count: formatCounts[format.id] || 0,
+    title: formatCounts[format.id]
+      ? `${format.label}: ${format.description}`
+      : `${format.label}: нет промптов при текущих фильтрах`,
+    unavailable: !formatCounts[format.id],
+  }));
+
+  // Набор (issue #388): новые промпты BCREQ, прочие действующие, архив.
+  const families = (state.promptsData.filters.families || []).map((family) => ({
+    token: `family:${family.id}`,
+    icon: family.icon,
+    label: family.label,
+    count: family.count,
+    title: family.description,
+  }));
+
+  nodes.filters.replaceChildren(
+    renderFilterGroup("Набор", families, "filter-group--families"),
+    renderFilterGroup("Процессы БА", processes, "filter-group--processes"),
+    renderFilterGroup("Операции", operations, "filter-group--operations"),
+    renderFilterGroup("Формат шагов", formats, "filter-group--modes"),
+  );
+}
+
+// Иконка «скопировать промпт» (issue #388): тот же формат копирования, что у
+// кнопки «Копировать» — обработчик ищет промпт по data-copy-id.
+function copyIconButton(prompt) {
+  const button = el("button", "copy-icon", "⧉");
+  button.type = "button";
+  button.dataset.copyId = prompt.id;
+  if (prompt.contexts) button.dataset.copyWorking = "true";
+  button.title = `Скопировать промпт ${prompt.file}`;
+  button.setAttribute("aria-label", `Скопировать промпт ${prompt.file}`);
+  return button;
+}
+
+function workingPromptPath(prompt) {
+  return el("code", "working-prompt-path", prompt.sourcePath);
+}
+
+function promptCard(prompt) {
+  const card = el("article", "prompt-card");
+  card.dataset.archived = String(prompt.archived);
+  card.dataset.family = prompt.family || "other";
+  if (prompt.contexts) {
+    card.id = `catalog-edition-${prompt.id}`;
+    card.tabIndex = -1;
+  }
+
+  const head = el("div", "prompt-head");
+  const titleWrap = el("div");
+  if (prompt.classId) {
+    const step = prompt.flowStep ? ` · шаг потока ${prompt.flowStep}` : "";
+    const badge = el("span", "new-badge", `★ BCREQ · класс ${prompt.classId}${step}`);
+    badge.title = "Класс ручного промпта BCREQ (PR #422, issue #423)";
+    titleWrap.append(badge);
+  } else if (prompt.archived) {
+    const badge = el("span", "archive-badge", `⌛ Архивная версия · ${prompt.archiveInfo ? `сайт ${prompt.archiveInfo.siteVersion} · ${prompt.archiveInfo.step}` : "этап 1"}`);
+    badge.title = prompt.archiveInfo ? "Полная редакция 2.7.0; заменена отдельными вызовами AIN. Текст сохранён без сокращений." : "Промпт этапа 1 перенесён в архив: его заменяют классы К-01…К-39 (issue #423)";
+    titleWrap.append(badge);
+  } else if (prompt.isNew) {
+    const badge = el("span", "new-badge", "★ BCREQ · новый");
+    badge.title = "Новый промпт набора BCREQ (issue #388)";
+    titleWrap.append(badge);
+  }
+  titleWrap.append(el("h3", "prompt-title", prompt.title));
+  const idLabel = el("span", "prompt-id", prompt.id);
+  idLabel.title = "Уникальный токен промпта";
+  titleWrap.append(idLabel);
+  head.append(titleWrap, copyIconButton(prompt));
+
+  const description = el("p", "prompt-description", prompt.descriptionLong || prompt.description);
+
+  // Мета-строка вместо хэша: версия, дата обновления, статус тестов.
+  const tests = testsFor(prompt);
+  const meta = el("div", "prompt-meta");
+  meta.append(el("span", "prompt-meta-item", `v${String(prompt.version).replace(/^v/, "")}`));
+  if (prompt.updated) {
+    meta.append(el("span", "prompt-meta-item", prompt.updated));
+  }
+  if (prompt.contexts) {
+    meta.append(workingPromptPath(prompt));
+  } else {
+    const testItem = el("span", "prompt-meta-item", tests > 0 ? `✅ ${tests} тест(ов)` : "тестов нет");
+    testItem.dataset.kind = tests > 0 ? "tested" : "untested";
+    meta.append(testItem);
+  }
+
+  const tags = el("div", "tag-row");
+  for (const format of promptFormats(prompt)) {
+    const mode = el("span", "tag", `${FORMAT_ICONS[format] || prompt.modeIcon} ${formatLabel(format)}`);
+    mode.dataset.kind = "mode";
+    mode.title = `Режим файла: ${MODE_LABELS[prompt.mode] || prompt.mode}`;
+    tags.append(mode);
+  }
+  const status = el("span", "tag", promptStatus(prompt));
+  status.dataset.kind = "status";
+  const operation = el("span", "tag", `${prompt.operation.icon} ${prompt.operation.label}`);
+  operation.dataset.kind = "operation";
+  tags.append(status, operation);
+  for (const process of prompt.processDetails.length > 0 ? prompt.processDetails : prompt.processes.map((label) => ({ label, emoji: "🗂️" }))) {
+    const tag = el("span", "tag", `${process.emoji || "🗂️"} ${process.label}`);
+    tag.dataset.kind = "process";
+    tags.append(tag);
+  }
+
+  const actions = el("div", "prompt-actions");
+  const copy = el("button", "copy-button");
+  copy.type = "button";
+  copy.dataset.copyId = prompt.id;
+  if (prompt.contexts) copy.dataset.copyWorking = "true";
+  copy.append(el("span", "", "⧉"));
+  copy.append(el("span", "", "Копировать"));
+  const repoLink = el("a", "repo-link");
+  repoLink.href = repoHref(prompt.url);
+  repoLink.target = "_blank";
+  repoLink.rel = "noreferrer";
+  repoLink.title = "Открыть файл в GitHub";
+  repoLink.setAttribute("aria-label", `Открыть ${prompt.file} в GitHub`);
+  repoLink.append(el("span", "", "📁"));
+  repoLink.append(el("span", "", "Перейти в репо"));
+  actions.append(copy, repoLink);
+
+  card.append(head, description, meta, tags);
+  const links = promptLinks(prompt);
+  if (links) {
+    card.append(links);
+  }
+  card.append(actions);
+  return card;
+}
+
+function linkTo(url, text, title) {
+  const link = el("a", "prompt-link", text);
+  link.href = repoHref(url);
+  link.target = "_blank";
+  link.rel = "noreferrer";
+  if (title) {
+    link.title = title;
+  }
+  return link;
+}
+
+function internalLink(href, label) {
+  const link = el("a", "prompt-link", label);
+  link.href = href;
+  return link;
+}
+
+function catalogEditionHref(id) {
+  return `#catalog?${new URLSearchParams({ edition: id })}`;
+}
+
+function processStepHref(step, track, edition) {
+  const params = new URLSearchParams({ step, track });
+  if (edition) params.set("edition", edition);
+  return `#processes?${params}`;
+}
+
+// Связи класса и архива (issue #423): класс → контракт состояния и аналог из
+// архива; архивный промпт → классы, которые его заменили.
+function promptLinks(prompt) {
+  const row = el("div", "prompt-links");
+  if (prompt.contexts) {
+    row.append(el("span", "prompt-links-label", "Шаги в «Процессах»"));
+    for (const { step, formats, mode, assigned } of prompt.contexts) {
+      for (const format of formats) {
+        const role = assigned ? (mode === "by-test" ? "по тесту" : "назначена") : "для сравнения";
+        row.append(internalLink(processStepHref(step, format, prompt.id),
+          `${step} · ${STEP_FORMATS[format].short} · ${role}`));
+      }
+    }
+  } else if (prompt.classId) {
+    const steps = state.promptsData.classSteps?.[prompt.classId] || [];
+    if (steps.length) row.append(el("span", "prompt-links-label", "Рабочие шаги"));
+    for (const step of steps) {
+      row.append(internalLink(processStepHref(step, stepFormats(step)[0]), step));
+    }
+    const contract = state.promptsData.stateContract;
+    if (contract) {
+      row.append(el("span", "prompt-links-label", "Контракт:"));
+      row.append(linkTo(contract.url, "состояние BCREQ", contract.path));
+    }
+    if (prompt.analog) {
+      row.append(el("span", "prompt-links-label", "Аналог в архиве:"));
+      row.append(linkTo(prompt.analog.url, prompt.analog.file, prompt.analog.path));
+    }
+  } else if (prompt.archiveInfo) {
+    row.append(el("span", "prompt-links-label", "Заменён шагами:"));
+    for (const id of prompt.archiveInfo.replacedBy) {
+      const link = el("a", "prompt-link", id);
+      link.href = `#processes?ain=${id}`;
+      row.append(link);
+    }
+    row.append(linkTo(repoHref(prompt.archiveInfo.sourcePath, prompt.archiveInfo.sourceCommit), "Исходная редакция 2.7.0"));
+  } else if (prompt.archived && (prompt.successors || []).length > 0) {
+    row.append(el("span", "prompt-links-label", "Заменён классами:"));
+    for (const classId of prompt.successors) {
+      const successor = state.prompts.find((item) => item.classId === classId);
+      if (!successor) {
+        row.append(el("span", "prompt-link", classId));
+        continue;
+      }
+      const link = el("a", "prompt-link", classId);
+      link.href = `#prompt=${successor.id}`;
+      link.title = successor.title;
+      row.append(link);
+    }
+  } else if (prompt.archived) {
+    // В catalog.json PR #422 у этого промпта нет класса-аналога: не выдумываем связь.
+    row.append(el("span", "prompt-links-label", "Прямого класса-аналога нет:"));
+    const link = el("a", "prompt-link", "маршрут 39 классов");
+    link.href = "#processes";
+    link.title = "Ручной процесс BCREQ v0.2 на странице «Процессы»";
+    row.append(link);
+  }
+  return row.childElementCount > 0 ? row : null;
+}
+
+function renderPrompts() {
+  const prompts = visiblePrompts();
+  const families = selectedValues("family");
+  const archive = state.prompts.filter((prompt) => prompt.archived).length;
+  const working = families.includes("working") ? state.workingPrompts.length : 0;
+  const active = families.length === 0 || families.includes("bcreq") ? state.prompts.length - archive : 0;
+  const history = archiveSelected() && (!families.length || families.includes("archive")) ? archive : 0;
+  let summary = `${prompts.length} из ${active + working + history}`;
+  if (!archiveSelected() && !families.includes("working")) {
+    const hidden = matchingPrompts("", { includeArchive: true }).length - prompts.length;
+    summary += hidden > 0 ? ` · в архиве ещё ${hidden}` : ` · архив ${archive}`;
+  }
+  nodes.resultCount.value = summary;
+
+  if (prompts.length === 0) {
+    nodes.promptGrid.replaceChildren(el("div", "empty-state", "Ничего не найдено"));
+    return;
+  }
+
+  nodes.promptGrid.replaceChildren(...prompts.map(promptCard));
+}
+
+function statusBar(segments) {
+  const total = segments.reduce((sum, segment) => sum + segment.value, 0) || 1;
+  const bar = el("div", "check-bar");
+  for (const segment of segments) {
+    if (segment.value <= 0) {
+      continue;
+    }
+    const part = el("span", "check-bar-part");
+    part.dataset.kind = segment.kind;
+    part.style.width = `${Math.round((segment.value / total) * 100)}%`;
+    part.title = `${segment.label}: ${segment.value}`;
+    bar.append(part);
+  }
+  return bar;
+}
+
+function checkCard(title, valueNode, footNode) {
+  const card = el("article", "check-card");
+  card.append(el("p", "check-title", title));
+  card.append(valueNode);
+  if (footNode) {
+    card.append(footNode);
+  }
+  return card;
+}
+
+function checkMetrics(items) {
+  const wrap = el("div", "check-metrics");
+  for (const [value, label] of items) {
+    const item = el("span", "check-metric");
+    item.append(el("strong", "", String(value)));
+    item.append(document.createTextNode(label));
+    wrap.append(item);
+  }
+  return wrap;
+}
+
+function renderChecks() {
+  if (!state.checks) {
+    return;
+  }
+  const checks = state.checks;
+  const statuses = checks.statuses || {};
+  const testsPassed = checks.testsPassed || { covered: 0, total: 0, percent: 0 };
+
+  const statusValue = el("div", "check-value-block");
+  statusValue.append(
+    statusBar([
+      { kind: "canonical", value: statuses.canonical || 0, label: "canonical" },
+      { kind: "draft", value: statuses.draft || 0, label: "draft" },
+      { kind: "archived", value: statuses.archived || 0, label: "archived" },
+    ]),
+  );
+  statusValue.append(
+    checkMetrics([
+      [statuses.canonical || 0, "canonical"],
+      [statuses.draft || 0, "draft"],
+      [statuses.archived || 0, "archived"],
+    ]),
+  );
+  const statusCard = checkCard("Статус отладки", statusValue);
+
+  // ФТ-3: всего проверено + тесты пройдены (X/Y, %).
+  const checkedValue = el("span", "check-big", String(checks.totalChecked ?? checks.tests.total));
+  const checkedFoot = checkMetrics([
+    [`${testsPassed.covered}/${testsPassed.total}`, "промптов с тестами"],
+    [`${testsPassed.percent}%`, "покрытие тестами"],
+  ]);
+  const checkedCard = checkCard("Всего проверок", checkedValue, checkedFoot);
+
+  const feedbackValue = el("span", "check-big", String(checks.feedback.total));
+  const feedbackFoot = checkMetrics([
+    [checks.feedback.prompts, "промптов с feedback"],
+    [checks.feedback.label, ""],
+  ]);
+  const feedbackCard = checkCard("Обратная связь", feedbackValue, feedbackFoot);
+
+  nodes.checksGrid.replaceChildren(statusCard, checkedCard, feedbackCard);
+
+  // ФТ-3: проверки по процессам (динамически, включая «Прочее»).
+  const byProcess = checks.byProcess || [];
+  if (byProcess.length > 0) {
+    const heading = el("p", "check-activity-title", "Проверки по процессам БА");
+    const maxChecks = Math.max(...byProcess.map((entry) => entry.checks), 1);
+    const grid = el("div", "byprocess-grid");
+    for (const entry of byProcess) {
+      const row = el("article", "byprocess-card");
+      const top = el("div", "byprocess-head");
+      top.append(el("span", "byprocess-icon", entry.emoji || "🗂️"));
+      top.append(el("span", "byprocess-label", entry.label));
+      top.append(el("span", "byprocess-count", String(entry.checks)));
+      const track = el("div", "progress-track");
+      const bar = el("div", "progress-bar");
+      bar.style.width = `${Math.round((entry.checks / maxChecks) * 100)}%`;
+      track.append(bar);
+      row.append(top, track, el("span", "byprocess-foot", `${entry.coveredPrompts} промптов с тестами`));
+      grid.append(row);
+    }
+    nodes.checksByProcess.replaceChildren(heading, grid);
+  } else {
+    nodes.checksByProcess.replaceChildren();
+  }
+
+  // ФТ-3: блок «Активность» — топ-5 промптов по использованию.
+  const topPrompts = checks.prompts.filter((prompt) => prompt.usage > 0).slice(0, 5);
+  if (topPrompts.length === 0) {
+    nodes.checksActivity.replaceChildren(
+      el("div", "empty-state", "Нет зафиксированной активности использования"),
+    );
+    return;
+  }
+
+  const heading = el("p", "check-activity-title", "Активность — топ-5 промптов");
+  const list = el("ol", "top-list");
+  for (const prompt of topPrompts) {
+    const row = el("li", "top-row");
+    row.append(el("span", "top-id", prompt.id));
+    const meta = el("span", "activity-meta");
+    meta.append(el("span", "activity-chip", `тестов ${prompt.tests}`));
+    if (prompt.feedback > 0) {
+      const fb = el("span", "activity-chip", `feedback ${prompt.feedback}`);
+      fb.dataset.kind = "feedback";
+      meta.append(fb);
+    }
+    row.append(meta);
+    list.append(row);
+  }
+  nodes.checksActivity.replaceChildren(heading, list);
+}
+
+function renderRoadmap() {
+  nodes.roadmapLevels.replaceChildren(
+    ...state.roadmap.levels.map((level) => {
+      const card = el("article", "roadmap-card");
+      card.dataset.status = level.status;
+      card.append(el("span", "roadmap-number", String(level.number)));
+      card.append(el("h3", "", level.title));
+      card.append(el("p", "", level.howItWorks));
+      card.append(el("p", "", level.exitCriteria));
+      return card;
+    }),
+  );
+
+  nodes.roadmapGaps.replaceChildren(
+    ...state.roadmap.gaps.map((gap) => {
+      const card = el("article", "gap-card");
+      card.append(el("h3", "", gap.gap));
+      card.append(el("p", "", gap.why));
+      card.append(el("p", "", gap.nextArtifact));
+      return card;
+    }),
+  );
+}
+
+// Процесс BCREQ (issue #388): ручные шаги БА с копированием промпта и
+// согласование с командой и Заказчиком. Данные — data/bcreq-flow.json.
+function bcreqField(label, value, field) {
+  const row = el("div", "bcreq-field");
+  if (field) {
+    row.dataset.field = field;
+  }
+  row.append(el("span", "bcreq-field-label", label), el("span", "bcreq-field-value", value));
+  return row;
+}
+
+function bcreqStep(step) {
+  const item = el("li", "bcreq-step");
+  item.dataset.stage = step.stage;
+  item.id = `bcreq-step-${step.number}`;
+  item.tabIndex = -1;
+
+  const head = el("div", "bcreq-step-head");
+  const number = el("span", "bcreq-step-number", String(step.number));
+  number.setAttribute("aria-hidden", "true");
+  const titleWrap = el("div", "bcreq-step-title-wrap");
+  titleWrap.append(el("h3", "bcreq-step-title", step.step));
+  // Класс может работать на нескольких стадиях (issue #423): тег на каждую.
+  const stageTags = el("div", "tag-row");
+  for (const code of step.stages && step.stages.length ? step.stages : [step.stage]) {
+    const stage = el("span", "tag", code);
+    stage.dataset.kind = "stage";
+    stageTags.append(stage);
+  }
+  titleWrap.append(stageTags);
+
+  const copy = el("button", "copy-icon", "⧉");
+  copy.type = "button";
+  copy.dataset.copyId = step.prompt.id;
+  copy.title = `Скопировать промпт ${step.prompt.file}`;
+  copy.setAttribute("aria-label", `Скопировать промпт шага ${step.step}`);
+  head.append(number, titleWrap, copy);
+
+  const prompt = el("p", "bcreq-step-prompt");
+  const link = el("a", "", step.prompt.title || step.prompt.file);
+  link.title = step.prompt.file;
+  link.href = repoHref(step.prompt.url);
+  link.target = "_blank";
+  link.rel = "noreferrer";
+  prompt.append(el("span", "bcreq-field-label", "Промпт"), link);
+  if (step.params && step.params !== "—") {
+    prompt.append(el("code", "bcreq-params", step.params));
+  }
+
+  const actions = el("ol", "bcreq-actions");
+  actions.append(...step.actions.map((action) => el("li", "", action)));
+
+  item.append(
+    head,
+    prompt,
+    bcreqField("Что подготовить", step.prepare, "prepare"),
+    el("div", "bcreq-field-label", "Что делает БА"),
+    actions,
+    bcreqField("Результат", step.result, "result"),
+  );
+  if (step.gate && step.gate !== "—") {
+    item.append(el("p", "bcreq-gate", `⛳ ${step.gate}`));
+  }
+  return item;
+}
+
+function bcreqTable(table, headers, rows) {
+  const thead = el("thead");
+  const headRow = el("tr");
+  headRow.append(...headers.map((header) => el("th", "", header)));
+  thead.append(headRow);
+  const tbody = el("tbody");
+  for (const cells of rows) {
+    const row = el("tr");
+    row.append(...cells.map((cell) => el("td", "", cell)));
+    tbody.append(row);
+  }
+  table.replaceChildren(thead, tbody);
+}
+
+function renderBcreqFlow() {
+  const flow = state.bcreqFlow;
+  if (!flow || !nodes.bcreqSteps) {
+    return;
+  }
+  nodes.bcreqRules.replaceChildren(
+    ...flow.manual.rules.map((rule) => {
+      const item = el("li", "bcreq-rule");
+      item.append(el("strong", "", rule.id), document.createTextNode(` ${rule.text}`));
+      return item;
+    }),
+  );
+  nodes.bcreqSteps.replaceChildren(...flow.manual.steps.map(bcreqStep));
+  renderBcreqRoute(flow.manual);
+
+  const lead = nodes.bcreqApprovalLead;
+  const basis = el("a", "", flow.approval.basis.label);
+  basis.href = repoHref(flow.approval.basis.url);
+  basis.target = "_blank";
+  basis.rel = "noreferrer";
+  const contract = el("a", "", flow.approval.contract.label);
+  contract.href = repoHref(flow.approval.contract.url);
+  contract.target = "_blank";
+  contract.rel = "noreferrer";
+  lead.replaceChildren(
+    document.createTextNode("Усовершенствованная версия описания процесса "),
+    basis,
+    document.createTextNode(". Стадии, гейты и возвраты — по документу «"),
+    contract,
+    document.createTextNode("». Каждый гейт проходит человек; модель готовит только отчёт по критериям."),
+  );
+
+  nodes.bcreqStages.replaceChildren(
+    ...flow.approval.stages.map((stage) => {
+      const card = el("article", "bcreq-stage");
+      const head = el("div", "bcreq-stage-head");
+      head.append(el("h3", "bcreq-stage-title", stage.stage));
+      const tags = el("div", "tag-row");
+      const phase = el("span", "tag", stage.phase);
+      phase.dataset.kind = "stage";
+      tags.append(phase);
+      if (stage.gate && stage.gate !== "—") {
+        const gate = el("span", "tag", `⛳ ${stage.gate}`);
+        gate.dataset.kind = "gate";
+        tags.append(gate);
+      }
+      head.append(tags);
+      const actions = el("ul", "bcreq-actions");
+      actions.append(...stage.actions.map((action) => el("li", "", action)));
+      card.append(
+        head,
+        bcreqField("Цель", stage.goal),
+        bcreqField("Вход", stage.input),
+        el("div", "bcreq-field-label", "Действия"),
+        actions,
+        bcreqField("Выход", stage.output),
+        bcreqField("Кто согласует", stage.approver),
+      );
+      const outcomes = stage.outcomes.filter((outcome) => outcome && outcome !== "—");
+      if (outcomes.length) {
+        const list = el("ul", "bcreq-outcomes");
+        list.append(...outcomes.map((outcome) => el("li", "", outcome)));
+        card.append(el("div", "bcreq-field-label", "Исходы"), list);
+      }
+      return card;
+    }),
+  );
+
+  bcreqTable(
+    nodes.bcreqReturns,
+    ["Причина уточнения", "Стадия возврата", "Шаг-точка входа", "Что делает БА"],
+    flow.approval.returns.map((item) => [item.reason, item.stage, item.entry, item.action]),
+  );
+  bcreqTable(
+    nodes.bcreqImprovements,
+    ["№", "В исходном описании", "Стало", "Зачем"],
+    flow.approval.improvements.map((item) => [item.id, item.before, item.after, item.why]),
+  );
+}
+
+function externalLink(url, text) {
+  const link = el("a", "", text);
+  link.href = repoHref(url);
+  link.target = "_blank";
+  link.rel = "noreferrer";
+  return link;
+}
+
+// Маршрут по стадиям (issue #423): порядок классов К-01…К-39 по таблице процесса
+// v0.2; чип ведёт к карточке шага ниже, гейт и решающая роль — справа.
+function renderBcreqRoute(manual) {
+  if (!nodes.bcreqRoute) {
+    return;
+  }
+  const sources = el("p", "bcreq-route-sources");
+  if (manual.classes) {
+    sources.append(document.createTextNode("Промпты шагов — "), externalLink(manual.classes.url, manual.classes.label));
+  }
+  if (manual.contract) {
+    sources.append(document.createTextNode("; каждый вызов идёт с документом «"), externalLink(manual.contract.url, manual.contract.label));
+    sources.append(document.createTextNode("». Шаблоны 14 промптов этапа 1 — в архиве каталога."));
+  }
+  const cards = (manual.sequences || []).map((sequence) => {
+    const card = el("article", "bcreq-route-stage");
+    const head = el("div", "bcreq-route-head");
+    head.append(el("h3", "bcreq-stage-title", sequence.stage));
+    if (sequence.gate && sequence.gate !== "—") {
+      const gate = el("span", "tag", `⛳ ${sequence.gate}`);
+      gate.dataset.kind = "gate";
+      head.append(gate);
+    }
+    const chain = el("ol", "bcreq-route-chain");
+    for (const link of sequence.chain) {
+      const item = el("li");
+      const chip = el("a", "bcreq-route-chip", link.classId);
+      chip.href = link.number ? `#processes?step=${link.number}` : "#processes";
+      chip.title = link.number ? `Ш-${link.number} · ${link.title}` : link.title || link.classId;
+      item.append(chip);
+      chain.append(item);
+    }
+    card.append(head, chain);
+    if (sequence.decides && sequence.decides !== "—") {
+      card.append(bcreqField("Кто решает", sequence.decides));
+    }
+    return card;
+  });
+  const grid = el("div", "bcreq-route-grid");
+  grid.append(...cards);
+  nodes.bcreqRoute.replaceChildren(sources, grid);
+}
+
+function renderProcesses() {
+  if (!state.processes || !nodes.processGrid) {
+    return;
+  }
+  nodes.processGrid.replaceChildren(
+    ...state.processes.processes.map((process) => {
+      const card = el("article", "process-card");
+      card.dataset.processId = String(process.id);
+      const head = el("div", "process-head");
+      head.append(el("span", "process-icon", process.emoji || "🗂️"));
+      head.append(el("h3", "process-title", process.label));
+      card.append(head);
+      card.append(el("p", "process-description", process.description));
+      const meta = el("div", "process-meta");
+      meta.append(el("span", "activity-chip", `промптов ${process.prompts.length}`));
+      meta.append(el("span", "activity-chip", `проверок ${process.checks}`));
+      if (process.gaps.length > 0) {
+        const gapChip = el("span", "activity-chip", `gaps ${process.gaps.length}`);
+        gapChip.dataset.kind = "feedback";
+        meta.append(gapChip);
+      }
+      card.append(meta);
+      const hint = el("span", "process-hint", "Подробнее →");
+      card.append(hint);
+      return card;
+    }),
+  );
+}
+
+function openProcessModal(processId) {
+  const process = state.processes.processes.find((item) => String(item.id) === String(processId));
+  if (!process) {
+    return;
+  }
+  const body = nodes.modalBody;
+  body.replaceChildren();
+
+  const head = el("div", "process-head");
+  head.append(el("span", "process-icon", process.emoji || "🗂️"));
+  head.append(el("h3", "modal-title", process.label));
+  head.querySelector("h3").id = "modal-title";
+  body.append(head);
+  body.append(el("p", "process-description", process.description));
+
+  if (process.operations.length > 0) {
+    body.append(el("h4", "modal-subhead", "Операции"));
+    const ops = el("div", "tag-row");
+    for (const operationId of process.operations) {
+      const tag = el("span", "tag", operationId);
+      tag.dataset.kind = "operation";
+      ops.append(tag);
+    }
+    body.append(ops);
+  }
+
+  body.append(el("h4", "modal-subhead", "Связанные промпты"));
+  if (process.prompts.length > 0) {
+    const list = el("ul", "modal-list");
+    for (const prompt of process.prompts) {
+      const item = el("li", "modal-list-row");
+      const link = el("a", "modal-link", `${prompt.modeIcon || "•"} ${prompt.title}`);
+      link.href = repoHref(prompt.url);
+      link.target = "_blank";
+      link.rel = "noreferrer";
+      item.append(link);
+      item.append(el("span", "modal-list-id", prompt.id));
+      list.append(item);
+    }
+    body.append(list);
+  } else {
+    body.append(el("p", "process-description", "Промпты пока не привязаны."));
+  }
+
+  if (process.patterns.length > 0) {
+    body.append(el("h4", "modal-subhead", "Подпроцессы и паттерны"));
+    const list = el("ul", "modal-list");
+    for (const pattern of process.patterns) {
+      const item = el("li", "modal-list-row");
+      const link = el("a", "modal-link", pattern.slug);
+      link.href = repoHref(pattern.url);
+      link.target = "_blank";
+      link.rel = "noreferrer";
+      item.append(link);
+      list.append(item);
+    }
+    body.append(list);
+  }
+
+  if (process.gaps.length > 0) {
+    body.append(el("h4", "modal-subhead", "Known gaps"));
+    const list = el("ul", "modal-list");
+    for (const gap of process.gaps) {
+      const item = el("li", "modal-gap-row");
+      item.append(el("span", "modal-gap-title", gap.gap));
+      if (gap.nextArtifact) {
+        item.append(el("span", "modal-gap-next", gap.nextArtifact));
+      }
+      list.append(item);
+    }
+    body.append(list);
+  }
+
+  nodes.modal.hidden = false;
+}
+
+function closeProcessModal() {
+  nodes.modal.hidden = true;
+}
+
+function renderPatterns() {
+  if (!state.patterns) {
+    return;
+  }
+  nodes.patternGrid.replaceChildren(
+    ...state.patterns.patterns.map((pattern) => {
+      const card = el("article", "pattern-card");
+      const head = el("div", "process-head");
+      head.append(el("span", "process-icon", pattern.operationIcon || "•"));
+      head.append(el("h3", "process-title", pattern.slug));
+      const link = el("a", "source-link", "↗");
+      link.href = repoHref(pattern.url);
+      link.target = "_blank";
+      link.rel = "noreferrer";
+      link.title = "Открыть паттерн в GitHub";
+      const headWrap = el("div", "pattern-head");
+      headWrap.append(head, link);
+      card.append(headWrap);
+      if (pattern.whenToStart) {
+        card.append(el("p", "process-description", pattern.whenToStart));
+      }
+      const tags = el("div", "tag-row");
+      for (const process of pattern.processes) {
+        const tag = el("span", "tag", process);
+        tag.dataset.kind = "process";
+        tags.append(tag);
+      }
+      const operation = el("span", "tag", pattern.operation);
+      operation.dataset.kind = "operation";
+      tags.append(operation);
+      card.append(tags);
+      if (pattern.prompts.length > 0) {
+        const list = el("ul", "modal-list");
+        for (const prompt of pattern.prompts) {
+          const item = el("li", "modal-list-row");
+          const promptLink = el("a", "modal-link", `${prompt.modeIcon || "•"} ${prompt.title}`);
+          promptLink.href = repoHref(prompt.url);
+          promptLink.target = "_blank";
+          promptLink.rel = "noreferrer";
+          item.append(promptLink);
+          list.append(item);
+        }
+        card.append(list);
+      }
+      return card;
+    }),
+  );
+}
+
+// ФТ-8: дерево «процесс -> подпроцессы». Жёсткое требование — показывать только
+// процессы и подпроцессы, для которых есть промпты (hasPrompts). Полный список
+// (с пустыми ветвями) остаётся в data/process-tree.json для прослеживаемости.
+function subprocessRow(subprocess) {
+  const row = el("li", "subprocess-row");
+  const head = el("div", "subprocess-head");
+  head.append(el("span", "subprocess-op", subprocess.operationIcon));
+  head.append(el("span", "subprocess-step", subprocess.step));
+  const kind = el("span", "subprocess-kind", KIND_LABELS[subprocess.kind] || subprocess.kind);
+  kind.dataset.kind = subprocess.kind;
+  kind.title =
+    subprocess.kind === "support"
+      ? "Ручной шаг, опирающийся на активный промпт"
+      : "Шаг выполняется активным промптом";
+  head.append(kind);
+  row.append(head);
+
+  const links = el("div", "subprocess-prompts");
+  for (const prompt of subprocess.prompts) {
+    const link = el("a", "subprocess-prompt", prompt.file);
+    link.href = repoHref(prompt.url);
+    link.target = "_blank";
+    link.rel = "noreferrer";
+    link.title = `Открыть ${prompt.file} в GitHub`;
+    links.append(link);
+  }
+  row.append(links);
+  return row;
+}
+
+function processNode(process, useTree) {
+  const shown = process.subprocesses.filter((subprocess) => subprocess.hasPrompts);
+  const node = el("details", "process-node");
+  // > 20 подпроцессов: дерево остаётся свёрнутым (раскрывающийся список). Иначе —
+  // раскрыто, список короткий и помещается на экран.
+  node.open = !useTree;
+
+  const summary = el("summary", "process-summary");
+  summary.append(el("span", "process-index", process.icon));
+  const titleWrap = el("span", "process-titlewrap");
+  titleWrap.append(el("span", "process-tree-title", process.label));
+  titleWrap.append(
+    el("span", "process-count", `${shown.length} подпроцессов с промптами из ${process.subprocessTotal}`),
+  );
+  summary.append(titleWrap);
+  node.append(summary);
+
+  const list = el("ul", "subprocess-list");
+  list.append(...shown.map(subprocessRow));
+  node.append(list);
+  return node;
+}
+
+function renderProcessTree() {
+  if (!state.processTree || !nodes.processTree) {
+    return;
+  }
+  const tree = state.processTree;
+  const visible = tree.processes.filter((process) => process.subprocessShown > 0);
+
+  const treeNote = tree.useTree
+    ? ` Подпроцессов больше ${tree.treeThreshold} — список раскрывающийся (дерево).`
+    : "";
+  nodes.processNote.textContent =
+    `Показаны только процессы и подпроцессы, для которых есть промпты: ` +
+    `${tree.shownSubprocesses} подпроцессов из ${tree.totalSubprocesses} ` +
+    `в ${tree.shownProcesses} процессах из ${tree.totalProcesses}.${treeNote}`;
+
+  if (visible.length === 0) {
+    nodes.processTree.replaceChildren(el("div", "empty-state", "Нет процессов с промптами"));
+    return;
+  }
+
+  nodes.processActions.hidden = !tree.useTree;
+  nodes.processTree.replaceChildren(...visible.map((process) => processNode(process, tree.useTree)));
+}
+
+function setAllProcessNodes(open) {
+  for (const node of nodes.processTree.querySelectorAll("details.process-node")) {
+    node.open = open;
+  }
+}
+
+// Клиентский роутер на hash (по умолчанию каталог).
+function currentPage() {
+  const raw = (window.location.hash || "").replace(/^#/, "");
+  if (raw.startsWith("prompt=")) {
+    return "catalog";
+  }
+  const page = raw.split("?")[0];
+  return PAGES.includes(page) ? page : "catalog";
+}
+
+function applyRoute() {
+  const page = currentPage();
+  closeProcessModal();
+  for (const section of document.querySelectorAll("section[data-page]")) {
+    section.hidden = section.dataset.page !== page;
+  }
+  for (const link of nodes.topnav.querySelectorAll("a[data-nav]")) {
+    link.dataset.active = String(link.dataset.nav === page);
+  }
+
+  const raw = (window.location.hash || "").replace(/^#/, "");
+  const params = new URLSearchParams(raw.split("?")[1] || "");
+  const workingId = page === "catalog" ? params.get("edition") : null;
+  const legacyId = raw.startsWith("prompt=") ? new URLSearchParams(raw).get("prompt") : null;
+  const prompt = workingId
+    ? state.workingPrompts.find(({ id }) => id === workingId)
+    : legacyId && state.prompts.find(({ id }) => id === legacyId);
+  if (prompt) {
+    state.query = prompt.id;
+    nodes.search.value = prompt.id;
+    state.selectedFilters.clear();
+    if (workingId) state.selectedFilters.add("family:working");
+    else if (prompt.archived) state.selectedFilters.add("family:archive");
+    rerenderInteractive();
+    updateClearButtonVisibility();
+  }
+  window.scrollTo({ top: 0, behavior: "auto" });
+  if (workingId && prompt) {
+    focusCard(document.getElementById(`catalog-edition-${prompt.id}`));
+  }
+  if (page === "processes" && state.testKitSource) {
+    const step = params.get("step");
+    const code = params.get("ain") || step;
+    const track = params.get("track");
+    const formats = code ? stepFormats(code) : [];
+    if (formats.length) setStepFormat(formats.includes(track) ? track : formats[0]);
+    else if (track) setStepFormat(track);
+    const workingTarget = formats.length ? document.getElementById(`bcreq-testkit-${code}`) : null;
+    const legacyTarget = /^\d{1,2}$/.test(step || "") ? document.getElementById(`bcreq-step-${step}`) : null;
+    applyProcessView(workingTarget ? workingTarget.dataset.group : legacyTarget ? "manual" : params.get("view"));
+    if (workingTarget) {
+      const item = state.testKit.steps[Number(workingTarget.dataset.testkitStep)];
+      const kind = ["draft", "published"].find((key) => testKitVariant(item, key)?.id === params.get("edition"));
+      selectTestKitEdition(workingTarget, kind || testKitAssignedKind(item));
+      updateFormatLinks(code, params.get("edition"), params);
+    } else {
+      updateFormatLinks("");
+    }
+    const originLink = workingTarget?.querySelector("[data-route-origin]");
+    if (originLink) {
+      const origin = params.get("from");
+      const cards = state.testKit.route.tracks[state.stepFormat];
+      const canReturn = Object.hasOwn(cards, origin) && cards[origin].actions.some(({ target }) => target === "Ш-С");
+      originLink.hidden = !canReturn;
+      if (canReturn) {
+        originLink.href = processStepHref(origin, state.stepFormat, params.get("fromEdition"));
+        originLink.textContent = `Открыть ${origin}`;
+      } else {
+        originLink.removeAttribute("href");
+      }
+    }
+    focusCard(workingTarget || legacyTarget);
+  }
+  if (page === "standards") {
+    const section = new URLSearchParams(raw.split("?")[1] || "").get("section");
+    if (/^(?:[0-9]|ttz)$/.test(section || "")) {
+      const ids = { 0: "standard-intro", 9: "standard-industry", ttz: "standard-ttz" };
+      const target = document.getElementById(ids[section] || `standard-${section}`);
+      if (target) {
+        for (let ancestor = target.parentElement; ancestor; ancestor = ancestor.parentElement) {
+          if (ancestor.tagName === "DETAILS") ancestor.open = true;
+        }
+        target.focus({ preventScroll: true });
+        target.scrollIntoView({ behavior: "instant", block: "start" });
+      }
+    }
+  }
+}
+
+function focusCard(target) {
+  if (!target) return;
+  target.closest("details")?.setAttribute("open", "");
+  target.focus({ preventScroll: true });
+  target.scrollIntoView({ behavior: "instant", block: "start" });
+}
+
+function stepCode(step) {
+  return step.step.split(/\s+/)[0];
+}
+
+function stepFormats(code) {
+  if (state.ainKit?.steps.some(({ id }) => id === code)) return ["decomposed"];
+  const step = state.testKitSource?.steps.find((item) => stepCode(item) === code);
+  return step ? (step.system ? ["system"] : ["decomposed", "system"]) : [];
+}
+
+function applyTheme(theme) {
+  document.documentElement.dataset.theme = theme;
+  nodes.themeToggle.textContent = theme === "dark" ? "☀" : "◐";
+  nodes.themeToggle.setAttribute("aria-pressed", String(theme === "dark"));
+}
+
+function initTheme() {
+  let stored = null;
+  try {
+    stored = window.localStorage.getItem(THEME_KEY);
+  } catch {
+    stored = null;
+  }
+  const prefersDark = window.matchMedia?.("(prefers-color-scheme: dark)").matches;
+  applyTheme(stored || (prefersDark ? "dark" : "light"));
+}
+
+function rerenderInteractive() {
+  renderFilters();
+  renderPrompts();
+  if (window.MANGO_DEBUG_FILTERS === true) {
+    console.debug("Catalog filters", {
+      selected: [...state.selectedFilters],
+      query: state.query,
+      processes: facetCounts("process"),
+      operations: facetCounts("operation"),
+      results: visiblePrompts().length,
+    });
+  }
+}
+
+// Панель карточки прилипает под верхней панелью: её высота зависит от ширины окна.
+function trackTopbarHeight() {
+  const topbar = document.querySelector(".topbar");
+  if (!topbar) {
+    return;
+  }
+  new ResizeObserver(() => {
+    document.documentElement.style.setProperty("--topbar-height", `${topbar.offsetHeight}px`);
+  }).observe(topbar);
+}
+
+// Issue #490: «Цель» и строка проверки БА из SSOT bcreq-step-handoff.md.
+function ainHandoff(kit, id) {
+  const handoff = kit.handoff?.steps?.[id];
+  if (!handoff?.goal || !handoff?.check) {
+    throw new Error(`Нет «Итога шага» для ${id}; пересоберите данные сайта`);
+  }
+  return { goal: handoff.goal, checkKind: handoff.checkKind, check: handoff.check, handoffBlock: "" };
+}
+
+// Issue #490, п. 2.2: системный (комплексный) формат — Ш-А, Ш-1, Ш-2 текстом
+// сайта 2.7.0 (prompts/drafts/system/) параллельно декомпозированным AIN-01…24.
+function composeSystemTestKit(kit) {
+  const steps = kit.steps.map((step) => (step.system
+    ? { ...step, mode: "by-test", modeNote: "системный формат", draft: step.system }
+    : { ...step }));
+  if (steps.filter((step) => step.system).length !== 3) {
+    throw new Error("Не удалось загрузить системный формат Ш-А, Ш-1, Ш-2");
+  }
+  const byTest = steps.filter((s) => s.mode === "by-test").length;
+  return { ...kit, steps, counts: { ...kit.counts, steps: steps.length, byTest, published: steps.length - byTest } };
+}
+
+const STEP_FORMATS = {
+  decomposed: { label: "Декомпозированные шаги", short: "декомпозированный" },
+  system: { label: "Системные (комплексные шаги)", short: "системный" },
+};
+
+function composeTestKit(format) {
+  return format === "system" ? composeSystemTestKit(state.testKitSource) : composeAinTestKit(state.testKitSource, state.ainKit);
+}
+
+function setStepFormat(format) {
+  const next = STEP_FORMATS[format] ? format : "decomposed";
+  if (state.testKit && next === state.stepFormat) return;
+  state.stepFormat = next;
+  state.testKit = composeTestKit(next);
+  renderTestKit();
+}
+
+// #475: expand A-IN inside the approved 2.7.0 cards and reader. The historical
+// 14-step data remains available for frozen runs; it is not a second UI route.
+function composeAinTestKit(kit, ain) {
+  if (ain.steps?.length !== 24 || ain.steps.some((s) => !s.prompt)) {
+    throw new Error("Не удалось загрузить 24 полных промпта A-IN");
+  }
+  const steps = kit.steps.flatMap((step) => {
+    if (step.step.startsWith("Ш-А ") || step.step.startsWith("Ш-2 ")) return [];
+    if (!step.step.startsWith("Ш-1 ")) return [{ ...step }];
+    return ain.steps.map((s) => ({
+      ainId: s.id, step: `${s.id} ${s.name}`, group: step.group,
+      operation: s.operation,
+      mode: "by-test", modeNote: "эффективность не измерена",
+      purpose: s.why, prepare: s.input,
+      ...ainHandoff(kit, s.id),
+      result: s.output, gate: s.id === "AIN-21" ? "Допуск к разделу 2" :
+        s.id === "AIN-24" ? "Г-IN" : "Review результата",
+      gateHint: `${s.checks}. Решение принимает БА.`,
+      draft: state.workingPrompts.find(({ sourcePath }) => sourcePath === s.promptPath),
+    }));
+  });
+  steps.forEach((s, i) => { s.number = s.number === "—" ? "—" : String(i + 1); });
+  const byTest = steps.filter((s) => s.mode === "by-test").length;
+  return { ...kit, steps, counts: { steps: steps.length, byTest, published: steps.length - byTest },
+    groups: kit.groups.map((g) => ({ ...g, count: steps.filter((s) => s.group === g.id).length })) };
+}
+
+function workingPromptsFrom(catalog, kit, ain) {
+  const bodies = new Map(catalog.prompts.map(({ sourcePath, body }) => [sourcePath, body]));
+  for (const step of kit.steps) {
+    for (const edition of [step.draft, step.system]) {
+      if (edition) bodies.set(edition.sourcePath, edition.body);
+    }
+  }
+  for (const { promptPath, prompt } of ain.steps) bodies.set(promptPath, prompt);
+  return catalog.workingPrompts.map((edition) => ({ ...edition, body: bodies.get(edition.sourcePath) }));
+}
+
+async function init() {
+  initTheme();
+  trackTopbarHeight();
+  try {
+    // Данные каталога загружаются только после ввода пароля (site/gate.js).
+    await (window.siteGate?.ready ?? Promise.resolve());
+    const [promptsData, stats, roadmap, checks, processes, patterns, processTree, bcreqFlow, testKit, ainKit] = await Promise.all([
+      fetch("data/prompts.json").then((response) => response.json()),
+      fetch("data/stats.json").then((response) => response.json()),
+      fetch("data/roadmap.json").then((response) => response.json()),
+      fetch("data/checks.json").then((response) => response.json()),
+      fetch("data/processes.json").then((response) => response.json()),
+      fetch("data/patterns.json").then((response) => response.json()),
+      fetch("data/process-tree.json").then((response) => response.json()),
+      fetch("data/bcreq-flow.json").then((response) => response.json()),
+      fetch("data/test-kit.json").then((response) => response.json()),
+      fetch("data/a-in-kit.json").then((response) => {
+        if (!response.ok) throw new Error("Не удалось загрузить A-IN; обновите страницу");
+        return response.json();
+      }),
+    ]);
+
+    state.promptsData = promptsData;
+    state.prompts = promptsData.prompts;
+    state.workingPrompts = workingPromptsFrom(promptsData, testKit, ainKit);
+    state.stats = stats;
+    state.roadmap = roadmap;
+    state.checks = checks;
+    state.processes = processes;
+    state.patterns = patterns;
+    state.processTree = processTree;
+    state.bcreqFlow = bcreqFlow;
+    state.testKitSource = testKit;
+    state.ainKit = ainKit;
+    state.testKit = composeTestKit(state.stepFormat);
+
+    renderSuggestions();
+    renderMetrics();
+    renderPhases();
+    renderFilters();
+    renderPrompts();
+    renderChecks();
+    renderRoadmap();
+    renderProcesses();
+    renderBcreqFlow();
+    renderTestKit();
+    renderProcessTree();
+    renderPatterns();
+    renderSiteVersion();
+    applyRoute();
+  } catch (error) {
+    nodes.promptGrid.replaceChildren(el("div", "empty-state", "Данные не загрузились"));
+    nodes.testKitSummary.textContent = "Данные не загрузились. Обновите страницу для повторной загрузки.";
+    console.error(error);
+  }
+}
+
+function updateClearButtonVisibility() {
+  nodes.clearSearch.hidden = !state.query;
+  nodes.clearFilters.hidden = state.selectedFilters.size === 0;
+}
+
+nodes.search.addEventListener("input", (event) => {
+  state.query = event.target.value;
+  rerenderInteractive();
+  updateClearButtonVisibility();
+});
+
+nodes.sort.addEventListener("change", (event) => {
+  state.sort = event.target.value;
+  renderPrompts();
+});
+
+nodes.exportButton.addEventListener("click", exportCatalog);
+
+nodes.clearSearch.addEventListener("click", () => {
+  state.query = "";
+  nodes.search.value = "";
+  rerenderInteractive();
+  updateClearButtonVisibility();
+});
+
+nodes.clearFilters.addEventListener("click", () => {
+  state.selectedFilters.clear();
+  rerenderInteractive();
+  updateClearButtonVisibility();
+});
+
+nodes.filters.addEventListener("click", (event) => {
+  const button = event.target.closest("[data-filter-token]");
+  if (!button) {
+    return;
+  }
+  const token = button.dataset.filterToken;
+  // Недоступную (каскадно скрытую) операцию нельзя выбрать, но можно снять.
+  if (button.dataset.unavailable === "true" && !state.selectedFilters.has(token)) {
+    return;
+  }
+  if (state.selectedFilters.has(token)) {
+    state.selectedFilters.delete(token);
+  } else {
+    state.selectedFilters.add(token);
+  }
+  rerenderInteractive();
+  updateClearButtonVisibility();
+});
+
+nodes.processExpand?.addEventListener("click", () => setAllProcessNodes(true));
+nodes.processCollapse?.addEventListener("click", () => setAllProcessNodes(false));
+
+nodes.promptGrid.addEventListener("click", async (event) => {
+  const shareButton = event.target.closest("[data-share-id]");
+  if (shareButton) {
+    const id = shareButton.dataset.shareId;
+    const url = `${window.location.origin}${window.location.pathname}#prompt=${encodeURIComponent(id)}`;
+    try {
+      await copyText(url);
+      showToast("Ссылка на карточку скопирована");
+    } catch (error) {
+      showToast("Не удалось скопировать ссылку");
+    }
+    return;
+  }
+
+  const button = event.target.closest("[data-copy-id]");
+  if (button) {
+    await copyPrompt(button);
+  }
+});
+
+async function copyPrompt(button) {
+  const prompts = button.dataset.copyWorking ? state.workingPrompts : state.prompts;
+  const prompt = prompts.find((item) => item.id === button.dataset.copyId);
+  if (!prompt) {
+    showToast(`Промпт ${button.dataset.copyId} не найден в каталоге`);
+    return;
+  }
+  try {
+    const body = prompt.body || prompt.content;
+    await copyText(`<!-- ${prompt.id} -->\n\n${body}`);
+    button.dataset.copied = "true";
+    showToast(`${prompt.file} скопирован`);
+    window.setTimeout(() => {
+      button.dataset.copied = "false";
+    }, 1400);
+  } catch (error) {
+    showToast("Не удалось скопировать");
+  }
+}
+
+// Тестовый набор этапа 1 (issue #446, BL-157б): 13 шагов комплекта прогона.
+// Режим шага — колонка «Режим в тесте» комплекта: published — опубликованный
+// промпт из prompts/ (версия из его frontmatter), by-test — черновик «по тесту»
+// из prompts/drafts/. Карточка шага (issue #448) — инструкция для БА без кодов:
+// зачем шаг, что подготовить, что делать, результат, кто решает на гейте.
+// Данные — data/test-kit.json.
+function testKitModeLabel(step) {
+  if (step.ainId) return "draft";
+  return step.mode === "by-test" ? "черновик «по тесту»" : `опубликован v${step.published.version}`;
+}
+
+function testKitVariant(step, kind) {
+  return kind === "draft" ? step.draft : step.published;
+}
+
+function testKitAssignedKind(step) {
+  return step.mode === "by-test" ? "draft" : "published";
+}
+
+function testKitEditionLabel(step, kind) {
+  const edition = testKitVariant(step, kind);
+  return kind === "draft" ? `по тесту · v${edition.version}` : `v${edition.version}`;
+}
+
+// Текст опубликованной редакции — из каталога (архивный промпт), черновика — из
+// test-kit.json. Один источник для чтения и копирования (issue #460).
+// Issue #490: к опубликованным Ш-В/Ш-С (тексты заморожены) добавляется «Итог
+// шага» из SSOT; к черновику Ш-0 — строка выбранного формата шагов, по которой
+// модель ведёт маршрут, не спрашивая БА о формате.
+function testKitBody(step, kind) {
+  const edition = testKitVariant(step, kind);
+  const body = state.workingPrompts.find(({ id }) => id === edition?.id)?.body || "";
+  if (body && stepCode(step) === "Ш-0") {
+    return `${body.trimEnd()}\n\nФормат шагов: ${STEP_FORMATS[state.stepFormat].short}\n`;
+  }
+  return body && kind === "published" && step.handoffBlock
+    ? `${body.trimEnd()}\n\n${step.handoffBlock}` : body;
+}
+
+// Контейнер чтения (issue #460): текст выбранной редакции прокручивается внутри
+// контейнера, панель с переключателем и копированием прилипает при прокрутке страницы.
+function testKitReader(step, index) {
+  const assigned = testKitAssignedKind(step);
+  const other = assigned === "draft" ? "published" : "draft";
+  const kinds = [assigned, other].filter((kind) => testKitVariant(step, kind));
+
+  const switcher = el("div", "testkit-edition");
+  switcher.setAttribute("role", "group");
+  switcher.setAttribute("aria-label", `Редакция промпта шага ${step.step}`);
+  switcher.append(
+    ...kinds.map((kind) => {
+      const button = el("button", "testkit-edition-button", testKitEditionLabel(step, kind));
+      button.type = "button";
+      button.dataset.testkitEdition = kind;
+      button.disabled = kinds.length === 1;
+      return button;
+    }),
+  );
+
+  const copy = el("button", "testkit-copy", "⧉ Копировать");
+  copy.type = "button";
+  copy.dataset.testkitIndex = String(index);
+
+  const bar = el("div", "testkit-reader-bar");
+  bar.append(switcher, copy);
+
+  const text = el("pre", "testkit-prompt-text");
+  text.tabIndex = 0;
+  text.setAttribute("role", "region");
+  text.setAttribute("aria-label", `Текст промпта шага ${step.step}`);
+
+  const note = el("p", "testkit-reader-note");
+  note.setAttribute("aria-live", "polite");
+
+  const reader = el("div", "testkit-reader");
+  reader.append(bar, note, text);
+  return reader;
+}
+
+function selectTestKitEdition(item, kind) {
+  const step = state.testKit.steps[Number(item.dataset.testkitStep)];
+  const variant = testKitVariant(step, kind);
+  const label = testKitEditionLabel(step, kind);
+  const assigned = testKitAssignedKind(step);
+
+  for (const button of item.querySelectorAll("[data-testkit-edition]")) {
+    button.setAttribute("aria-pressed", String(button.dataset.testkitEdition === kind));
+  }
+  const copy = item.querySelector(".testkit-copy");
+  copy.dataset.testkitKind = kind;
+  copy.title = `Скопировать ${variant.file} (${label})`;
+  copy.setAttribute("aria-label", `Скопировать промпт шага ${step.step}: ${label}`);
+
+  const text = item.querySelector(".testkit-prompt-text");
+  text.textContent = testKitBody(step, kind) || "Текст редакции не найден в каталоге.";
+  text.scrollTop = 0;
+
+  const note = item.querySelector(".testkit-reader-note");
+  note.dataset.comparison = String(kind !== assigned);
+  if (kind !== assigned) {
+    note.textContent = `Редакция для сравнения. Для теста шагу назначена редакция «${testKitEditionLabel(step, assigned)}».`;
+  } else if (item.querySelectorAll("[data-testkit-edition]").length === 1) {
+    note.textContent = "Единственная редакция шага: сравнивать не с чем.";
+  } else {
+    note.textContent = "Эта редакция назначена шагу для теста.";
+  }
+
+  const link = item.querySelector(".bcreq-step-prompt a");
+  link.textContent = variant.title || variant.file;
+  link.title = variant.file;
+  link.href = catalogEditionHref(variant.id);
+  item.querySelector(".testkit-edition-status").textContent = `${variant.status} · v${variant.version}`;
+  const source = item.querySelector(".testkit-edition-source");
+  source.href = repoHref(variant.url);
+  source.title = variant.sourcePath;
+  item.querySelector(".testkit-sha").textContent = `${variant.file} · sha256 ${variant.sha256.slice(0, 16)}`;
+  const scenarios = item.querySelector("[data-route-scenarios]");
+  if (scenarios) {
+    const context = new URLSearchParams({ from: stepCode(step), fromEdition: variant.id });
+    scenarios.href = `${processStepHref("Ш-С", state.stepFormat)}&${context}`;
+  }
+}
+
+function testKitRoute(code) {
+  const track = state.stepFormat;
+  const { actions, returns } = state.testKit.route.tracks[track][code];
+  const gates = state.testKit.route.gates;
+  const details = el("details", "testkit-more testkit-route");
+  details.append(el("summary", "", "Варианты дальше"));
+  details.append(el("p", "", "Ссылки открывают карточки. Решение и запуск шага выполняются в рабочем контексте."));
+  const choices = el("ul", "testkit-route-list");
+  for (const { name, when, guard, target } of actions) {
+    const choice = el("li", "");
+    const label = `${name[0].toUpperCase()}${name.slice(1)}`;
+    if (Object.hasOwn(state.testKit.route.tracks[track], target)) {
+      const link = internalLink(processStepHref(target, track), `${label} → ${target}`);
+      if (target === "Ш-С") link.dataset.routeScenarios = "";
+      choice.append(link);
+    } else {
+      const outcome = ["СТОП", "CS", "BASELINE"].includes(target) ? ` → ${target}` : "";
+      choice.append(el("strong", "", label + outcome));
+    }
+    choice.append(el("p", "", when));
+    if (target === "исходный") {
+      const link = internalLink("", "Открыть исходную карточку");
+      link.hidden = true;
+      link.dataset.routeOrigin = "";
+      choice.append(link);
+    }
+    if (guard === "БА") choice.append(el("p", "", "Требуется явное подтверждение БА."));
+    const [gate, decision] = guard.split("/");
+    if (gates[gate]) {
+      const { deciders, record } = gates[gate];
+      choice.append(el("p", "", `${gate} / ${decision}. Решает ${deciders}. Запись решения — ${record}.`));
+    }
+    choices.append(choice);
+  }
+  details.append(choices);
+  if (returns.length) {
+    details.append(el("strong", "", "Возврат"));
+    details.append(el("p", "", "БА выбирает точку входа, отмечает зависимые результаты как устаревшие, отзывает допуски и фиксирует решение в 8.5."));
+    const options = el("ul", "testkit-route-list");
+    for (const { name, when, target } of returns) {
+      const choice = el("li", "");
+      choice.append(internalLink(processStepHref(target, track), name ? `${name} → ${target}` : target));
+      choice.append(el("p", "", when));
+      options.append(choice);
+    }
+    details.append(options);
+  }
+  return details;
+}
+
+function testKitStep(step, index) {
+  const item = el("li", "bcreq-step testkit-step");
+  item.dataset.mode = step.mode;
+  item.dataset.group = step.group;
+  item.dataset.testkitStep = String(index);
+  if (step.ainId) item.dataset.ainStep = step.ainId;
+  item.id = `bcreq-testkit-${stepCode(step)}`;
+  item.tabIndex = -1;
+
+  const head = el("div", "bcreq-step-head");
+  const number = el("span", "bcreq-step-number", step.number);
+  number.setAttribute("aria-hidden", "true");
+  const titleWrap = el("div", "bcreq-step-title-wrap");
+  titleWrap.append(el("h3", "bcreq-step-title", step.step));
+  const tags = el("div", "tag-row");
+  const mode = el("span", "tag", testKitModeLabel(step) + (step.modeNote ? ` · ${step.modeNote}` : ""));
+  mode.dataset.kind = "testkit-mode";
+  mode.dataset.mode = step.mode;
+  tags.append(mode);
+  titleWrap.append(tags);
+  head.append(number, titleWrap);
+
+  const prompt = el("p", "bcreq-step-prompt");
+  const link = el("a", "");
+  prompt.append(el("span", "bcreq-field-label", "Редакция в «Каталоге»"), link,
+    el("span", "tag testkit-edition-status"));
+  if (step.params) {
+    prompt.append(el("code", "bcreq-params", step.params));
+  }
+
+  // Issue #490, п. 1.1: «Цель» (как работает промпт и зачем его применяем)
+  // вместо «Что делает БА»; под «Результатом» — что БА проверяет или что шаг технический.
+  const check = el("p", "testkit-check");
+  check.dataset.field = "check";
+  check.dataset.checkKind = step.checkKind;
+  if (step.checkKind === "technical") {
+    check.append(el("strong", "", "Шаг технический, "),
+      document.createTextNode(`можно проверить (${step.check}), но не обязательно.`));
+  } else {
+    check.append(el("strong", "", "БА — проверить: "), document.createTextNode(step.check));
+  }
+
+  const info = el("div", "testkit-step-info");
+  info.append(
+    el("p", "testkit-purpose", step.purpose),
+    prompt,
+    bcreqField("Цель", step.goal, "goal"),
+    bcreqField("Что подготовить", step.prepare, "prepare"),
+    bcreqField("Результат", step.result, "result"),
+    check,
+  );
+  if (step.gate && step.gate !== "—") {
+    const gate = el("p", "bcreq-gate");
+    gate.dataset.field = "gate";
+    gate.append(el("strong", "", `⛳ ${step.gate}. `), document.createTextNode(step.gateHint));
+    info.append(gate);
+  }
+  info.append(testKitRoute(stepCode(step)));
+
+  // SHA выбранной редакции — для проверяющего, свёрнуто по умолчанию.
+  const more = el("details", "testkit-more");
+  const source = linkTo("", "Исходный файл");
+  source.classList.add("testkit-edition-source");
+  more.append(el("summary", "", "Для проверяющего"), source, el("code", "testkit-sha"));
+  const classes = state.promptsData.stepClasses?.[stepCode(step)] || [];
+  if (classes.length) {
+    const links = el("p", "prompt-links");
+    links.append(el("span", "prompt-links-label", "Классы пилота"));
+    for (const classId of classes) {
+      const card = state.prompts.find((prompt) => prompt.classId === classId);
+      links.append(internalLink(`#prompt=${encodeURIComponent(card.id)}`, classId));
+    }
+    info.append(links);
+  }
+  if (step.ainId) {
+    const refs = el("p", "prompt-links");
+    refs.append(linkTo("docs/ba-processes/bcreq-a-in-execution.md", "Инструкция A-IN"));
+    refs.append(linkTo("docs/ba-processes/bcreq-a-in-route.json", "Карта шагов"));
+    refs.append(linkTo("docs/contracts/bcreq-manual-state.md", "Контракт состояния"));
+    refs.append(linkTo("standards/bcreq-sections/01-glossary.md", "Стандарт раздела 1"));
+    refs.append(linkTo("standards/bcreq-sections/02-business-context.md", "Стандарт раздела 2"));
+    refs.append(linkTo("https://github.com/G-Ivan-A/mango-ba-ai-runtime/tree/main/docs/kb", "База знаний"));
+    for (const id of classes) {
+      const operation = state.prompts.find((prompt) => prompt.classId === id);
+      refs.append(linkTo(operation.url, `Контракт ${id}`));
+    }
+    for (const old of state.prompts.filter((p) => p.archiveInfo?.replacedBy.includes(step.ainId))) {
+      const link = el("a", "prompt-link", `Архив 2.7.0 · ${old.archiveInfo.step}`);
+      link.href = `#prompt=${encodeURIComponent(old.id)}`;
+      refs.append(link);
+    }
+    more.append(refs);
+  }
+  info.append(more);
+
+  const layout = el("div", "testkit-step-layout");
+  layout.append(info, testKitReader(step, index));
+  item.append(head, layout);
+  selectTestKitEdition(item, testKitAssignedKind(step));
+  return item;
+}
+
+function renderTestKit() {
+  const kit = state.testKit;
+  if (!kit || !nodes.testKitSteps) {
+    return;
+  }
+  const source = el("a", "", `комплект прогона v${kit.kit.version}`);
+  source.href = repoHref(kit.kit.url);
+  source.target = "_blank";
+  source.rel = "noreferrer";
+  renderStepFormatSwitch();
+  const formatNote = state.stepFormat === "system"
+    ? "Системный формат: рабочие черновики Ш-А, Ш-1 и Ш-2"
+    : "Декомпозированный формат: 24 контракта A-IN по принятому RFC";
+  nodes.testKitSummary.replaceChildren(
+    document.createTextNode(
+      `Шагов: ${kit.counts.steps}; draft / «по тесту»: ${kit.counts.byTest}; опубликованный промпт: ${kit.counts.published}. ${formatNote}; остальные стадии — `,
+    ),
+    source,
+    document.createTextNode(". "),
+    linkTo(kit.route.source, "Нормативный маршрут v0.3"),
+    document.createTextNode(". При незакрытом ACCESS_GAP или критическом конфликте норм остановите прогон (BLOCKED) до устранения причины."),
+  );
+  nodes.testKitSteps.replaceChildren(
+    ...kit.groups.map((group) => {
+      const block = el("li", "testkit-group");
+      block.id = `bcreq-testkit-${group.id}`;
+      block.dataset.group = group.id;
+      const head = el("div", "testkit-group-head");
+      head.append(
+        el("h3", "bcreq-subtitle", `Этап ${group.number}. ${group.title}`),
+        el("p", "bcreq-lead", `Получается: ${group.outcome}.`),
+      );
+      const list = el("ol", "bcreq-steps");
+      kit.steps.forEach((step, index) => {
+        if (step.group === group.id) {
+          list.append(testKitStep(step, index));
+        }
+      });
+      block.append(head, list);
+      return block;
+    }),
+  );
+  renderProcessTabs();
+}
+
+// Переключатель формата шагов (issue #490, п. 2.3): БА выбирает формат
+// взаимодействия на сайте; выбор уходит в Ш-0 строкой «Формат шагов: …».
+function renderStepFormatSwitch() {
+  if (!nodes.stepFormatSwitch) return;
+  nodes.stepFormatSwitch.replaceChildren(
+    el("span", "step-format-label", "Формат шагов:"),
+    ...Object.entries(STEP_FORMATS).map(([id, format]) => {
+      const link = el("a", "process-tab", format.label);
+      link.href = `#processes?track=${id}`;
+      link.dataset.stepFormat = id;
+      link.dataset.active = String(id === state.stepFormat);
+      if (id === state.stepFormat) link.setAttribute("aria-current", "true");
+      return link;
+    }),
+  );
+}
+
+function updateFormatLinks(code, edition, params) {
+  const formats = stepFormats(code);
+  const otherStep = params?.get("otherStep");
+  for (const link of nodes.stepFormatSwitch.querySelectorAll("[data-step-format]")) {
+    const track = link.dataset.stepFormat;
+    if (!formats.length) {
+      link.href = `#processes?track=${track}`;
+      continue;
+    }
+    // Общая карточка сохраняет редакцию. У несовместимого шага открывается Ш-0,
+    // из которого переключатель возвращает к исходной карточке.
+    const alternate = otherStep && stepFormats(otherStep).includes(track) ? otherStep : null;
+    const available = formats.includes(track);
+    link.href = processStepHref(alternate || (available ? code : "Ш-0"), track,
+      alternate ? params.get("otherEdition") : available ? edition : null);
+    if (!alternate && !available) {
+      link.href += `&otherStep=${encodeURIComponent(code)}`;
+      if (edition) link.href += `&otherEdition=${encodeURIComponent(edition)}`;
+    }
+  }
+}
+
+// Подстраницы «Процессов» (issue #448): этапы тестового набора по логике
+// формирования документа, полный процесс из 39 классов и согласование.
+// Адрес — #processes?view=<id>; #processes?step=<N> открывает полный процесс.
+const TEST_KIT_ALL_VIEW = "all";
+const PROCESS_VIEWS_EXTRA = [
+  { id: "manual", title: "Полный процесс (39 классов)", section: "bcreq-manual" },
+  { id: "approval", title: "Согласование", section: "bcreq-approval" },
+];
+
+function processViews() {
+  const groups = state.testKit?.groups || [];
+  return [
+    // Первая вкладка открывается по умолчанию: БА сразу видит все шаги (issue #460).
+    { id: TEST_KIT_ALL_VIEW, title: "Все шаги", count: state.testKit?.counts.steps, section: "bcreq-testkit" },
+    ...groups.map((group) => ({
+      id: group.id,
+      title: `${group.number}. ${group.title}`,
+      count: group.count,
+      section: "bcreq-testkit",
+    })),
+    ...PROCESS_VIEWS_EXTRA,
+  ];
+}
+
+function renderProcessTabs() {
+  if (!nodes.processTabs) {
+    return;
+  }
+  nodes.processTabs.replaceChildren(
+    ...processViews().map((view) => {
+      const tab = el("a", "process-tab", view.title);
+      tab.href = `#processes?view=${view.id}`;
+      tab.dataset.processTab = view.id;
+      if (view.count) {
+        tab.append(el("span", "process-tab-count", String(view.count)));
+      }
+      return tab;
+    }),
+  );
+}
+
+function applyProcessView(view) {
+  const views = processViews();
+  const current = views.find((item) => item.id === view) || views[0];
+  if (!current) {
+    return;
+  }
+  for (const tab of nodes.processTabs?.querySelectorAll("[data-process-tab]") || []) {
+    const active = tab.dataset.processTab === current.id;
+    tab.dataset.active = String(active);
+    if (active) {
+      tab.setAttribute("aria-current", "page");
+    } else {
+      tab.removeAttribute("aria-current");
+    }
+  }
+  for (const id of ["bcreq-testkit", "bcreq-manual", "bcreq-approval"]) {
+    const section = document.getElementById(id);
+    if (section) {
+      section.hidden = section.id !== current.section;
+    }
+  }
+  if (nodes.processHelp) {
+    nodes.processHelp.hidden = current.section !== "bcreq-testkit";
+  }
+  for (const group of nodes.testKitSteps?.querySelectorAll(".testkit-group") || []) {
+    group.hidden = current.id !== TEST_KIT_ALL_VIEW && group.dataset.group !== current.id;
+  }
+}
+
+async function copyTestKitPrompt(button) {
+  const step = state.testKit?.steps[Number(button.dataset.testkitIndex)];
+  const variant = step && testKitVariant(step, button.dataset.testkitKind);
+  if (!variant) {
+    showToast("Промпт не найден в тестовом наборе");
+    return;
+  }
+  const kind = button.dataset.testkitKind;
+  const body = testKitBody(step, kind);
+  if (!body) {
+    showToast(`Промпт ${variant.id} не найден в каталоге`);
+    return;
+  }
+  try {
+    // Имя промпта и шаг — в первой строке: по ней видно в чате, какой промпт
+    // и на каком шаге применён (issue #448).
+    await copyText(`<!-- ${variant.id} · ${step.step} -->\n\n${body}`);
+    button.dataset.copied = "true";
+    // У черновика и опубликованного промпта одно имя файла: редакция — в уведомлении.
+    showToast(`${variant.file} (${testKitEditionLabel(step, kind)}) скопирован`);
+    window.setTimeout(() => {
+      button.dataset.copied = "false";
+    }, 1400);
+  } catch (error) {
+    showToast("Не удалось скопировать");
+  }
+}
+
+nodes.testKitSteps?.addEventListener("click", async (event) => {
+  const edition = event.target.closest("[data-testkit-edition]");
+  if (edition) {
+    const card = edition.closest(".testkit-step");
+    const kind = edition.dataset.testkitEdition;
+    const step = state.testKit.steps[Number(card.dataset.testkitStep)];
+    selectTestKitEdition(card, kind);
+    updateFormatLinks(stepCode(step), testKitVariant(step, kind).id);
+    return;
+  }
+  const button = event.target.closest("[data-testkit-index]");
+  if (button) {
+    await copyTestKitPrompt(button);
+  }
+});
+
+nodes.bcreqSteps?.addEventListener("click", async (event) => {
+  const button = event.target.closest("[data-copy-id]");
+  if (button) {
+    await copyPrompt(button);
+  }
+});
+
+nodes.processGrid?.addEventListener("click", (event) => {
+  const card = event.target.closest("[data-process-id]");
+  if (card) {
+    openProcessModal(card.dataset.processId);
+  }
+});
+
+nodes.modal.addEventListener("click", (event) => {
+  if (event.target.closest("[data-modal-close]")) {
+    closeProcessModal();
+  }
+});
+
+nodes.modalClose.addEventListener("click", closeProcessModal);
+
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape" && !nodes.modal.hidden) {
+    closeProcessModal();
+  }
+});
+
+nodes.themeToggle.addEventListener("click", () => {
+  const next = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
+  applyTheme(next);
+  try {
+    window.localStorage.setItem(THEME_KEY, next);
+  } catch {
+    /* localStorage может быть недоступен */
+  }
+});
+
+nodes.logout?.addEventListener("click", () => window.siteGate?.lock());
+
+window.addEventListener("hashchange", applyRoute);
+
+// Полные канонические ссылки работают и в локальном предпросмотре без перезагрузки.
+document.addEventListener("click", (event) => {
+  const link = event.target.closest('a[data-standard-target], a[data-nav="standards"]');
+  if (!link || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+  event.preventDefault();
+  const hash = new URL(link.href).hash;
+  if (window.location.hash === hash) applyRoute();
+  else window.location.hash = hash;
+});
+
+init();
